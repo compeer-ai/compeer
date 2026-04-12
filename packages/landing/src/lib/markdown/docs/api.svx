@@ -1,0 +1,74 @@
+---
+title: API
+order: 4
+---
+
+The Barque API allows you to create custom functionality for your agenetic workflow. All endpoints are served under `/api/v1` and return JSON.
+
+## Endpoints
+
+### GET /api/v1/projects
+
+Returns all projects.
+
+Response:
+
+```json
+[
+  {
+    "id": "7b5f23f7-3c7b-4a8d-9c49-6d7ef4f1324d",
+    "name": "My Project"
+  }
+]
+```
+
+### GET /api/v1/search
+
+Searches captures with a required query string and optional project filter.
+
+Query parameters:
+
+- `query` (string, required): Search query.
+- `projectId` (string, optional): Limit results to a single project.
+
+Response:
+
+```json
+[
+  {
+    "id": "2c3a6c5d-2d4b-4b52-9f2e-4f07c8b9e3e1",
+    "type": "text",
+    "content": "Launch checklist",
+    "projectId": "7b5f23f7-3c7b-4a8d-9c49-6d7ef4f1324d"
+  }
+]
+```
+
+### POST /api/v1/capture
+
+Creates a new capture.
+
+Fields:
+
+- `type` (string, required): One of `text`, `data`, `url`.
+- `content` (string, required): Capture content.
+- `projectId` (string, required): Project to attach the capture to.
+
+
+Request body:
+
+```json
+{
+  "type": "text",
+  "content": "My note",
+  "projectId": "7b5f23f7-3c7b-4a8d-9c49-6d7ef4f1324d"
+}
+```
+
+Response:
+
+```json
+{
+  "success": true
+}
+```

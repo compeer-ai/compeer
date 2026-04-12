@@ -1,0 +1,47 @@
+{
+  "name": "@barque/cli",
+  "version": "0.0.1",
+  "description": "CLI for capturing project content",
+  "module": "src/index.ts",
+  "type": "module",
+  "bin": {
+    "barque": "build/barque"
+  },
+  "files": [
+    "build/"
+  ],
+  "scripts": {
+    "dev": "bun ./src/index.ts",
+    "tsgo": "tsgo",
+    "test:types": "tsgo --noEmit",
+    "build": "bun run build:linux",
+    "build:linux": "bun build --compile --minify --sourcemap ./src/index.ts --outfile build/barque",
+    "build:macos": "bun build --compile --minify --sourcemap --target=bun-darwin-arm64 ./src/index.ts --outfile build/barque-macos",
+    "build:windows": "bun build --compile --minify --sourcemap --target=bun-windows-x64 ./src/index.ts --outfile build/barque.exe",
+    "build:all": "bun run build:linux && bun run build:macos && bun run build:windows",
+    "prepublishOnly": "bun run build"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.11",
+    "@typescript/native-preview": "^7.0.0-dev.20260214.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@barque/connections": "workspace:*",
+    "@drizzle-team/brocli": "^0.11.0",
+    "zod": "^4.3.6"
+  },
+  "engines": {
+    "bun": ">=1.0.0"
+  },
+  "keywords": [
+    "cli",
+    "capture",
+    "notes",
+    "productivity"
+  ],
+  "author": "",
+  "license": "MIT"
+}

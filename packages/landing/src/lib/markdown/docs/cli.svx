@@ -1,0 +1,96 @@
+---
+title: CLI
+order: 2
+---
+
+The Barque CLI lets you initialize Barque locally, capture project content, and search across captures.
+
+## Install
+
+Install the `barque` cli from NPM.
+
+```bash
+bun install @barque/cli
+```
+
+## Quick start
+
+```bash
+# Start Barque locally and configure your agent
+barque init
+
+# List your projects
+barque projects
+
+# Capture a note into a project
+barque capture --project my-project --text "Ships on Friday"
+
+# Search captures in a project
+barque search --project my-project --query "Ships"
+```
+
+## Commands
+
+### `barque init`
+
+Initializes Barque in the current directory.
+
+- Verifies Docker is running and starts the Barque server on `http://localhost:8193` if needed.
+- Prompts for your coding agent and writes a `barque` skill file into the matching agent config directory.
+- Stores the selected agent in `~/.config/barque/credentials.json`.
+
+### `barque projects`
+
+Lists projects you own.
+
+```bash
+barque projects
+barque p
+```
+
+### `barque capture`
+
+Captures content for a project. Exactly one capture mode is required.
+
+```bash
+# Capture text
+barque capture --project my-project --text "Release checklist"
+
+# Capture a URL
+barque capture --project my-project --url "https://example.com/roadmap"
+
+# Capture JSON data
+barque capture --project my-project --data '{"title":"Spec","version":3}'
+```
+
+Options:
+
+- `--project`, `-p` (required): project name to capture into
+- `--text`, `-t`: raw text content
+- `--url`, `-u`: URL to fetch and capture
+- `--data`, `-d`: JSON string payload
+
+### `barque search`
+
+Searches captured content within a project.
+
+```bash
+barque search --project my-project --query "roadmap"
+barque s -p my-project -q "roadmap"
+```
+
+Options:
+
+- `--project`, `-p`: project id to search within
+- `--query`, `-q` (required): search query
+
+### `barque logs`
+
+Prints the CLI command history log.
+
+```bash
+barque logs
+barque lg
+```
+
+Logs are stored under `.barque/history.log` in the directory where you ran the command. The file rotates when it grows past 10MB.

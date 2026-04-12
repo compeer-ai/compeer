@@ -1,0 +1,32 @@
+---
+title: Web Application
+order: 7
+---
+
+Barque includes a local web app for managing projects, captures, and usage.
+
+## Open the app
+
+After starting the container, visit: `http://localhost:3000`
+
+## Home
+
+- View all projects and search by name.
+- Add a new project from the drawer.
+
+## Captures
+
+Inside a project you can:
+
+- Add captures from a website URL, plain text, or JSON data.
+- Search captures.
+- Select and delete captures in bulk.
+
+## Usage
+
+The Usage page shows recent queries and the captures used to answer them.
+
+## Settings
+
+- Global settings let you change the UI theme.
+- Project settings let you rename or delete a project (including all captures).
