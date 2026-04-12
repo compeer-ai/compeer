@@ -1,0 +1,15 @@
+---
+title: Quickstart
+order: 1
+---
+
+Barque runs as a Docker container. Make sure Docker is installed first:
+https://docs.docker.com/get-docker/
+
+Then start the server:
+
+```bash
+docker run -p 3000:3000 ghcr.io/barque-ai/barque:latest
+```
+
+That is it. No environment variables or additional services are required.

@@ -1,0 +1,184 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"title": "Barque API",
+		"version": "1.0.0",
+		"description": "API for managing projects, captures, and search functionality"
+	},
+	"servers": [
+		{
+			"url": "https://barque.ai/api/v1"
+		}
+	],
+	"tags": [
+		{
+			"name": "API Routes"
+		}
+	],
+	"paths": {
+		"/api/v1/projects": {
+			"get": {
+				"summary": "List user projects",
+				"responses": {
+					"default": {
+						"description": "Default fallback response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"name": {
+												"type": "string"
+											},
+											"id": {
+												"type": "string"
+											},
+											"userId": {
+												"type": "string"
+											}
+										},
+										"required": ["name", "id", "userId"]
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "Returns all projects belonging to the authenticated user",
+				"tags": ["Projects"]
+			}
+		},
+		"/api/v1/user": {
+			"get": {
+				"summary": "Get current user",
+				"responses": {
+					"default": {
+						"description": "Default fallback response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"firstName": {
+											"type": "string"
+										},
+										"lastName": {
+											"type": "string"
+										},
+										"name": {
+											"type": "string"
+										},
+										"id": {
+											"type": "string"
+										},
+										"email": {
+											"type": "string"
+										},
+										"avatar": {
+											"type": "string"
+										},
+										"theme": {
+											"oneOf": [
+												{
+													"type": "string"
+												}
+											]
+										}
+									},
+									"required": ["firstName", "lastName", "name", "id", "email", "avatar", "theme"]
+								}
+							}
+						}
+					}
+				},
+				"description": "Returns information about the currently authenticated user",
+				"tags": ["User"]
+			}
+		},
+		"/api/v1/search": {
+			"get": {
+				"summary": "Search captures",
+				"parameters": [
+					{
+						"name": "query",
+						"in": "query",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "projectId",
+						"in": "query",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"default": {
+						"description": "Default fallback response",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"description": "Search for captures within a project using semantic search",
+				"tags": ["Search"]
+			}
+		},
+		"/api/v1/capture": {
+			"post": {
+				"summary": "Create capture",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"type": {
+										"type": "string",
+										"enum": ["text", "data", "url"]
+									},
+									"content": {
+										"type": "string"
+									},
+									"projectId": {
+										"type": "string"
+									}
+								},
+								"required": ["type", "content", "projectId"]
+							}
+						}
+					}
+				},
+				"responses": {
+					"default": {
+						"description": "Default fallback response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"success": {
+											"oneOf": [{}, {}]
+										}
+									},
+									"required": ["success"]
+								}
+							}
+						}
+					}
+				},
+				"description": "Create a new text, data, or URL capture in a project",
+				"tags": ["Captures"]
+			}
+		}
+	}
+}

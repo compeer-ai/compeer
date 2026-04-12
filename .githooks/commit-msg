@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+commit_msg_file="$1"
+commit_msg=$(head -n 1 "$commit_msg_file")
+
+pattern='^(feat|fix|chore)(\([^)]+\))?([: ][[:space:]]?).*'
+
+if [[ ! "$commit_msg" =~ $pattern ]]; then
+  echo "Invalid commit message." >&2
+  echo "Expected prefix: feat, fix, or chore (optionally with scope)." >&2
+  echo "Examples: 'feat: add search', 'fix(api): handle timeout', 'chore deps update'" >&2
+  exit 1
+fi

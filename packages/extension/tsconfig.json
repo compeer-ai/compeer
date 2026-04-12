@@ -1,0 +1,10 @@
+{
+  "extends": "./.wxt/tsconfig.json",
+  "compilerOptions": {
+    "useDefineForClassFields": true,
+    "paths": {
+      "@web/client": ["../web/src/lib/utilities/client.ts"],
+      "$lib/*": ["../web/src/lib/*"]
+    }
+  }
+}

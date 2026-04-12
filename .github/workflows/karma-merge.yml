@@ -1,0 +1,48 @@
+name: Karma Merge
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  increment-karma:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Update karma
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            const author = context.payload.pull_request.user.login;
+            const filePath = '.github/karma.json';
+            const karma = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+            const entry = karma.find(item => item && item.username === author);
+            if (entry) {
+              const nextValue = Math.min(100, Number(entry.karma || 0) + 5);
+              entry.karma = nextValue;
+            } else {
+              karma.push({ username: author, karma: 5 });
+            }
+
+            fs.writeFileSync(filePath, JSON.stringify(karma, null, 2) + '\n');
+      - name: Commit karma update
+        run: |
+          if git diff --quiet; then
+            echo "No karma changes to commit."
+            exit 0
+          fi
+
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/karma.json
+          git commit -m "Increment karma for merged PR"
+          git push

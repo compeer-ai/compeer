@@ -1,0 +1,34 @@
+name: Issue Codeowners Check
+
+on:
+  issues:
+    types: [opened, reopened]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  codeowners-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Close if not codeowner
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            const author = context.payload.issue.user.login;
+            const codeowners = JSON.parse(fs.readFileSync('.github/codeowners.json', 'utf8'));
+            const isCodeowner = codeowners.some(entry => entry && entry.username === author);
+
+            if (!isCodeowner) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                state: 'closed'
+              });
+            }

@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Geist Variable";
+  src: url("/Geist-VariableFont.ttf");
+}
+
+html,
+body {
+  font-family: "Geist Variable", sans-serif;
+  scroll-behavior: smooth;
+  @apply text-gray-700;
+}
