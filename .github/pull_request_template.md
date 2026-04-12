@@ -2,14 +2,14 @@
 
 Resolves <!-- Put the GitHub issue id here -->
 
-# What Changed
+### What Changed
 
 <!-- Describe what you changed -->
 
-# Why it was Changed
+### Why it was Changed
 
 <!-- Describe why you made those changes -->
 
-# New Dependencies
+### New Dependencies
 
 <!-- Describe any new dependencies -->
