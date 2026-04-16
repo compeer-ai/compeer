@@ -5,11 +5,14 @@
   import Logo from "./Logo.svelte";
   import { ChevronsUpDown, Home, Settings2 } from "@lucide/svelte";
   import Icon from "./Icon.svelte";
+	import type { Workspace } from "$lib/repository/workspaceRepository";
+	import { dispatcher } from "$lib/utilities/dispatcher";
 	
   interface Props {
     projects: Project[];
+    workspaces: Workspace[]
   }
-  const { projects }: Props = $props();
+  const { projects, workspaces }: Props = $props();
   const workspace = page.params.workspace;
   function isActiveProject(projectId: string) {
     return (
@@ -23,20 +26,27 @@
   }
 </script>
 
+{#snippet drawerContent()}
+  <div class="space-y-3 px-5 flex flex-col">
+    {#each workspaces as workspace}
+      <a href={`/${workspace.name}`} onclick={() => dispatcher.state('closeDrawer', {})}>
+        <span class="hover:text-black transition ease-in-out">{workspace.name}</span>
+      </a>
+    {/each}
+  </div>
+{/snippet}
 <div class="w-100 flex flex-col justify-between">
   <div class=" space-y-7"  data-sveltekit-preload-data="hover">
     <div class="border-b border-gray-300 px-7 h-18 flex items-center justify-between">
       <a href={`/`}>
         <Logo />
       </a>
-      <a href="/">
-        <button class="border shadow-sm shadow-gray-100 hover:bg-gray-100/30 ease-in-out rounded-lg text-black font-medium space-x-2 border-gray-300 h-10 flex items-center text-sm px-3">
+      <button onclick={() => dispatcher.send('drawer', drawerContent)}  class="border shadow-sm shadow-gray-100 hover:bg-gray-100/30 ease-in-out rounded-lg text-black font-medium space-x-2 border-gray-300 h-10 flex items-center text-sm px-3">
         <span>
           {page.params.workspace}
         </span>
-          <Icon icon={ChevronsUpDown} />
-        </button>
-      </a>
+        <Icon icon={ChevronsUpDown} />
+      </button>
     </div>
     <div class="space-y-3 flex flex-col px-7 font-medium">
       <a href={`/${workspace}`}>
