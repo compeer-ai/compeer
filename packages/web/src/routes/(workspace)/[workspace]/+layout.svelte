@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { LayoutProps } from "./$types";
   import { readProjects } from "$lib/remotes/project.remote";
-	import { readWorkspace } from "$lib/remotes/workspace.remote";
+	import { readWorkspace, readWorkspaces } from "$lib/remotes/workspace.remote";
 	import { page } from "$app/state";
 	import WorkspaceSidebar from "$lib/components/common/WorkspaceSidebar.svelte";
 	
@@ -9,16 +9,17 @@
 
   const workspace = readWorkspace({
     name: page.params.workspace!!
-  })
+  });
+  const workspaces = readWorkspaces();
   const projects = $derived.by(() => workspace.current && readProjects({
     workspaceId: workspace.current.id
   }));
 </script>
 
 
-{#if projects?.ready && workspace.ready}
+{#if projects?.ready && workspace.ready && workspaces.ready}
     <div class="flex">
-      <WorkspaceSidebar projects={projects.current} />
+      <WorkspaceSidebar projects={projects.current} workspaces={workspaces.current} />
       <div
         class="h-screen w-full overflow-y-auto border-l border-gray-300"
         style={`background-color: #fff;
