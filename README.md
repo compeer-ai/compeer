@@ -1,3 +1,3 @@
-# barque
+# compeer
 
-AIzaSyBRjA5ogVEB6HDKdByWm7KQPKA3SSUyy8Y
+The open, configurable, and transparent context layer for the agenetic era
