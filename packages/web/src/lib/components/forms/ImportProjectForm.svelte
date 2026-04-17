@@ -6,6 +6,7 @@
 	formImportProject,
   } from "$lib/remotes/project.remote";
   import HiddenInput from "../common/HiddenInput.svelte";
+	import FileInput from "../common/FileInput.svelte";
 
   interface Props {
     workspaceId: string;
@@ -23,8 +24,8 @@
   className="space-y-5"
 >
   <HiddenInput {...formCreateProject.fields.workspaceId.as("hidden", workspaceId)} />
-  <Input
-    {...formImportProject.fields.file.as("file")}
+  <FileInput
+    {...formImportProject.fields.file}
     label="File"
     placeholder="Name"
     required

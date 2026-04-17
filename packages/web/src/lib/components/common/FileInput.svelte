@@ -4,7 +4,6 @@
     placeholder: string;
     required?: boolean;
     value?: unknown;
-    type?: string;
     name: string;
   }
 
@@ -14,7 +13,6 @@
     value = $bindable(),
     placeholder,
     required,
-    type = "text",
   }: Props = $props();
 </script>
 
@@ -27,10 +25,10 @@
   <input
     {name}
     {required}
-    {type}
     {placeholder}
+    type="file"
     id={name}
     bind:value
-    class="h-12 outline-0 appearance-none rounded-lg border border-gray-300 px-3 shadow-sm shadow-gray-100 placeholder:text-gray-400"
+    class="h-12 file:h-12 file:border-r file:border-gray-300 file:pr-3 file:mr-3 file:bg-gray-300/10 file:cursor-pointer cursor-pointer outline-0 appearance-none rounded-lg border border-gray-300 px-3 shadow-sm shadow-gray-100 placeholder:text-gray-400 text-left"
   />
 </label>
