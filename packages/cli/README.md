@@ -1,15 +1,28 @@
-# cli
+# @compeer/cli
 
-To install dependencies:
+CLI for working with compeer, both for humans and agents.
 
-```bash
-bun install
-```
-
-To run:
+## Commands
 
 ```bash
-bun run index.ts
-```
+# Development
+bun run dev
 
-This project was created using `bun init` in bun v1.3.3. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+# Type check
+bun run test:types
+
+# Build (default Linux)
+bun run build
+
+# Build for Linux
+bun run build:linux
+
+# Build for macOS
+bun run build:macos
+
+# Build for Windows
+bun run build:windows
+
+# Build for all platforms
+bun run build:all
+```
