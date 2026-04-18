@@ -29,7 +29,6 @@
     // Path aliases for importing from web package
     "paths": {
       "@web/client": ["../web/src/lib/utilities/client.ts"],
-      "@barque/connections": ["../connections/src/index.ts"],
       "$lib/*": ["../web/src/lib/*"]
     }
   }
