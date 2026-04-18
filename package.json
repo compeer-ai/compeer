@@ -1,5 +1,5 @@
 {
-  "name": "barque",
+  "name": "compeer-ai",
   "private": true,
   "scripts": {
     "docker:build:barque": "docker build -f packages/web/Dockerfile . -t registry.gitlab.com/lgmatrix13/barque:latest"

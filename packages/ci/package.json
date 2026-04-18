@@ -1,5 +1,5 @@
 {
-  "name": "ci",
+  "name": "@compeer-ai/ci",
   "module": "index.ts",
   "type": "module",
   "private": true,

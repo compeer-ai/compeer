@@ -1,5 +1,5 @@
 {
-  "name": "@barque/cli",
+  "name": "@compeer-ai/cli",
   "version": "0.0.1",
   "description": "CLI for capturing project content",
   "module": "src/index.ts",

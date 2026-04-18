@@ -1,5 +1,5 @@
 {
-	"name": "web",
+	"name": "@compeer-ai/web",
 	"private": true,
 	"version": "3.2.3",
 	"type": "module",
@@ -40,7 +40,7 @@
 		"vitest": "^3.2.4"
 	},
 	"dependencies": {
-		"@barque/scrape": "workspace:*",
+		"@compeer-ai/scrape": "workspace:*",
 		"@hono/valibot-validator": "^0.6.1",
 		"@huggingface/transformers": "^3.8.1",
 		"@libsql/client": "^0.17.0",
