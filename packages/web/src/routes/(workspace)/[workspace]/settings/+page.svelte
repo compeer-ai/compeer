@@ -6,6 +6,7 @@
 	import { page } from "$app/state";
 	import DeleteForm from "$lib/components/forms/DeleteForm.svelte";
 	import { goto } from "$app/navigation";
+	import { config } from "$lib/utilities/config";
 
     const workspace = readWorkspace({
         name: page.params.workspace!!
@@ -16,19 +17,23 @@
 {#if workspace.ready}
 <section class="space-y-5 p-7" use:animations.fadeInForward>
   <h1 class="text-xl font-semibold text-black">Workspace Settings</h1>
-    <Card title="Metadata" collaspable>
-        <div class="p-5">
-            <WorkspaceForm  workspace={workspace.current} {invalidate} />
-        </div>
-    </Card>
-    <Card title="Danger Zone" collaspable>
-        <div class="space-y-3 p-5">
-            <p>
-            This deletes all project contents, including all captures. This action
-            cannot be reversed.
-            </p>
-            <DeleteForm remote={deleteWorkspace} toastMessage="Deleted Workspace" onSuccess={() => goto('/')} id={workspace.current.id} />
-        </div>
-    </Card>
+    {#if config.flags.updateWorkspaces}
+        <Card title="Metadata" collaspable>
+            <div class="p-5">
+                <WorkspaceForm  workspace={workspace.current} {invalidate} />
+            </div>
+        </Card>
+    {/if}
+    {#if config.flags.deleteWorkspaces}
+        <Card title="Danger Zone" collaspable>
+            <div class="space-y-3 p-5">
+                <p>
+                This deletes all project contents, including all captures. This action
+                cannot be reversed.
+                </p>
+                <DeleteForm remote={deleteWorkspace} toastMessage="Deleted Workspace" onSuccess={() => goto('/')} id={workspace.current.id} />
+            </div>
+        </Card>
+    {/if}
 </section>
 {/if}

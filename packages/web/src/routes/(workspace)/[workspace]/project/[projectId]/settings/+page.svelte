@@ -11,6 +11,7 @@
 	import Button from "$lib/components/common/Button.svelte";
 	import { download } from "$lib/utilities/download";
 	import Input from "$lib/components/common/Input.svelte";
+  import { config } from "$lib/utilities/config";
 
   const workspace = $derived(readWorkspace({
     name: page.params.workspace!!
@@ -29,42 +30,50 @@
     class="space-y-5 p-7 h-screen-minus-header overflow-y-auto"
     use:animations.fadeInForward
   >
-    <Card title="Update Project" collaspable>
-      <div class="space-y-3 p-5">
-        <ProjectForm project={project.current} workspaceId={workspace.current.id} invalidate={updateInvalidate} />
-      </div>
-    </Card>
-    <Card title="Configure MCP" collaspable>
-      <div class="space-y-3 p-5">
-        <Input label='URL' name="url" placeholder="URL" value={`${page.url.origin}/workspace/${workspace.current.name}/project/${project.current.id}/mcp`} />
-      </div>
-    </Card>
-    <Card title="Export Project" collaspable>
-      <div class="p-5">
-        <Button variant='wide' onclick={async () => {
-          const backup = await commandExportProject({ id: page.params.projectId!! });
-          download.start(backup, `${project.current.name}_backup.barque`)
-        }}>
-          Export
-        </Button>
-      </div>
-    </Card>
-    <Card title="Delete Project" collaspable>
-      <div class="space-y-3 p-5">
-        <p>
-          This deletes all project contents, including all captures. This action
-          cannot be reversed.
-        </p>
-        <DeleteForm
-          id={page.params.projectId!!}
-          toastMessage={"Deleted Project"}
-          remote={formDeleteProject}
-          onSuccess={async () => {
-            await deleteInvalidate();
-            goto(`/${workspace.current.name}`);
-          }}
-        />
-      </div>
-    </Card>
+    {#if config.flags.updateProjects}
+      <Card title="Update Project" collaspable>
+        <div class="space-y-3 p-5">
+          <ProjectForm project={project.current} workspaceId={workspace.current.id} invalidate={updateInvalidate} />
+        </div>
+      </Card>
+    {/if}
+    {#if config.flags.configureProjectMcps}
+      <Card title="Configure MCP" collaspable>
+        <div class="space-y-3 p-5">
+          <Input label='URL' name="url" placeholder="URL" value={`${page.url.origin}/workspace/${workspace.current.name}/project/${project.current.id}/mcp`} />
+        </div>
+      </Card>
+    {/if}
+    {#if config.flags.exportProjects}
+      <Card title="Export Project" collaspable>
+        <div class="p-5">
+          <Button variant='wide' onclick={async () => {
+            const backup = await commandExportProject({ id: page.params.projectId!! });
+            download.start(backup, `${project.current.name}_backup.barque`)
+          }}>
+            Export
+          </Button>
+        </div>
+      </Card>
+    {/if}
+    {#if config.flags.deleteProjects}
+      <Card title="Delete Project" collaspable>
+        <div class="space-y-3 p-5">
+          <p>
+            This deletes all project contents, including all captures. This action
+            cannot be reversed.
+          </p>
+          <DeleteForm
+            id={page.params.projectId!!}
+            toastMessage={"Deleted Project"}
+            remote={formDeleteProject}
+            onSuccess={async () => {
+              await deleteInvalidate();
+              goto(`/${workspace.current.name}`);
+            }}
+          />
+        </div>
+      </Card>
+    {/if}
   </section>
 {/if}

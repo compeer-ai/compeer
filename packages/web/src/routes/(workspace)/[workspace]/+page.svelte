@@ -12,6 +12,7 @@
 	import { readWorkspace } from "$lib/remotes/workspace.remote";
 	import { page } from "$app/state";
 	import ImportProjectForm from "$lib/components/forms/ImportProjectForm.svelte";
+	import { config } from "$lib/utilities/config";
 
   let query = $state("");
   function filterProjects(projects: IProject[], query: string) {
@@ -55,15 +56,17 @@
       <Icon icon={Plus}></Icon>
       <span>Add Project</span>
     </button>
-        <button
-      class="bg-primary-gradient hover:bg-primary flex h-12 cursor-pointer items-center space-x-2 rounded-lg px-3 text-white transition ease-in-out"
-      onclick={() => {
-        dispatcher.send("drawer", importProjectDrawerContent);
-      }}
-    >
-      <Icon icon={Download}></Icon>
-      <span>Import Project</span>
-    </button>
+    {#if config.flags.importProjects}
+      <button
+        class="bg-primary-gradient hover:bg-primary flex h-12 cursor-pointer items-center space-x-2 rounded-lg px-3 text-white transition ease-in-out"
+        onclick={() => {
+          dispatcher.send("drawer", importProjectDrawerContent);
+        }}
+      >
+        <Icon icon={Download}></Icon>
+        <span>Import Project</span>
+      </button>
+    {/if}
   </div>
   </div>
   {#if filterProjects(projects.current, query).length}
