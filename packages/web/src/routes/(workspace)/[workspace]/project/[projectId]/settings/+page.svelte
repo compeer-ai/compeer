@@ -10,6 +10,7 @@
 	import { readWorkspace } from "$lib/remotes/workspace.remote";
 	import Button from "$lib/components/common/Button.svelte";
 	import { download } from "$lib/utilities/download";
+	import Input from "$lib/components/common/Input.svelte";
 
   const workspace = $derived(readWorkspace({
     name: page.params.workspace!!
@@ -31,6 +32,11 @@
     <Card title="Update Project" collaspable>
       <div class="space-y-3 p-5">
         <ProjectForm project={project.current} workspaceId={workspace.current.id} invalidate={updateInvalidate} />
+      </div>
+    </Card>
+    <Card title="Configure MCP" collaspable>
+      <div class="space-y-3 p-5">
+        <Input label='URL' name="url" placeholder="URL" value={`${page.url.origin}/workspace/${workspace.current.name}/project/${project.current.id}/mcp`} />
       </div>
     </Card>
     <Card title="Export Project" collaspable>
