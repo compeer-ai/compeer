@@ -6,7 +6,7 @@ import { enhancedValidatedQuery, enhancedValidatedMutation } from '../utilities/
 import { and, eq, inArray } from 'drizzle-orm';
 import { captureChunkTable, captureTable } from '$lib/utilities/schema';
 import { getRequestEvent, query } from '$app/server';
-import { scrape } from '@barque/scrape';
+import { scrape } from '@compeer-ai/scrape';
 import { db } from '$lib/utilities/sqlite';
 
 const captureRepository = new CaptureRepository();

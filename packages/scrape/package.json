@@ -1,5 +1,5 @@
 {
-  "name": "@barque/scrape",
+  "name": "@compeer-ai/scrape",
   "module": "index.ts",
   "type": "module",
   "private": true,

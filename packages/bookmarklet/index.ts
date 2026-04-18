@@ -1,4 +1,4 @@
-import { scrape } from "@barque/scrape";
+import { scrape } from "@compeer-ai/scrape";
 
 (async () => {
   const content = document.documentElement.outerHTML;
