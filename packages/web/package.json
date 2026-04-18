@@ -40,7 +40,6 @@
 		"vitest": "^3.2.4"
 	},
 	"dependencies": {
-		"@aperta/logging": "1.0.0",
 		"@barque/scrape": "workspace:*",
 		"@hono/zod-validator": "^0.7.6",
 		"@huggingface/transformers": "^3.8.1",
@@ -54,6 +53,7 @@
 		"drizzle-valibot": "^0.4.2",
 		"hono": "^4.11.9",
 		"motion": "^12.23.26",
+		"pino": "^10.3.1",
 		"tmcp": "^1.19.3",
 		"valibot": "^1.3.1"
 	},
