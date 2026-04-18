@@ -8,21 +8,20 @@ import { McpServer } from 'tmcp';
 import * as v from 'valibot';
 
 export const POST: RequestHandler = async ({ request, params, url }) => {
-	if (!params.projectId || !params.workspace) {
+	if (!params.workspace) {
 		throw errors.badRequest(url, 'Invalid project id');
 	}
-	const project = await readProject({ id: params.projectId });
-	const name = `read-${project.name}-captures`;
 	const workspace = params.workspace;
+	const name = `read-${workspace}-captures`;
 
 	const server = new McpServer(
 		{
-			name: `${project.name}-projet-compeer-server`,
+			name: `${workspace}-compeer-workspace-server`,
 			version: '1.0.0'
 		},
 		{
 			adapter: new ValibotJsonSchemaAdapter(),
-			instructions: `Get captures within ${project.name}`,
+			instructions: `Get captures within ${workspace}`,
 			capabilities: {
 				tools: {
 					[name]: true
@@ -34,8 +33,8 @@ export const POST: RequestHandler = async ({ request, params, url }) => {
 	server.tool(
 		{
 			name: name,
-			description: `Read captures for ${project.name}`,
-			title: `Read ${project.name} Captures`,
+			description: `Read captures for ${workspace}`,
+			title: `Read ${workspace} Captures`,
 			schema: v.object({
 				query: v.string()
 			}),
@@ -48,7 +47,7 @@ export const POST: RequestHandler = async ({ request, params, url }) => {
 			})
 		},
 		async ({ query }) => {
-			const result = await readSearchCaptures({ project: project.name, workspace, query });
+			const result = await readSearchCaptures({ workspace, query });
 			return {
 				content: [
 					{

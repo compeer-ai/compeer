@@ -18,7 +18,7 @@ const Type = {
 
 export const readSearchCaptures = query(
 	v.object({
-		project: v.string(),
+		project: v.optional(v.string()),
 		workspace: v.string(),
 		query: v.string()
 	}),
