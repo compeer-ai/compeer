@@ -95,7 +95,6 @@
       "name": "web",
       "version": "3.2.3",
       "dependencies": {
-        "@aperta/logging": "1.0.0",
         "@barque/scrape": "workspace:*",
         "@hono/zod-validator": "^0.7.6",
         "@huggingface/transformers": "^3.8.1",
@@ -144,8 +143,6 @@
     },
   },
   "packages": {
-    "@aperta/logging": ["@aperta/logging@1.0.0", "", {}, "sha512-4S/po9Gp6t/SQVY8QoGj7kl+g86m9677UP4F1a7ka/juqAtAlBnGi0Piot1B0RTn/Lvfpv1g9BhN+dw+K5t59w=="],
-
     "@barque/cli": ["@barque/cli@workspace:packages/cli"],
 
     "@barque/scrape": ["@barque/scrape@workspace:packages/scrape"],

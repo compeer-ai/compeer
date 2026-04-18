@@ -40,7 +40,6 @@
 		"vitest": "^3.2.4"
 	},
 	"dependencies": {
-		"@aperta/logging": "1.0.0",
 		"@barque/scrape": "workspace:*",
 		"@hono/zod-validator": "^0.7.6",
 		"@huggingface/transformers": "^3.8.1",
