@@ -17,8 +17,7 @@ async function fetcher(
   return response.text();
 }
 
-async function _DOMParser(fetch: typeof window.fetch, url: string) {
-  const html = await fetcher(fetch, url);
+async function _DOMParser(html: string) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, "text/html");
   const scriptTags = doc.querySelectorAll(
