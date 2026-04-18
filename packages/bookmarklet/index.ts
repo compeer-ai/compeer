@@ -4,5 +4,6 @@ import { scrape } from "@barque/scrape";
   const content = document.documentElement.outerHTML;
   const text = await scrape.DOMParser(content);
   const encodedText = encodeURIComponent(text);
-  window.location.href = `http://localhost:7009?text=${encodedText}`;
+  const currentUrl = window.location.href;
+  window.location.href = `http://localhost:7009?text=${encodedText}&url=${currentUrl}`;
 })();
