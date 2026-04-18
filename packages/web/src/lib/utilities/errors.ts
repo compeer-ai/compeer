@@ -2,35 +2,35 @@ import { error } from '@sveltejs/kit';
 import { loggers } from './loggers';
 
 function notFound(url: URL, message: string): Error {
-	loggers.infra.error(`${message} ${url.href}`);
+	loggers.infra.child({ href: url.href }).error(message);
 	throw error(404, {
 		message
 	});
 }
 
 function badRequest(url: URL, message: string): Error {
-	loggers.infra.error(`${message} ${url.href}`);
+	loggers.infra.child({ href: url.href }).error(message);
 	throw error(400, {
 		message
 	});
 }
 
 function unauthorized(url: URL, message: string) {
-	loggers.security.error(`${message} ${url.href}`);
+	loggers.security.child({ href: url.href }).error(message);
 	throw error(401, {
 		message
 	});
 }
 
 function toManyRequests(url: URL, message: string) {
-	loggers.security.error(`${message} ${url.href}`);
+	loggers.security.child({ href: url.href }).error(message);
 	throw error(429, {
 		message
 	});
 }
 
 function forbidden(url: URL, message: string) {
-	loggers.security.error(`${message} ${url.href}`);
+	loggers.security.child({ href: url.href }).error(message);
 	throw error(403, {
 		message
 	});

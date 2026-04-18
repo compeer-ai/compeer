@@ -51,13 +51,14 @@ const _deleteProject = enhancedValidatedMutation(
 		id: v.string()
 	}),
 	async ({ validatedPayload }) => {
-		const project = await projectRepository.deleteByPredicate(
+		const result = await projectRepository.deleteByPredicate(
 			eq(projectTable.id, validatedPayload.id)
 		);
-		loggers.data.info('Deleted project', project);
+		const project = result.first();
+		loggers.data.child(project).info('Deleted project');
 
-		await _readProject.refresh(project.first());
-		_readProjects.refresh(project.first());
+		await _readProject.refresh(project);
+		_readProjects.refresh(project);
 	}
 );
 
