@@ -1,19 +1,24 @@
 import { commandCreateCapture } from '$lib/remotes/capture.remote';
 import { readProjects } from '$lib/remotes/project.remote';
 import { Hono } from 'hono';
-import z from 'zod';
-import { zValidator } from '@hono/zod-validator';
+import * as v from 'valibot';
+import { vValidator } from '@hono/valibot-validator';
 import { readSearchCaptures } from '$lib/remotes/capture.remote';
 import openApiSpec from '../../../openapi/openapi.json' with { type: 'json' };
-import { backup } from '$lib/utilities/backup';
 import { readWorkspace, readWorkspaces } from '$lib/remotes/workspace.remote';
 
-const paramsValidator = zValidator(
+const paramsValidator = vValidator(
 	'param',
-	z.object({
-		workspace: z.string()
+	v.object({
+		workspace: v.string()
 	})
 );
+
+const Type = {
+	Text: 'text',
+	Data: 'data',
+	Url: 'url'
+} as const;
 
 export const router = new Hono()
 	.get('/alive', (c) => {
@@ -31,11 +36,11 @@ export const router = new Hono()
 	.get(
 		'/:workspace/search',
 		paramsValidator,
-		zValidator(
+		vValidator(
 			'query',
-			z.object({
-				query: z.string(),
-				project: z.string().optional()
+			v.object({
+				query: v.string(),
+				project: v.optional(v.string())
 			})
 		),
 		async (c) => {
@@ -51,12 +56,12 @@ export const router = new Hono()
 	})
 	.post(
 		'/capture',
-		zValidator(
+		vValidator(
 			'json',
-			z.object({
-				type: z.enum(['text', 'data', 'url']),
-				content: z.string(),
-				projectId: z.string()
+			v.object({
+				type: v.enum(Type),
+				content: v.string(),
+				projectId: v.string()
 			})
 		),
 		async (c) => {
