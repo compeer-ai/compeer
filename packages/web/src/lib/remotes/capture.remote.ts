@@ -39,7 +39,7 @@ const _readCaptures = enhancedValidatedQuery(
 	}),
 	async ({ validatedPayload }) => {
 		const result = await captureRepository.readByPredicate(
-			and(eq(captureTable.projectId, validatedPayload.projectId), eq(captureTable.deleted, false))!!
+			eq(captureTable.projectId, validatedPayload.projectId)
 		);
 		const captures = result.all();
 		const formattedCaptures = captures.map(({ embedding, ...others }) => others);
@@ -213,13 +213,7 @@ const _deleteCapture = enhancedValidatedMutation(
 	}),
 	true,
 	async ({ validatedPayload }) => {
-		await captureRepository.updateByPredicate(
-			validatedPayload.id,
-			eq(captureTable.projectId, validatedPayload.projectId),
-			{
-				deleted: true
-			}
-		);
+		await captureRepository.deleteById(validatedPayload.id);
 		loggers.data.info('Deleted capture');
 
 		await _readCaptures.refresh(validatedPayload);

@@ -57,7 +57,6 @@ export const captureTable = sqliteTable('capture', {
 	type: text().notNull(),
 	url: text(),
 	enabled: integer({ mode: 'boolean' }).default(true).notNull(),
-	deleted: integer({ mode: 'boolean' }).default(false).notNull(),
 	projectId: text()
 		.references(() => projectTable.id, {
 			onDelete: 'cascade'
