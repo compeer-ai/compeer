@@ -1,4 +1,5 @@
 import { WorkspaceRepository } from '$lib/repository/workspaceRepository';
+import { config } from '$lib/utilities/config';
 import {
 	enhancedQuery,
 	enhancedValidatedMutation,
@@ -12,6 +13,7 @@ const workspaceRepository = new WorkspaceRepository();
 
 const _readWorkspace = enhancedValidatedQuery(
 	'read_workspace',
+	true,
 	v.object({
 		name: v.pipe(
 			v.string(),
@@ -38,6 +40,7 @@ const _deleteWorkspace = enhancedValidatedMutation(
 	v.object({
 		id: v.string()
 	}),
+	config.flags.deleteWorkspaces,
 	async ({ validatedPayload }) => {
 		await workspaceRepository.deleteById(validatedPayload.id);
 		await _readWorkspaces.refresh();
@@ -46,7 +49,7 @@ const _deleteWorkspace = enhancedValidatedMutation(
 
 export const deleteWorkspace = _deleteWorkspace.form;
 
-const _readWorkspaces = enhancedQuery('read_workspaces', async () => {
+const _readWorkspaces = enhancedQuery('read_workspaces', true, async () => {
 	const workspaces = await workspaceRepository.readAll();
 	return workspaces;
 });
@@ -57,6 +60,7 @@ const _createWorkspace = enhancedValidatedMutation(
 	v.object({
 		name: v.string()
 	}),
+	config.flags.createWorkspaces,
 	async ({ validatedPayload }) => {
 		await workspaceRepository.create({ name: validatedPayload.name });
 		await _readWorkspaces.refresh();
@@ -70,6 +74,7 @@ const _updateWorkspace = enhancedValidatedMutation(
 		id: v.string(),
 		name: v.string()
 	}),
+	config.flags.updateWorkspaces,
 	async ({ validatedPayload }) => {
 		const result = await workspaceRepository.update(validatedPayload.id, validatedPayload);
 		const updatedWorkspace = result.first();

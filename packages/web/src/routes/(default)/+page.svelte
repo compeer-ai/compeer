@@ -30,16 +30,16 @@
 <div class="p-7 space-y-5" use:animations.fadeInForward>
   <div class="flex justify-between">
     <Search bind:query placeholder="Search for a workspace..." />
-      {#if config.flags.addWorkspaces}
-      <button
-      class="bg-primary-gradient hover:bg-primary flex h-12 cursor-pointer items-center space-x-2 rounded-lg px-3 text-white transition ease-in-out"
-      onclick={() => {
-        dispatcher.send("drawer", drawerContent);
-      }}
-    >
-      <Icon icon={Plus}></Icon>
-      <span>Add Workspace</span>
-    </button>
+      {#if config.flags.createWorkspaces}
+        <button
+        class="bg-primary-gradient hover:bg-primary flex h-12 cursor-pointer items-center space-x-2 rounded-lg px-3 text-white transition ease-in-out"
+        onclick={() => {
+          dispatcher.send("drawer", drawerContent);
+        }}
+      >
+        <Icon icon={Plus}></Icon>
+        <span>Add Workspace</span>
+      </button>
     {/if}
   </div>
   {#if filerWorkspaces(workspaces.current, query).length}
