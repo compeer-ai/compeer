@@ -8,11 +8,13 @@ import * as v from 'valibot';
 import { enhancedValidatedMutation, enhancedValidatedQuery } from '../utilities/remote';
 import { captureSchema } from '$lib/repository/captureRepository';
 import { commandCreateCaptures, readCaptures } from './capture.remote';
+import { config } from '$lib/utilities/config';
 
 const projectRepository = new ProjectRepository();
 
 const _readProject = enhancedValidatedQuery(
 	'read_project',
+	true,
 	v.object({
 		id: v.string()
 	}),
@@ -31,6 +33,7 @@ const _readProject = enhancedValidatedQuery(
 
 const _readProjects = enhancedValidatedQuery(
 	'read_projects',
+	true,
 	v.object({
 		workspaceId: v.string()
 	}),
@@ -50,11 +53,13 @@ const _deleteProject = enhancedValidatedMutation(
 	v.object({
 		id: v.string()
 	}),
+	config.flags.deleteProjects,
 	async ({ validatedPayload }) => {
 		const result = await projectRepository.deleteByPredicate(
 			eq(projectTable.id, validatedPayload.id)
 		);
 		const project = result.first();
+		console.log(project);
 		loggers.data.child(project).info('Deleted project');
 
 		await _readProject.refresh(project);
@@ -70,6 +75,7 @@ const _updateProject = enhancedValidatedMutation(
 		id: v.string(),
 		description: v.string()
 	}),
+	config.flags.updateProjects,
 	async ({ validatedPayload }) => {
 		const result = await projectRepository.update(validatedPayload.id, validatedPayload);
 		const updatedProject = await result.first();
@@ -88,6 +94,7 @@ const _createProject = enhancedValidatedMutation(
 		description: v.nullish(v.string()),
 		workspaceId: v.string()
 	}),
+	config.flags.createProjects,
 	async ({ validatedPayload }) => {
 		const result = await projectRepository.create(validatedPayload);
 		const createdProject = await result.first();
@@ -103,6 +110,7 @@ const _exportProject = enhancedValidatedMutation(
 	v.object({
 		id: v.string()
 	}),
+	config.flags.exportProjects,
 	async ({ validatedPayload }) => {
 		const [project, captures] = await Promise.all([
 			_readProject.query({ id: validatedPayload.id }),
@@ -122,6 +130,7 @@ const _importProject = enhancedValidatedMutation(
 		file: v.blob(),
 		workspaceId: v.string()
 	}),
+	config.flags.importProjects,
 	async ({ validatedPayload }) => {
 		const { file } = validatedPayload;
 		const text = await file.text();

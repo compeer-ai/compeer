@@ -1,6 +1,5 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import type { Project } from "$lib/repository/projectRepository";
   import classNames from "classnames";
   import Logo from "./Logo.svelte";
   import { Home, Settings2 } from "@lucide/svelte";

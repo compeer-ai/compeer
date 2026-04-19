@@ -1,12 +1,17 @@
-import { command, form, query } from '$app/server';
+import { command, form, getRequestEvent, query } from '$app/server';
 import { cache } from './cache';
 import { type RemoteCommand, type RemoteForm, type RemoteQueryFunction } from '@sveltejs/kit';
 import { loggers } from './loggers';
 import { version } from '../../../package.json';
 import * as v from 'valibot';
+import { errors } from './errors';
 
-export function enhancedQuery<T>(key: string, fn: () => T) {
+export function enhancedQuery<T>(key: string, flag: boolean, fn: () => T) {
 	const _query = query(async () => {
+		const { url } = getRequestEvent();
+		if (!flag) {
+			throw errors.badRequest(url, 'Remote function not enabled');
+		}
 		const cacheKey = `${version}:${key}`;
 		const hashedCacheKey = Bun.hash(cacheKey).toString();
 		const result = await cache.read(hashedCacheKey, () => fn());
@@ -27,6 +32,7 @@ export function enhancedQuery<T>(key: string, fn: () => T) {
 
 export function enhancedValidatedQuery<S extends v.ObjectSchema<any, any>, T>(
 	key: string,
+	flag: boolean,
 	schema: S,
 	fn: (args: { validatedPayload: v.InferOutput<S> }) => T
 ): {
@@ -34,6 +40,10 @@ export function enhancedValidatedQuery<S extends v.ObjectSchema<any, any>, T>(
 	refresh: (validatedPayload: v.InferOutput<S>) => Promise<void>;
 } {
 	const _query = query(schema, async (validatedPayload: v.InferOutput<S>) => {
+		const { url } = getRequestEvent();
+		if (!flag) {
+			throw errors.badRequest(url, 'Remote function not enabled');
+		}
 		const computedCacheKey = `${version}:${key}:${Object.entries(validatedPayload)
 			.map(([key, value]) => `(${key}=${value})`)
 			.join('')}`;
@@ -60,12 +70,17 @@ export function enhancedValidatedQuery<S extends v.ObjectSchema<any, any>, T>(
 
 export function enhancedValidatedMutation<S extends v.ObjectSchema<any, any>, T>(
 	schema: S,
+	flag: boolean,
 	fn: (args: { validatedPayload: v.InferOutput<S> }) => T
 ): {
 	command: RemoteCommand<v.InferOutput<S>, Promise<T>>;
 	form: RemoteForm<v.InferOutput<S>, T>;
 } {
 	const _form = form(schema, async (validatedPayload: v.InferOutput<S>) => {
+		const { url } = getRequestEvent();
+		if (!flag) {
+			throw errors.badRequest(url, 'Remote function not enabled');
+		}
 		const result = fn({
 			validatedPayload: validatedPayload
 		});
@@ -73,6 +88,10 @@ export function enhancedValidatedMutation<S extends v.ObjectSchema<any, any>, T>
 	});
 
 	const _command = command(schema, async (validatedPayload: v.InferOutput<S>) => {
+		const { url } = getRequestEvent();
+		if (!flag) {
+			throw errors.badRequest(url, 'Remote function not enabled');
+		}
 		const result = fn({
 			validatedPayload: validatedPayload
 		});
@@ -85,13 +104,21 @@ export function enhancedValidatedMutation<S extends v.ObjectSchema<any, any>, T>
 	};
 }
 
-export function enhancedMutation<T>(fn: () => T) {
+export function enhancedMutation<T>(flag: boolean, fn: () => T) {
 	const _form = form('unchecked', async () => {
+		const { url } = getRequestEvent();
+		if (!flag) {
+			throw errors.badRequest(url, 'Remote function not enabled');
+		}
 		const result = fn();
 		return result;
 	});
 
 	const _command = command('unchecked', async () => {
+		const { url } = getRequestEvent();
+		if (!flag) {
+			throw errors.badRequest(url, 'Remote function not enabled');
+		}
 		const result = fn();
 		return result;
 	});

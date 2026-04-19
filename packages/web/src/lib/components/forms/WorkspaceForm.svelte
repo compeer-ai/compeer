@@ -7,11 +7,10 @@
 	import { goto } from "$app/navigation";
 
   interface Props {
-    invalidate?: () => Promise<void>
     workspace?: Workspace;
   }
 
-  const { workspace, invalidate }: Props = $props();
+  const { workspace }: Props = $props();
   let name = $derived(workspace ? workspace.name : '')
 </script>
 
@@ -23,8 +22,6 @@
   onSuccess={async () => {
     if (workspace) {
       await goto(`/${name}/settings`)
-    } else {
-      await invalidate?.()
     }
   }}
 >

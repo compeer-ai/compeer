@@ -83,7 +83,7 @@
 {#if projects?.ready && theme.ready}
 <main data-theme={theme.current}>
     <div class="flex">
-      <Sidebar projects={projects.current} />
+      <Sidebar />
       <div
         class="h-screen w-full overflow-y-auto border-l border-gray-300"
         style={`background-color: #fff;

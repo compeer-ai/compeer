@@ -1,0 +1,14 @@
+{
+	"flags": {
+		"importProjects": true,
+		"createProjects": true,
+		"updateProjects": true,
+		"configureProjectMcps": true,
+		"exportProjects": true,
+		"deleteProjects": true,
+
+		"createWorkspaces": true,
+		"updateWorkspaces": true,
+		"deleteWorkspaces": true
+	}
+}
