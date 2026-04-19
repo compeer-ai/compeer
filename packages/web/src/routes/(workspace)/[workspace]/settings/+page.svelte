@@ -11,7 +11,6 @@
     const workspace = readWorkspace({
         name: page.params.workspace!!
     });
-    const invalidate = () => workspace.refresh()
 </script>
 
 {#if workspace.ready}
@@ -20,7 +19,7 @@
     {#if config.flags.updateWorkspaces}
         <Card title="Metadata" collaspable>
             <div class="p-5">
-                <WorkspaceForm  workspace={workspace.current} {invalidate} />
+                <WorkspaceForm  workspace={workspace.current} />
             </div>
         </Card>
     {/if}

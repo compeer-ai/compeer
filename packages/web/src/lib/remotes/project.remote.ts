@@ -59,6 +59,7 @@ const _deleteProject = enhancedValidatedMutation(
 			eq(projectTable.id, validatedPayload.id)
 		);
 		const project = result.first();
+		console.log(project);
 		loggers.data.child(project).info('Deleted project');
 
 		await _readProject.refresh(project);

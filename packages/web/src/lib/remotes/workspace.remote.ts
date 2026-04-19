@@ -27,7 +27,7 @@ const _readWorkspace = enhancedValidatedQuery(
 		const workspace = result.first();
 		if (!workspace) {
 			const createdWorkspace = await workspaceRepository.create({ name: validatedPayload.name });
-			await _readWorkspaces.refresh();
+			_readWorkspaces.refresh();
 			return createdWorkspace.first();
 		}
 		return workspace;
@@ -43,7 +43,7 @@ const _deleteWorkspace = enhancedValidatedMutation(
 	config.flags.deleteWorkspaces,
 	async ({ validatedPayload }) => {
 		await workspaceRepository.deleteById(validatedPayload.id);
-		await _readWorkspaces.refresh();
+		_readWorkspaces.refresh();
 	}
 );
 
@@ -63,7 +63,7 @@ const _createWorkspace = enhancedValidatedMutation(
 	config.flags.createWorkspaces,
 	async ({ validatedPayload }) => {
 		await workspaceRepository.create({ name: validatedPayload.name });
-		await _readWorkspaces.refresh();
+		_readWorkspaces.refresh();
 	}
 );
 
@@ -79,7 +79,7 @@ const _updateWorkspace = enhancedValidatedMutation(
 		const result = await workspaceRepository.update(validatedPayload.id, validatedPayload);
 		const updatedWorkspace = result.first();
 
-		await _readWorkspaces.refresh();
+		_readWorkspaces.refresh();
 		await _readWorkspace.refresh(updatedWorkspace);
 	}
 );

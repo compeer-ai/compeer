@@ -60,7 +60,7 @@
       <Card title="Delete Project" collaspable>
         <div class="space-y-3 p-5">
           <p>
-            This deletes all project contents, including all captures. This action
+            This deletes all workspace contents, including all captures. This action
             cannot be reversed.
           </p>
           <DeleteForm
