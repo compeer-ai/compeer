@@ -6,6 +6,9 @@ import { vValidator } from '@hono/valibot-validator';
 import { readSearchCaptures } from '$lib/remotes/capture.remote';
 import openApiSpec from '../../../openapi/openapi.json' with { type: 'json' };
 import { readWorkspace, readWorkspaces } from '$lib/remotes/workspace.remote';
+import Bun from 'bun';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 const paramsValidator = vValidator(
 	'param',
@@ -26,6 +29,14 @@ export const router = new Hono()
 	})
 	.get('/openapi', (c) => {
 		return c.json(openApiSpec);
+	})
+	.get('/backup', async (c) => {
+		const sqliteDir = fileURLToPath(new URL('../../../', import.meta.url));
+		const dbPath = join(sqliteDir, 'sqlite.db');
+		const buffer = await Bun.file(dbPath).arrayBuffer();
+		c.header('Content-Type', 'application/octet-stream');
+		c.header('Content-Disposition', `attachment; filename="sqlite.db"`);
+		return c.body(buffer);
 	})
 	.get('/:workspace/projects', paramsValidator, async (c) => {
 		const { workspace } = c.req.valid('param');
