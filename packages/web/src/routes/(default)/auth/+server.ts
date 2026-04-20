@@ -1,7 +1,7 @@
 import { errors } from '$lib/utilities/errors';
 import { jwt } from '$lib/utilities/jwt';
 import { oidc } from '$lib/utilities/oidc';
-import { redirect, type RequestHandler } from '@sveltejs/kit';
+import { type RequestHandler } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async ({ cookies, url }) => {
 	const codeVerifier = cookies.get('codeVerifier');
