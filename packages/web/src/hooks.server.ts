@@ -1,9 +1,23 @@
-import type { Handle, ServerInit } from '@sveltejs/kit';
+import { redirect, type Handle, type ServerInit } from '@sveltejs/kit';
 import { db } from '$lib/utilities/sqlite';
 import { loggers } from '$lib/utilities/loggers';
 import { readdir } from 'node:fs/promises';
 import pkg from '../package.json';
 import { config } from '$lib/utilities/config';
+import { OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_SERVER } from '$env/static/private';
+import { oidc } from '$lib/utilities/oidc';
+
+export const handle: Handle = async ({ event }) => {
+	const cookies = event.cookies;
+	const oidcEnabled = OIDC_SERVER && OIDC_CLIENT_SECRET && OIDC_CLIENT_ID;
+	if (oidcEnabled) {
+		const { authorizationUrl, codeVerifier } = await oidc.login();
+		cookies.set('codeVerifier', codeVerifier, {
+			path: '/'
+		});
+		throw redirect(307, authorizationUrl);
+	}
+};
 
 export const init: ServerInit = async () => {
 	if (pkg.version != config.version) {
