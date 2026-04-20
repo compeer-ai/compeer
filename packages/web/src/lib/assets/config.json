@@ -1,4 +1,5 @@
 {
+	"$schema": "https://compeer.dev/schema/config",
 	"version": "1.0.0",
 	"flags": {
 		"importProjects": true,
