@@ -6,6 +6,7 @@
   import { readTheme, updateThemeCommand } from "$lib/remotes/config.remote";
   import { delay } from "$lib/utilities/delay";
   import { dispatcher } from "$lib/utilities/dispatcher";
+	import Button from "$lib/components/common/Button.svelte";
 
   const themes = [
     {
@@ -64,6 +65,14 @@
           ></button>
         {/each}
       </div>
+    </Card>
+    <Card title="Backup" collaspable>
+        <div class="p-5 space-y-3">
+            <p>Retrieve a backup of your Compeer instance</p>
+            <a href="/api/v1/backup">
+                <Button variant='wide'>Backup</Button>
+            </a>
+        </div>
     </Card>
   </div>
 </section>
