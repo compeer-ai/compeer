@@ -7,12 +7,14 @@
   import Icon from "./Icon.svelte";
 	import type { Workspace } from "$lib/repository/workspaceRepository";
 	import { dispatcher } from "$lib/utilities/dispatcher";
+	import type { User } from "$lib/models/user";
 	
   interface Props {
+    user?: User;
     projects: Project[];
     workspaces: Workspace[]
   }
-  const { projects, workspaces }: Props = $props();
+  const { projects, workspaces, user }: Props = $props();
   const workspace = page.params.workspace;
   function isActiveProject(projectId: string) {
     return (
@@ -93,4 +95,9 @@
       </div>
     {/if}
   </div>
+  {#if user}
+    <div class="border-t border-gray-300 h-14 font-medium flex items-center text-black px-7">
+      {user.name}
+    </div>
+  {/if}
 </div>

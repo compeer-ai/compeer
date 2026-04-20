@@ -4,12 +4,14 @@
 	import { readWorkspace, readWorkspaces } from "$lib/remotes/workspace.remote";
 	import { page } from "$app/state";
 	import WorkspaceSidebar from "$lib/components/common/WorkspaceSidebar.svelte";
+	import { readUser } from "$lib/remotes/user.remote";
 	
   const { children }: LayoutProps = $props();
 
   const workspace = readWorkspace({
     name: page.params.workspace!!
   });
+  const user = readUser();
   const workspaces = readWorkspaces();
   const projects = $derived.by(() => workspace.current && readProjects({
     workspaceId: workspace.current.id
@@ -17,9 +19,9 @@
 </script>
 
 
-{#if projects?.ready && workspace.ready && workspaces.ready}
+{#if projects?.ready && workspace.ready && workspaces.ready && user.ready}
     <div class="flex">
-      <WorkspaceSidebar projects={projects.current} workspaces={workspaces.current} />
+      <WorkspaceSidebar projects={projects.current} workspaces={workspaces.current} user={user.current} />
       <div
         class="h-screen w-full overflow-y-auto border-l border-gray-300"
         style={`background-color: #fff;
