@@ -1,4 +1,5 @@
 import { decodeJwt, jwtVerify, SignJWT, type JWTPayload } from 'jose';
+import { loggers } from './loggers';
 
 async function encode(payload: JWTPayload, secret: string) {
 	const encoder = new TextEncoder();
@@ -15,7 +16,7 @@ async function decode(token: string) {
 		const { payload } = decodeJwt(token);
 		return payload;
 	} catch (err) {
-		console.error('Failed to decode JWT:', err);
+		loggers.security.child({ err }).error('Failed to decode JWT');
 		return null;
 	}
 }
@@ -26,7 +27,7 @@ async function verify(token: string, secret: string): Promise<object | null> {
 		const { payload } = await jwtVerify(token, encoder.encode(secret));
 		return payload;
 	} catch (err) {
-		console.error('JWT verification failed:', err);
+		loggers.security.child({ err }).error('Failed to verify JWT');
 		return null;
 	}
 }
