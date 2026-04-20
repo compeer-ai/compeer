@@ -1,4 +1,4 @@
-import { redirect, type Handle, type ServerInit } from '@sveltejs/kit';
+import { redirect, type Cookies, type Handle, type ServerInit } from '@sveltejs/kit';
 import { db } from '$lib/utilities/sqlite';
 import { loggers } from '$lib/utilities/loggers';
 import { readdir } from 'node:fs/promises';
@@ -6,17 +6,37 @@ import pkg from '../package.json';
 import { config } from '$lib/utilities/config';
 import { OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_SERVER } from '$env/static/private';
 import { oidc } from '$lib/utilities/oidc';
+import { jwt } from '$lib/utilities/jwt';
 
-export const handle: Handle = async ({ event }) => {
+async function login(cookies: Cookies) {
+	const { authorizationUrl, codeVerifier } = await oidc.login();
+	cookies.set('codeVerifier', codeVerifier, {
+		path: '/'
+	});
+	return Response.redirect(authorizationUrl, 307);
+}
+
+export const handle: Handle = async ({ event, resolve }) => {
 	const cookies = event.cookies;
 	const oidcEnabled = OIDC_SERVER && OIDC_CLIENT_SECRET && OIDC_CLIENT_ID;
-	if (oidcEnabled) {
-		const { authorizationUrl, codeVerifier } = await oidc.login();
-		cookies.set('codeVerifier', codeVerifier, {
-			path: '/'
-		});
-		throw redirect(307, authorizationUrl);
+	const notAuth = event.url.pathname !== '/auth';
+	if (oidcEnabled && notAuth) {
+		const currentJwt = cookies.get('jwt');
+		if (!currentJwt) {
+			return login(cookies);
+		}
+		const verifiedJwt = await jwt.verify(currentJwt);
+		if (!verifiedJwt) {
+			cookies.delete('user', {
+				path: '/'
+			});
+			cookies.delete('jwt', {
+				path: '/'
+			});
+			return login(cookies);
+		}
 	}
+	return resolve(event);
 };
 
 export const init: ServerInit = async () => {
