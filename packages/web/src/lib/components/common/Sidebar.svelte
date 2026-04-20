@@ -4,6 +4,13 @@
   import Logo from "./Logo.svelte";
   import { Home, Settings2 } from "@lucide/svelte";
   import Icon from "./Icon.svelte";
+	import type { User } from "$lib/models/user";
+
+  interface Props {
+    user?: User
+  }
+
+  const { user }: Props = $props();
 
   function isActive(pathname: typeof page.url.pathname) {
     return page.url.pathname === pathname;
@@ -46,4 +53,9 @@
       </a>
     </div>
   </div>
+  {#if user}
+    <div class="border-t border-gray-300 h-10 text-black">
+      {user.name}
+    </div>
+  {/if}
 </div>

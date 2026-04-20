@@ -107,6 +107,7 @@
         "drizzle-orm": "0.45.2",
         "drizzle-valibot": "^0.4.2",
         "hono": "^4.11.9",
+        "jose": "^6.2.2",
         "motion": "^12.23.26",
         "openid-client": "^6.8.3",
         "pino": "^10.3.1",
