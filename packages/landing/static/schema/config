@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "flags": {
+      "type": "object",
+      "properties": {
+        "importProjects": { "type": "boolean" },
+        "createProjects": { "type": "boolean" },
+        "updateProjects": { "type": "boolean" },
+        "configureProjectMcps": { "type": "boolean" },
+        "exportProjects": { "type": "boolean" },
+        "deleteProjects": { "type": "boolean" },
+
+        "createWorkspaces": { "type": "boolean" },
+        "updateWorkspaces": { "type": "boolean" },
+        "deleteWorkspaces": { "type": "boolean" }
+      },
+      "additionalProperties": false,
+      "required": [
+        "importProjects",
+        "createProjects",
+        "updateProjects",
+        "configureProjectMcps",
+        "exportProjects",
+        "deleteProjects",
+
+        "createWorkspaces",
+        "updateWorkspaces",
+        "deleteWorkspaces"
+      ]
+    }
+  },
+  "required": ["flags"]
+}
