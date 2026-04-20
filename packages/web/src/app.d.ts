@@ -1,10 +1,6 @@
 declare global {
 	namespace App {
-		interface Locals {
-			user?: {
-				name: string;
-			};
-		}
+		interface Locals {}
 
 		interface Error {
 			message: string;

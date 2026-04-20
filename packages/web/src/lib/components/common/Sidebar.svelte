@@ -54,7 +54,7 @@
     </div>
   </div>
   {#if user}
-    <div class="border-t border-gray-300 h-10 text-black">
+    <div class="border-t border-gray-300 h-14 font-medium flex items-center text-black px-7">
       {user.name}
     </div>
   {/if}

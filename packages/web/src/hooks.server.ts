@@ -5,11 +5,6 @@ import { readdir } from 'node:fs/promises';
 import pkg from '../package.json';
 import { config } from '$lib/utilities/config';
 
-export const handle: Handle = async ({ event, resolve }) => {
-	const response = resolve(event);
-	return response;
-};
-
 export const init: ServerInit = async () => {
 	if (pkg.version != config.version) {
 		loggers.infra.error(
