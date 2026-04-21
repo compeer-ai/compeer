@@ -7,11 +7,10 @@
 	import DeleteForm from "$lib/components/forms/DeleteForm.svelte";
 	import { goto } from "$app/navigation";
 	import { config } from "$lib/utilities/config";
-	import Button from "$lib/components/common/Button.svelte";
 
-    const workspace = readWorkspace({
+    const workspace = $derived(readWorkspace({
         name: page.params.workspace!!
-    });
+    }));
 </script>
 
 {#if workspace.ready}
@@ -35,6 +34,5 @@
             </div>
         </Card>
     {/if}
-
 </section>
 {/if}
