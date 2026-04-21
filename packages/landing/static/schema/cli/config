@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "server": {
+      "type": "string",
+      "format": "uri",
+      "default": "http://localhost:5173",
+      "description": "The Barque server URL. Defaults to the local dev server."
+    },
+    "workspace": {
+      "type": "string",
+      "description": "Required workspace identifier or path for this project."
+    },
+    "agent": {
+      "type": "string",
+      "enum": [
+        "opencode",
+        "gemini-cli",
+        "github-copilot",
+        "claude-code"
+      ],
+      "description": "The agent implementation to use."
+    }
+  },
+  "required": ["workspace", "agent"],
+  "additionalProperties": false
+}
