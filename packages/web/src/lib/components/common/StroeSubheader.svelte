@@ -6,9 +6,9 @@
     Settings2,
     SquareDashedMousePointer,
   } from "@lucide/svelte";
-  import { readProject } from "$lib/remotes/store.remote";
+  import { readStore } from "$lib/remotes/store.remote";
 
-  const store = await readProject({ id: page.params.projectId!! });
+  const store = await readStore({ id: page.params.storeId!! });
   const workspace = page.params.workspace!!;
   function isActive(pathname: string) {
     return page.url.pathname === pathname;

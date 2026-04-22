@@ -26,7 +26,7 @@ export const capture = command({
         json: {
           ...opts,
           type: opts.type as "data" | "url" | "text",
-          projectId: opts.store,
+          storeId: opts.store,
         },
       });
       if (result.ok) {

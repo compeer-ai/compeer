@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Store } from "$lib/repository/projectRepository";
+  import type { Store } from "$lib/repository/storeRepository";
   import {
     Activity,
     Settings2,

@@ -1,5 +1,5 @@
 import { readSearchCaptures } from '$lib/remotes/capture.remote';
-import { readProject } from '$lib/remotes/store.remote';
+import { readStore } from '$lib/remotes/store.remote';
 import { errors } from '$lib/utilities/errors';
 import type { RequestHandler } from '@sveltejs/kit';
 import { ValibotJsonSchemaAdapter } from '@tmcp/adapter-valibot';
@@ -8,10 +8,10 @@ import { McpServer } from 'tmcp';
 import * as v from 'valibot';
 
 export const POST: RequestHandler = async ({ request, params, url }) => {
-	if (!params.projectId || !params.workspace) {
+	if (!params.storeId || !params.workspace) {
 		throw errors.badRequest(url, 'Invalid store id');
 	}
-	const store = await readProject({ id: params.projectId });
+	const store = await readStore({ id: params.storeId });
 	const name = `read-${store.name}-captures`;
 	const workspace = params.workspace;
 

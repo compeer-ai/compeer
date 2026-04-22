@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS `capture` (
 	`url` text,
 	`enabled` integer DEFAULT true NOT NULL,
 	`deleted` integer DEFAULT false NOT NULL,
-	`projectId` text NOT NULL,
-	FOREIGN KEY (`projectId`) REFERENCES `project`(`id`) ON UPDATE no action ON DELETE cascade
+	`storeId` text NOT NULL,
+	FOREIGN KEY (`storeId`) REFERENCES `project`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS `config` (

@@ -2,9 +2,9 @@ import { boolean, command } from "@drizzle-team/brocli";
 import { backend } from "../utilities/backend";
 import { config } from "../utilities/config";
 
-export const projects = command({
-  name: "projects",
-  desc: "Get all projects",
+export const stores = command({
+  name: "stores",
+  desc: "Get all stores",
   aliases: ["p"],
   options: {
     pretty: boolean().default(false),
@@ -16,7 +16,7 @@ export const projects = command({
   handler: async (opts) => {
     const { pretty, workspace } = opts;
     try {
-      const result = await backend.client.api.v1[":workspace"].projects.$get({
+      const result = await backend.client.api.v1[":workspace"].stores.$get({
         param: {
           workspace,
         },
@@ -27,7 +27,7 @@ export const projects = command({
         return;
       }
       console.error(
-        `Failed to read projects:`,
+        `Failed to read stores:`,
         JSON.stringify({
           status: result.status,
           statusText: result.statusText,

@@ -19,8 +19,8 @@ bun install @barque/cli
 # Start Barque locally and configure your agent
 barque init
 
-# List your projects
-barque projects
+# List your stores
+barque stores
 
 # Capture a note into a store
 barque capture --store my-store --text "Ships on Friday"
@@ -39,12 +39,12 @@ Initializes Barque in the current directory.
 - Prompts for your coding agent and writes a `barque` skill file into the matching agent config directory.
 - Stores the selected agent in `~/.config/barque/credentials.json`.
 
-### `barque projects`
+### `barque stores`
 
-Lists projects you own.
+Lists stores you own.
 
 ```bash
-barque projects
+barque stores
 barque p
 ```
 

@@ -128,7 +128,7 @@
     </div>
     <div class="space-y-3">
         <h2 class="text-xl text-black font-semibold">Connect to any Agent</h2>
-        <p>Use the HTTP API, CLI, or our MCP server to connect any agent. Search across projects, pull the best captures, and share context across your tools.</p>
+        <p>Use the HTTP API, CLI, or our MCP server to connect any agent. Search across stores, pull the best captures, and share context across your tools.</p>
 		<a href="/docs/quickstart">
 			<Button>Learn More</Button>
 		</a>

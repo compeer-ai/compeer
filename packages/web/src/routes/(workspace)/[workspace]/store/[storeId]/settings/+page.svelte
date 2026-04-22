@@ -3,7 +3,7 @@
   import { animations } from "$lib/utilities/animations";
   import Metadata from "$lib/components/common/Metadata.svelte";
   import ProjectForm from "$lib/components/forms/ProjectForm.svelte";
-  import { commandExportProject, formDeleteProject, readProject, readProjects } from "$lib/remotes/store.remote";
+  import { commandExportProject, formDeleteProject, readStore, readStores } from "$lib/remotes/store.remote";
   import { page } from "$app/state";
   import { goto } from "$app/navigation";
   import DeleteForm from "$lib/components/forms/DeleteForm.svelte";
@@ -16,12 +16,12 @@
   const workspace = $derived(readWorkspace({
     name: page.params.workspace!!
   }));
-  const store = $derived(readProject({
-    id: page.params.projectId!!
+  const store = $derived(readStore({
+    id: page.params.storeId!!
   }));
 
   const updateInvalidate = () => store.refresh();
-  const deleteInvalidate = () => workspace.current && readProjects({ workspaceId: workspace.current?.id }).refresh()
+  const deleteInvalidate = () => workspace.current && readStores({ workspaceId: workspace.current?.id }).refresh()
 </script>
 
 <Metadata title="Barque: Store Settings" description="Give AI eyes" />
@@ -48,7 +48,7 @@
       <Card title="Export Store" collaspable>
         <div class="p-5">
           <Button variant='wide' onclick={async () => {
-            const backup = await commandExportProject({ id: page.params.projectId!! });
+            const backup = await commandExportProject({ id: page.params.storeId!! });
             download.start(backup, `${store.current.name}_backup.barque`)
           }}>
             Export
@@ -64,7 +64,7 @@
             cannot be reversed.
           </p>
           <DeleteForm
-            id={page.params.projectId!!}
+            id={page.params.storeId!!}
             toastMessage={"Deleted Store"}
             remote={formDeleteProject}
             onSuccess={async () => {

@@ -64,7 +64,7 @@ async function mainContext(query: string, workspace: string) {
 		  vector_distance_cos(cc.embedding, vector32(?)) as distance
 		FROM capture_chunk cc
 		JOIN capture c ON c.id = cc.captureId
-		JOIN store p ON p.id = c.projectId
+		JOIN store p ON p.id = c.storeId
 		JOIN workspace w on w.id = p.workspaceId
 		WHERE w.name = ? AND c.enabled = 1 AND c.deleted = 0 
 		ORDER BY distance ASC
@@ -92,7 +92,7 @@ async function projectContext(query: string, workspace: string, store: string) {
 		  vector_distance_cos(cc.embedding, vector32(?)) as distance
 		FROM capture_chunk cc
 		JOIN capture c ON c.id = cc.captureId
-		JOIN store p ON p.id = c.projectId
+		JOIN store p ON p.id = c.storeId
 		JOIN workspace w on p.workspaceId = w.id
 		WHERE p.name = ? AND w.name = ? AND c.enabled = 1 AND c.deleted = 0
 		ORDER BY distance ASC

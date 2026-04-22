@@ -7,7 +7,7 @@ export default defineConfig({
 		info: {
 			title: 'Barque API',
 			version: '1.0.0',
-			description: 'API for managing projects, captures, and search functionality'
+			description: 'API for managing stores, captures, and search functionality'
 		},
 		servers: [{ url: 'https://barque.ai/api/v1' }]
 	},
@@ -21,10 +21,10 @@ export default defineConfig({
 			appTypePath: 'src/lib/utilities/api.ts',
 			api: [
 				{
-					api: '/projects',
+					api: '/stores',
 					method: 'get',
-					summary: 'List user projects',
-					description: 'Returns all projects belonging to the authenticated user',
+					summary: 'List user stores',
+					description: 'Returns all stores belonging to the authenticated user',
 					tag: ['Projects']
 				},
 				{

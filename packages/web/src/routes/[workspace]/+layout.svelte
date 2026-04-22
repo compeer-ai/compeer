@@ -1,7 +1,7 @@
 <script lang="ts">
   import "../../app.css";
   import type { LayoutProps } from "./$types";
-  import { readProjects } from "$lib/remotes/store.remote";
+  import { readStores } from "$lib/remotes/store.remote";
   import { onMount, type Snippet } from "svelte";
   import Drawer from "$lib/components/common/Drawer.svelte";
   import Modal from "$lib/components/common/Modal.svelte";
@@ -18,7 +18,7 @@
   const workspace = readWorkspace({
     name: page.params.workspace!!
   })
-  const projects = $derived.by(() => workspace.current && readProjects({
+  const stores = $derived.by(() => workspace.current && readStores({
     workspaceId: workspace.current.id
   }));
   const theme = readTheme()
@@ -80,7 +80,7 @@
   });
 </script>
 
-{#if projects?.ready && theme.ready}
+{#if stores?.ready && theme.ready}
 <main data-theme={theme.current}>
     <div class="flex">
       <Sidebar />

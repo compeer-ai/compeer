@@ -3,7 +3,7 @@
 	"info": {
 		"title": "Barque API",
 		"version": "1.0.0",
-		"description": "API for managing projects, captures, and search functionality"
+		"description": "API for managing stores, captures, and search functionality"
 	},
 	"servers": [
 		{
@@ -16,9 +16,9 @@
 		}
 	],
 	"paths": {
-		"/api/v1/projects": {
+		"/api/v1/stores": {
 			"get": {
-				"summary": "List user projects",
+				"summary": "List user stores",
 				"responses": {
 					"default": {
 						"description": "Default fallback response",
@@ -46,7 +46,7 @@
 						}
 					}
 				},
-				"description": "Returns all projects belonging to the authenticated user",
+				"description": "Returns all stores belonging to the authenticated user",
 				"tags": ["Projects"]
 			}
 		},
@@ -110,7 +110,7 @@
 						}
 					},
 					{
-						"name": "projectId",
+						"name": "storeId",
 						"in": "query",
 						"required": true,
 						"schema": {
@@ -149,11 +149,11 @@
 									"content": {
 										"type": "string"
 									},
-									"projectId": {
+									"storeId": {
 										"type": "string"
 									}
 								},
-								"required": ["type", "content", "projectId"]
+								"required": ["type", "content", "storeId"]
 							}
 						}
 					}

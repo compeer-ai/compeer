@@ -1,13 +1,13 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import ProjectSubheader from "$lib/components/common/ProjectSubheader.svelte";
+  import StoreSubheader from "$lib/components/common/StroeSubheader.svelte";
 	import type { LayoutProps } from "./$types";
   const { children }: LayoutProps = $props();
 </script>
 
 <div class="h-screen w-full">
-  {#key page.params.projectId}
-    <ProjectSubheader />
+  {#key page.params.storeId}
+    <StoreSubheader />
     {@render children()}
   {/key}
 </div>

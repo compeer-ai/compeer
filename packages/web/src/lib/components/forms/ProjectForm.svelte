@@ -1,7 +1,7 @@
 <script lang="ts">
   import Form from "../common/Form.svelte";
   import Input from "../common/Input.svelte";
-  import type { Store } from "$lib/repository/projectRepository";
+  import type { Store } from "$lib/repository/storeRepository";
   import {
     formUpdateProject,
     formCreateProject,

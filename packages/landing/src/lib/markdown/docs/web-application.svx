@@ -3,7 +3,7 @@ title: Web Application
 order: 7
 ---
 
-Barque includes a local web app for managing projects, captures, and usage.
+Barque includes a local web app for managing stores, captures, and usage.
 
 ## Open the app
 
@@ -11,7 +11,7 @@ After starting the container, visit: `http://localhost:3000`
 
 ## Home
 
-- View all projects and search by name.
+- View all stores and search by name.
 - Add a new store from the drawer.
 
 ## Captures

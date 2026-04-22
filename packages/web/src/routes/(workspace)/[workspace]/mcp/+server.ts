@@ -1,5 +1,5 @@
 import { readSearchCaptures } from '$lib/remotes/capture.remote';
-import { readProject } from '$lib/remotes/store.remote';
+import { readStore } from '$lib/remotes/store.remote';
 import { errors } from '$lib/utilities/errors';
 import type { RequestHandler } from '@sveltejs/kit';
 import { ValibotJsonSchemaAdapter } from '@tmcp/adapter-valibot';

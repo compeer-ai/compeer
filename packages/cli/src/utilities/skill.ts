@@ -1,4 +1,4 @@
-import { type Store } from "$lib/repository/projectRepository";
+import { type Store } from "$lib/repository/storeRepository";
 import { mkdir } from "fs/promises";
 import path from "path";
 
@@ -51,8 +51,8 @@ async function sync(agent: string, store: Store) {
   await Bun.write(path.join(skillPath, "SKILL.md"), header + body);
 }
 
-async function syncAll(agent: string, projects: Store[]) {
-  await Promise.all(projects.map((store) => sync(agent, store)));
+async function syncAll(agent: string, stores: Store[]) {
+  await Promise.all(stores.map((store) => sync(agent, store)));
 }
 
 export const skill = {
