@@ -18,14 +18,14 @@ const Type = {
 
 export const readSearchCaptures = query(
 	v.object({
-		project: v.optional(v.string()),
+		store: v.optional(v.string()),
 		workspace: v.string(),
 		query: v.string()
 	}),
 	async (validatedPayload) => {
-		const { query, project, workspace } = validatedPayload;
-		const context = project
-			? await rag.projectContext(query, workspace, project)
+		const { query, store, workspace } = validatedPayload;
+		const context = store
+			? await rag.projectContext(query, workspace, store)
 			: await rag.mainContext(query, workspace);
 		return context;
 	}

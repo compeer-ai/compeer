@@ -1,5 +1,5 @@
 import { commandCreateCapture } from '$lib/remotes/capture.remote';
-import { readProjects } from '$lib/remotes/project.remote';
+import { readProjects } from '$lib/remotes/store.remote';
 import { Hono } from 'hono';
 import * as v from 'valibot';
 import { vValidator } from '@hono/valibot-validator';
@@ -51,7 +51,7 @@ export const router = new Hono()
 			'query',
 			v.object({
 				query: v.string(),
-				project: v.optional(v.string())
+				store: v.optional(v.string())
 			})
 		),
 		async (c) => {

@@ -1,5 +1,5 @@
 import { readSearchCaptures } from '$lib/remotes/capture.remote';
-import { readProject } from '$lib/remotes/project.remote';
+import { readProject } from '$lib/remotes/store.remote';
 import { errors } from '$lib/utilities/errors';
 import type { RequestHandler } from '@sveltejs/kit';
 import { ValibotJsonSchemaAdapter } from '@tmcp/adapter-valibot';
@@ -9,20 +9,20 @@ import * as v from 'valibot';
 
 export const POST: RequestHandler = async ({ request, params, url }) => {
 	if (!params.projectId || !params.workspace) {
-		throw errors.badRequest(url, 'Invalid project id');
+		throw errors.badRequest(url, 'Invalid store id');
 	}
-	const project = await readProject({ id: params.projectId });
-	const name = `read-${project.name}-captures`;
+	const store = await readProject({ id: params.projectId });
+	const name = `read-${store.name}-captures`;
 	const workspace = params.workspace;
 
 	const server = new McpServer(
 		{
-			name: `${project.name}-projet-compeer-server`,
+			name: `${store.name}-projet-compeer-server`,
 			version: '1.0.0'
 		},
 		{
 			adapter: new ValibotJsonSchemaAdapter(),
-			instructions: `Get captures within ${project.name}`,
+			instructions: `Get captures within ${store.name}`,
 			capabilities: {
 				tools: {
 					[name]: true
@@ -34,8 +34,8 @@ export const POST: RequestHandler = async ({ request, params, url }) => {
 	server.tool(
 		{
 			name: name,
-			description: `Read captures for ${project.name}`,
-			title: `Read ${project.name} Captures`,
+			description: `Read captures for ${store.name}`,
+			title: `Read ${store.name} Captures`,
 			schema: v.object({
 				query: v.string()
 			}),
@@ -48,7 +48,7 @@ export const POST: RequestHandler = async ({ request, params, url }) => {
 			})
 		},
 		async ({ query }) => {
-			const result = await readSearchCaptures({ project: project.name, workspace, query });
+			const result = await readSearchCaptures({ store: store.name, workspace, query });
 			return {
 				content: [
 					{

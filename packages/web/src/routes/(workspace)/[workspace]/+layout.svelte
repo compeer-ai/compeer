@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { LayoutProps } from "./$types";
-  import { readProjects } from "$lib/remotes/project.remote";
+  import { readProjects } from "$lib/remotes/store.remote";
 	import { readWorkspace, readWorkspaces } from "$lib/remotes/workspace.remote";
 	import { page } from "$app/state";
 	import WorkspaceSidebar from "$lib/components/common/WorkspaceSidebar.svelte";

@@ -6,9 +6,9 @@
     Settings2,
     SquareDashedMousePointer,
   } from "@lucide/svelte";
-  import { readProject } from "$lib/remotes/project.remote";
+  import { readProject } from "$lib/remotes/store.remote";
 
-  const project = await readProject({ id: page.params.projectId!! });
+  const store = await readProject({ id: page.params.projectId!! });
   const workspace = page.params.workspace!!;
   function isActive(pathname: string) {
     return page.url.pathname === pathname;
@@ -16,12 +16,12 @@
   const pages = [
     {
       name: "Captures",
-      path: `/${workspace}/project/${project.id}/captures`,
+      path: `/${workspace}/store/${store.id}/captures`,
       icon: SquareDashedMousePointer,
     },
     {
       name: "Settings",
-      path: `/${workspace}/project/${project.id}/settings`,
+      path: `/${workspace}/store/${store.id}/settings`,
       icon: Settings2,
     },
   ];

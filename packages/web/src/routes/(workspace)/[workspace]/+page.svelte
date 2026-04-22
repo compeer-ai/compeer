@@ -6,9 +6,9 @@
   import Icon from "$lib/components/common/Icon.svelte";
   import { dispatcher } from "$lib/utilities/dispatcher";
   import ProjectForm from "$lib/components/forms/ProjectForm.svelte";
-  import type { Project as IProject } from "$lib/repository/projectRepository";
-  import Project from "$lib/components/common/Project.svelte";
-  import { readProjects } from "$lib/remotes/project.remote";
+  import type { Store as IProject } from "$lib/repository/projectRepository";
+  import Store from "$lib/components/common/Store.svelte";
+  import { readProjects } from "$lib/remotes/store.remote";
 	import { readWorkspace } from "$lib/remotes/workspace.remote";
 	import { page } from "$app/state";
 	import ImportProjectForm from "$lib/components/forms/ImportProjectForm.svelte";
@@ -17,8 +17,8 @@
   let query = $state("");
   function filterProjects(projects: IProject[], query: string) {
     if (!query.length) return projects;
-    return projects.filter((project) =>
-      project.name.toLowerCase().includes(query.toLowerCase()),
+    return projects.filter((store) =>
+      store.name.toLowerCase().includes(query.toLowerCase()),
     );
   }
 
@@ -35,7 +35,7 @@
 {#if projects?.ready && workspace.ready}
 <section class="space-y-5 p-7" use:animations.fadeInForward>
   <div class="flex justify-between">
-    <Search bind:query placeholder="Search for a project..." />
+    <Search bind:query placeholder="Search for a store..." />
     {#snippet addProjectDrawerContent()}
       <div class="px-5">
         <ProjectForm workspaceId={workspace.current.id} {invalidate} />
@@ -54,7 +54,7 @@
       }}
     >
       <Icon icon={Plus}></Icon>
-      <span>Add Project</span>
+      <span>Add Store</span>
     </button>
     {#if config.flags.importProjects}
       <button
@@ -64,7 +64,7 @@
         }}
       >
         <Icon icon={Download}></Icon>
-        <span>Import Project</span>
+        <span>Import Store</span>
       </button>
     {/if}
   </div>
@@ -74,8 +74,8 @@
       class="border border-gray-300 divide-y divide-gray-300 rounded-lg shadow-sm shadow-gray-100 bg-white overflow-hidden"
       use:animations.fadeIn
     >
-      {#each filterProjects(projects.current, query) as project}
-        <Project {project} />
+      {#each filterProjects(projects.current, query) as store}
+        <Store {store} />
       {/each}
     </div>
   {/if}

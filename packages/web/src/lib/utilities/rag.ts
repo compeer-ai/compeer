@@ -64,7 +64,7 @@ async function mainContext(query: string, workspace: string) {
 		  vector_distance_cos(cc.embedding, vector32(?)) as distance
 		FROM capture_chunk cc
 		JOIN capture c ON c.id = cc.captureId
-		JOIN project p ON p.id = c.projectId
+		JOIN store p ON p.id = c.projectId
 		JOIN workspace w on w.id = p.workspaceId
 		WHERE w.name = ? AND c.enabled = 1 AND c.deleted = 0 
 		ORDER BY distance ASC
@@ -81,7 +81,7 @@ async function mainContext(query: string, workspace: string) {
 	return formattedResult;
 }
 
-async function projectContext(query: string, workspace: string, project: string) {
+async function projectContext(query: string, workspace: string, store: string) {
 	const { embedding } = await embed(query);
 	const embeddingJson = JSON.stringify(embedding);
 	const result = await db.$client.execute({
@@ -92,13 +92,13 @@ async function projectContext(query: string, workspace: string, project: string)
 		  vector_distance_cos(cc.embedding, vector32(?)) as distance
 		FROM capture_chunk cc
 		JOIN capture c ON c.id = cc.captureId
-		JOIN project p ON p.id = c.projectId
+		JOIN store p ON p.id = c.projectId
 		JOIN workspace w on p.workspaceId = w.id
 		WHERE p.name = ? AND w.name = ? AND c.enabled = 1 AND c.deleted = 0
 		ORDER BY distance ASC
 		LIMIT 7
 		`,
-		args: [embeddingJson, project, workspace]
+		args: [embeddingJson, store, workspace]
 	});
 
 	const formattedResult = result.rows.map((row: any) => ({

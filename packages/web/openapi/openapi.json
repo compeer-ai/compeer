@@ -128,7 +128,7 @@
 						}
 					}
 				},
-				"description": "Search for captures within a project using semantic search",
+				"description": "Search for captures within a store using semantic search",
 				"tags": ["Search"]
 			}
 		},
@@ -176,7 +176,7 @@
 						}
 					}
 				},
-				"description": "Create a new text, data, or URL capture in a project",
+				"description": "Create a new text, data, or URL capture in a store",
 				"tags": ["Captures"]
 			}
 		}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Project } from "$lib/repository/projectRepository";
+  import type { Store } from "$lib/repository/projectRepository";
   import {
     Activity,
     Settings2,
@@ -9,24 +9,24 @@
 	import { page } from "$app/state";
 
   interface Props {
-    project: Project;
+    store: Store;
   }
 
-  const { project }: Props = $props();
+  const { store }: Props = $props();
 </script>
 
 <div
   class="p-5 group flex flex-row justify-between items-center hover:bg-gray-100/30 transition ease-in-out"
 >
-  <a href={`/${page.params.workspace!!}/project/${project.id}/captures`} class="flex-1 block">
+  <a href={`/${page.params.workspace!!}/store/${store.id}/captures`} class="flex-1 block">
     <h2 class="font-medium text-black w-full">
-      {project.name}
+      {store.name}
     </h2>
   </a>
   <div
     class="space-x-3 flex items-center group-hover:opacity-100 group-hover:scale-100 scale-99 opacity-0 ease-in-out transition"
   >
-    <a href={`/${page.params.workspace!!}/project/${project.id}/captures`}>
+    <a href={`/${page.params.workspace!!}/store/${store.id}/captures`}>
       <button
         class="text-sm cursor-pointer flex font-medium px-3 items-center h-7 space-x-2 text-black border border-gray-300 rounded-full shadow-sm shadow-gray-100"
       >
@@ -34,7 +34,7 @@
         <span>Captures</span>
       </button>
     </a>
-    <a href={`/${page.params.workspace!!}/project/${project.id}/settings`}>
+    <a href={`/${page.params.workspace!!}/store/${store.id}/settings`}>
       <button
         class="text-sm cursor-pointer flex font-medium px-3 items-center h-7 space-x-2 text-black border border-gray-300 rounded-full shadow-sm shadow-gray-100"
       >

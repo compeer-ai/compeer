@@ -23,11 +23,11 @@ const _readProject = enhancedValidatedQuery(
 		const result = await projectRepository.readByPredicate(
 			eq(projectTable.id, validatedPayload.id)
 		);
-		const project = result.first();
-		if (!project) {
-			throw errors.notFound(url, 'Project not found');
+		const store = result.first();
+		if (!store) {
+			throw errors.notFound(url, 'Store not found');
 		}
-		return project;
+		return store;
 	}
 );
 
@@ -58,12 +58,12 @@ const _deleteProject = enhancedValidatedMutation(
 		const result = await projectRepository.deleteByPredicate(
 			eq(projectTable.id, validatedPayload.id)
 		);
-		const project = result.first();
-		console.log(project);
-		loggers.data.child(project).info('Deleted project');
+		const store = result.first();
+		console.log(store);
+		loggers.data.child(store).info('Deleted store');
 
-		await _readProject.refresh(project);
-		_readProjects.refresh(project);
+		await _readProject.refresh(store);
+		_readProjects.refresh(store);
 	}
 );
 
@@ -79,7 +79,7 @@ const _updateProject = enhancedValidatedMutation(
 	async ({ validatedPayload }) => {
 		const result = await projectRepository.update(validatedPayload.id, validatedPayload);
 		const updatedProject = await result.first();
-		loggers.data.info('Updated project');
+		loggers.data.info('Updated store');
 
 		await _readProject.refresh({ id: validatedPayload.id });
 		await _readProjects.refresh(updatedProject);
@@ -98,7 +98,7 @@ const _createProject = enhancedValidatedMutation(
 	async ({ validatedPayload }) => {
 		const result = await projectRepository.create(validatedPayload);
 		const createdProject = await result.first();
-		loggers.data.info('Created Project');
+		loggers.data.info('Created Store');
 
 		_readProjects.refresh(createdProject);
 	}
@@ -112,12 +112,12 @@ const _exportProject = enhancedValidatedMutation(
 	}),
 	config.flags.exportProjects,
 	async ({ validatedPayload }) => {
-		const [project, captures] = await Promise.all([
+		const [store, captures] = await Promise.all([
 			_readProject.query({ id: validatedPayload.id }),
 			readCaptures({ projectId: validatedPayload.id })
 		]);
 		return {
-			project,
+			store,
 			captures: captures
 		};
 	}
@@ -136,14 +136,14 @@ const _importProject = enhancedValidatedMutation(
 		const text = await file.text();
 		const json = JSON.parse(text);
 		const schema = v.object({
-			project: v.pipe(
+			store: v.pipe(
 				projectSchema,
 				v.transform((value) => ({ ...value, workspaceId: validatedPayload.workspaceId }))
 			),
 			captures: v.array(captureSchema)
 		});
 		const data = await v.parseAsync(schema, json);
-		await _createProject.command(data.project);
+		await _createProject.command(data.store);
 		if (data.captures.length) {
 			await commandCreateCaptures({ captures: data.captures });
 		}

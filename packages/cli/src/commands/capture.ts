@@ -3,10 +3,10 @@ import { backend } from "../utilities/backend";
 
 export const capture = command({
   name: "capture",
-  desc: "Capture content for a project",
+  desc: "Capture content for a store",
   aliases: ["c"],
   options: {
-    project: string("project").desc("Name of the project").required(),
+    store: string("store").desc("Name of the store").required(),
     content: positional("content").desc("Capture content").required(),
   },
   transform: (opts) => {
@@ -26,7 +26,7 @@ export const capture = command({
         json: {
           ...opts,
           type: opts.type as "data" | "url" | "text",
-          projectId: opts.project,
+          projectId: opts.store,
         },
       });
       if (result.ok) {

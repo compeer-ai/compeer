@@ -1,44 +1,44 @@
 <script lang="ts">
   import Form from "../common/Form.svelte";
   import Input from "../common/Input.svelte";
-  import type { Project } from "$lib/repository/projectRepository";
+  import type { Store } from "$lib/repository/projectRepository";
   import {
     formUpdateProject,
     formCreateProject,
-  } from "$lib/remotes/project.remote";
+  } from "$lib/remotes/store.remote";
   import HiddenInput from "../common/HiddenInput.svelte";
   import Textarea from "../common/Textarea.svelte";
 
   interface Props {
-    project?: Project;
+    store?: Store;
     workspaceId: string;
     invalidate: () => Promise<void>
   }
 
-  const { project, workspaceId, invalidate }: Props = $props();
+  const { store, workspaceId, invalidate }: Props = $props();
 </script>
 
 <Form
-  toastMessage={project ? "Updated Project" : "Created Project"}
-  submitButtonTitle={`${project ? "Update" : "Create"} Project`}
-  remote={project ? formUpdateProject : formCreateProject}
+  toastMessage={store ? "Updated Store" : "Created Store"}
+  submitButtonTitle={`${store ? "Update" : "Create"} Store`}
+  remote={store ? formUpdateProject : formCreateProject}
   onSuccess={invalidate}
   className="space-y-5"
 >
-  {#if project}
-    <HiddenInput {...formUpdateProject.fields.id.as("hidden", project.id)} />
+  {#if store}
+    <HiddenInput {...formUpdateProject.fields.id.as("hidden", store.id)} />
   {/if}
   <HiddenInput {...formCreateProject.fields.workspaceId.as("hidden", workspaceId)} />
   <Input
     {...formCreateProject.fields.name.as("text")}
-    value={project?.name}
+    value={store?.name}
     label="Name"
     placeholder="Name"
     required
   />
   <Textarea
     {...formCreateProject.fields.description.as("text")}
-    value={project?.description}
+    value={store?.description}
     label="Description"
     placeholder="Description"
     required

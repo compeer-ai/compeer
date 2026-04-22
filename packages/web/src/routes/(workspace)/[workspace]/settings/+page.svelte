@@ -28,7 +28,7 @@
         <Card title="Danger Zone" collaspable>
             <div class="space-y-3 p-5">
                 <p>
-                This deletes all project contents, including all captures. This action
+                This deletes all store contents, including all captures. This action
                 cannot be reversed.
                 </p>
                 <DeleteForm remote={deleteWorkspace} toastMessage="Deleted Workspace" onSuccess={() => goto('/')} id={workspace.current.id} />

@@ -38,14 +38,14 @@ export default defineConfig({
 					api: '/search',
 					method: 'get',
 					summary: 'Search captures',
-					description: 'Search for captures within a project using semantic search',
+					description: 'Search for captures within a store using semantic search',
 					tag: ['Search']
 				},
 				{
 					api: '/capture',
 					method: 'post',
 					summary: 'Create capture',
-					description: 'Create a new text, data, or URL capture in a project',
+					description: 'Create a new text, data, or URL capture in a store',
 					tag: ['Captures']
 				}
 			]

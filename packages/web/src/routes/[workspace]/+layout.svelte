@@ -1,7 +1,7 @@
 <script lang="ts">
   import "../../app.css";
   import type { LayoutProps } from "./$types";
-  import { readProjects } from "$lib/remotes/project.remote";
+  import { readProjects } from "$lib/remotes/store.remote";
   import { onMount, type Snippet } from "svelte";
   import Drawer from "$lib/components/common/Drawer.svelte";
   import Modal from "$lib/components/common/Modal.svelte";
