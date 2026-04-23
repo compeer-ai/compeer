@@ -27,7 +27,7 @@
   }
 
   const captures = readCaptures({
-    projectId: page.params.projectId!!
+    storeId: page.params.storeId!!
   });
   const invalidate = () => captures.refresh();
 
@@ -53,7 +53,7 @@
       <Search bind:query placeholder="Search captures..." />
       {#snippet addCaptureDrawerContent()}
         <div class="px-5">
-          <CaptureForm projectId={page.params.projectId!!} {invalidate} />
+          <CaptureForm storeId={page.params.storeId!!} {invalidate} />
         </div>
       {/snippet}
       <div class="space-x-3 flex">
@@ -68,7 +68,7 @@
                 id: Date.now(),
               });
               await commandDeleteCaptures({
-                projectId: page.params.projectId!!,
+                storeId: page.params.storeId!!,
                 captureIds: selectedCaptureIds,
               });
               await delay(350);
@@ -100,7 +100,7 @@
       <Captures
         captures={filteredCaptures}
         {invalidate}
-        projectId={page.params.projectId!!}
+        storeId={page.params.storeId!!}
         bind:selected={selectedCaptures}
       />
     {/if}

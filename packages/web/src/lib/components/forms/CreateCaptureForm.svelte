@@ -9,11 +9,11 @@
   import JsonTextarea from "../common/JsonTextarea.svelte";
 
   interface Props {
-    projectId: string;
+    storeId: string;
     invalidate: () => Promise<void>;
   }
 
-  const { projectId, invalidate }: Props = $props();
+  const { storeId, invalidate }: Props = $props();
   let type = $state<"data" | "text" | "url">();
 </script>
 
@@ -63,7 +63,7 @@
       onSuccess={invalidate}
     >
       <HiddenInput
-        {...formCreateCapture.fields.projectId.as("hidden", projectId)}
+        {...formCreateCapture.fields.storeId.as("hidden", storeId)}
       />
       <HiddenInput {...formCreateCapture.fields.type.as("hidden", type)} />
       {#if type === "text"}

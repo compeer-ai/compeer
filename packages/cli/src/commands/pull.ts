@@ -14,7 +14,7 @@ export const pull = command({
   handler: async (opts) => {
     const { workspace } = opts;
     try {
-      const result = await backend.client.api.v1[":workspace"].projects.$get({
+      const result = await backend.client.api.v1[":workspace"].stores.$get({
         param: {
           workspace,
         },
@@ -22,7 +22,7 @@ export const pull = command({
       if (result.ok) {
         const json = await result.json();
         await skill.syncAll(opts.agent!!, json);
-        console.log(`Pulled ${json.length} projects`);
+        console.log(`Pulled ${json.length} stores`);
         return;
       }
       console.error(

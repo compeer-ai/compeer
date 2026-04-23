@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import type { Project } from "$lib/repository/projectRepository";
+  import type { Store } from "$lib/repository/storeRepository";
   import classNames from "classnames";
   import Logo from "./Logo.svelte";
   import { ChevronsUpDown, Home, Settings2 } from "@lucide/svelte";
@@ -11,15 +11,15 @@
 	
   interface Props {
     user?: User;
-    projects: Project[];
+    stores: Store[];
     workspaces: Workspace[]
   }
-  const { projects, workspaces, user }: Props = $props();
+  const { stores, workspaces, user }: Props = $props();
   const workspace = page.params.workspace;
-  function isActiveProject(projectId: string) {
+  function isActiveProject(storeId: string) {
     return (
-      page.url.pathname.startsWith(`/${workspace}/project/${projectId}`) &&
-      page.params.projectId === projectId
+      page.url.pathname.startsWith(`/${workspace}/store/${storeId}`) &&
+      page.params.storeId === storeId
     );
   }
 
@@ -78,16 +78,16 @@
         </div>
       </a>
     </div>
-    {#if projects.length}
+    {#if stores.length}
       <div class="space-y-3 px-7">
         <h2 class="font-semibold text-black text-sm">Projects</h2>
         <div class="space-y-2 font-medium flex flex-col">
-          {#each projects as project}
-            <a href={`/${workspace}/project/${project.id}/captures`}>
+          {#each stores as store}
+            <a href={`/${workspace}/store/${store.id}/captures`}>
               <span
                 class={classNames({
-                  "text-black": isActiveProject(project.id),
-                })}>{project.name}</span
+                  "text-black": isActiveProject(store.id),
+                })}>{store.name}</span
               >
             </a>
           {/each}

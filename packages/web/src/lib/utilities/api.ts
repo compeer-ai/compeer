@@ -1,5 +1,5 @@
 import { commandCreateCapture } from '$lib/remotes/capture.remote';
-import { readProjects } from '$lib/remotes/project.remote';
+import { readStores } from '$lib/remotes/store.remote';
 import { Hono } from 'hono';
 import * as v from 'valibot';
 import { vValidator } from '@hono/valibot-validator';
@@ -38,10 +38,10 @@ export const router = new Hono()
 		c.header('Content-Disposition', `attachment; filename="sqlite.db"`);
 		return c.body(buffer);
 	})
-	.get('/:workspace/projects', paramsValidator, async (c) => {
+	.get('/:workspace/stores', paramsValidator, async (c) => {
 		const { workspace } = c.req.valid('param');
 		const { id: workspaceId } = await readWorkspace({ name: workspace });
-		const result = await readProjects({ workspaceId });
+		const result = await readStores({ workspaceId });
 		return c.json(result);
 	})
 	.get(
@@ -51,7 +51,7 @@ export const router = new Hono()
 			'query',
 			v.object({
 				query: v.string(),
-				project: v.optional(v.string())
+				store: v.optional(v.string())
 			})
 		),
 		async (c) => {
@@ -72,7 +72,7 @@ export const router = new Hono()
 			v.object({
 				type: v.enum(Type),
 				content: v.string(),
-				projectId: v.string()
+				storeId: v.string()
 			})
 		),
 		async (c) => {

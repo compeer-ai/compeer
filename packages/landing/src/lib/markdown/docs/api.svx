@@ -7,9 +7,9 @@ The Barque API allows you to create custom functionality for your agenetic workf
 
 ## Endpoints
 
-### GET /api/v1/projects
+### GET /api/v1/stores
 
-Returns all projects.
+Returns all stores.
 
 Response:
 
@@ -17,19 +17,19 @@ Response:
 [
   {
     "id": "7b5f23f7-3c7b-4a8d-9c49-6d7ef4f1324d",
-    "name": "My Project"
+    "name": "My Store"
   }
 ]
 ```
 
 ### GET /api/v1/search
 
-Searches captures with a required query string and optional project filter.
+Searches captures with a required query string and optional store filter.
 
 Query parameters:
 
 - `query` (string, required): Search query.
-- `projectId` (string, optional): Limit results to a single project.
+- `storeId` (string, optional): Limit results to a single store.
 
 Response:
 
@@ -39,7 +39,7 @@ Response:
     "id": "2c3a6c5d-2d4b-4b52-9f2e-4f07c8b9e3e1",
     "type": "text",
     "content": "Launch checklist",
-    "projectId": "7b5f23f7-3c7b-4a8d-9c49-6d7ef4f1324d"
+    "storeId": "7b5f23f7-3c7b-4a8d-9c49-6d7ef4f1324d"
   }
 ]
 ```
@@ -52,7 +52,7 @@ Fields:
 
 - `type` (string, required): One of `text`, `data`, `url`.
 - `content` (string, required): Capture content.
-- `projectId` (string, required): Project to attach the capture to.
+- `storeId` (string, required): Store to attach the capture to.
 
 
 Request body:
@@ -61,7 +61,7 @@ Request body:
 {
   "type": "text",
   "content": "My note",
-  "projectId": "7b5f23f7-3c7b-4a8d-9c49-6d7ef4f1324d"
+  "storeId": "7b5f23f7-3c7b-4a8d-9c49-6d7ef4f1324d"
 }
 ```
 

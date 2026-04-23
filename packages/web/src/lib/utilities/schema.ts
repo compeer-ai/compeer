@@ -18,8 +18,8 @@ const embedding = customType<{
 	}
 });
 
-export const projectTable = sqliteTable(
-	'project',
+export const storeTable = sqliteTable(
+	'store',
 	{
 		id: text()
 			.primaryKey()
@@ -57,8 +57,8 @@ export const captureTable = sqliteTable('capture', {
 	type: text().notNull(),
 	url: text(),
 	enabled: integer({ mode: 'boolean' }).default(true).notNull(),
-	projectId: text()
-		.references(() => projectTable.id, {
+	storeId: text()
+		.references(() => storeTable.id, {
 			onDelete: 'cascade'
 		})
 		.notNull()

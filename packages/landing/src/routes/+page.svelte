@@ -114,7 +114,7 @@
 <section class="space-y-10">
     <div class="space-y-3">
         <h2 class="text-xl text-black font-semibold">What is Barque?</h2>
-        <p>Barque is an open-source, fast context layer for agents. It stores your project knowledge as captures, makes it searchable, and keeps usage history so agents always have the right context.</p>
+        <p>Barque is an open-source, fast context layer for agents. It stores your store knowledge as captures, makes it searchable, and keeps usage history so agents always have the right context.</p>
 		<a href="/docs/quickstart">
 			<Button>Learn More</Button>
 		</a>
@@ -128,7 +128,7 @@
     </div>
     <div class="space-y-3">
         <h2 class="text-xl text-black font-semibold">Connect to any Agent</h2>
-        <p>Use the HTTP API, CLI, or our MCP server to connect any agent. Search across projects, pull the best captures, and share context across your tools.</p>
+        <p>Use the HTTP API, CLI, or our MCP server to connect any agent. Search across stores, pull the best captures, and share context across your tools.</p>
 		<a href="/docs/quickstart">
 			<Button>Learn More</Button>
 		</a>

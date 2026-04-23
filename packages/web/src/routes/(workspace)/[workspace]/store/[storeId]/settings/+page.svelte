@@ -3,7 +3,7 @@
   import { animations } from "$lib/utilities/animations";
   import Metadata from "$lib/components/common/Metadata.svelte";
   import ProjectForm from "$lib/components/forms/ProjectForm.svelte";
-  import { commandExportProject, formDeleteProject, readProject, readProjects } from "$lib/remotes/project.remote";
+  import { commandExportProject, formDeleteProject, readStore, readStores } from "$lib/remotes/store.remote";
   import { page } from "$app/state";
   import { goto } from "$app/navigation";
   import DeleteForm from "$lib/components/forms/DeleteForm.svelte";
@@ -16,40 +16,40 @@
   const workspace = $derived(readWorkspace({
     name: page.params.workspace!!
   }));
-  const project = $derived(readProject({
-    id: page.params.projectId!!
+  const store = $derived(readStore({
+    id: page.params.storeId!!
   }));
 
-  const updateInvalidate = () => project.refresh();
-  const deleteInvalidate = () => workspace.current && readProjects({ workspaceId: workspace.current?.id }).refresh()
+  const updateInvalidate = () => store.refresh();
+  const deleteInvalidate = () => workspace.current && readStores({ workspaceId: workspace.current?.id }).refresh()
 </script>
 
-<Metadata title="Barque: Project Settings" description="Give AI eyes" />
-{#if project.ready && workspace.ready}
+<Metadata title="Barque: Store Settings" description="Give AI eyes" />
+{#if store.ready && workspace.ready}
   <section
     class="space-y-5 p-7 h-screen-minus-header overflow-y-auto"
     use:animations.fadeInForward
   >
     {#if config.flags.updateProjects}
-      <Card title="Update Project" collaspable>
+      <Card title="Update Store" collaspable>
         <div class="space-y-3 p-5">
-          <ProjectForm project={project.current} workspaceId={workspace.current.id} invalidate={updateInvalidate} />
+          <ProjectForm store={store.current} workspaceId={workspace.current.id} invalidate={updateInvalidate} />
         </div>
       </Card>
     {/if}
     {#if config.flags.configureProjectMcps}
       <Card title="Configure MCP" collaspable>
         <div class="space-y-3 p-5">
-          <Input label='URL' name="url" placeholder="URL" value={`${page.url.origin}/workspace/${workspace.current.name}/project/${project.current.id}/mcp`} />
+          <Input label='URL' name="url" placeholder="URL" value={`${page.url.origin}/workspace/${workspace.current.name}/store/${store.current.id}/mcp`} />
         </div>
       </Card>
     {/if}
     {#if config.flags.exportProjects}
-      <Card title="Export Project" collaspable>
+      <Card title="Export Store" collaspable>
         <div class="p-5">
           <Button variant='wide' onclick={async () => {
-            const backup = await commandExportProject({ id: page.params.projectId!! });
-            download.start(backup, `${project.current.name}_backup.barque`)
+            const backup = await commandExportProject({ id: page.params.storeId!! });
+            download.start(backup, `${store.current.name}_backup.barque`)
           }}>
             Export
           </Button>
@@ -57,15 +57,15 @@
       </Card>
     {/if}
     {#if config.flags.deleteProjects}
-      <Card title="Delete Project" collaspable>
+      <Card title="Delete Store" collaspable>
         <div class="space-y-3 p-5">
           <p>
             This deletes all workspace contents, including all captures. This action
             cannot be reversed.
           </p>
           <DeleteForm
-            id={page.params.projectId!!}
-            toastMessage={"Deleted Project"}
+            id={page.params.storeId!!}
+            toastMessage={"Deleted Store"}
             remote={formDeleteProject}
             onSuccess={async () => {
               await deleteInvalidate();

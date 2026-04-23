@@ -16,14 +16,14 @@
 
   interface Props {
     captures: Capture[];
-    projectId: string;
+    storeId: string;
     invalidate: () => Promise<void>
     selected?: Set<string>;
   }
 
   let {
     captures,
-    projectId,
+    storeId,
     invalidate,
     selected = $bindable(new Set<string>()),
   }: Props = $props();
@@ -52,7 +52,7 @@
             <UpdateCaptureForm
               {capture}
               {invalidate}
-              projectId={capture.projectId}
+              storeId={capture.storeId}
             />
           </div>
         {/snippet}
@@ -117,7 +117,7 @@
                   id: Date.now(),
                 });
                 await commandDeleteCapture({
-                  projectId,
+                  storeId,
                   id: capture.id,
                 });
                 await delay(350);

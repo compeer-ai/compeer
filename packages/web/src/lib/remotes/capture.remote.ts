@@ -18,14 +18,14 @@ const Type = {
 
 export const readSearchCaptures = query(
 	v.object({
-		project: v.optional(v.string()),
+		store: v.optional(v.string()),
 		workspace: v.string(),
 		query: v.string()
 	}),
 	async (validatedPayload) => {
-		const { query, project, workspace } = validatedPayload;
-		const context = project
-			? await rag.projectContext(query, workspace, project)
+		const { query, store, workspace } = validatedPayload;
+		const context = store
+			? await rag.projectContext(query, workspace, store)
 			: await rag.mainContext(query, workspace);
 		return context;
 	}
@@ -35,11 +35,11 @@ const _readCaptures = enhancedValidatedQuery(
 	'read_captures',
 	true,
 	v.object({
-		projectId: v.string()
+		storeId: v.string()
 	}),
 	async ({ validatedPayload }) => {
 		const result = await captureRepository.readByPredicate(
-			eq(captureTable.projectId, validatedPayload.projectId)
+			eq(captureTable.storeId, validatedPayload.storeId)
 		);
 		const captures = result.all();
 		const formattedCaptures = captures.map(({ embedding, ...others }) => others);
@@ -53,12 +53,12 @@ const _createCapture = enhancedValidatedMutation(
 	v.object({
 		type: v.enum(Type),
 		content: v.string(),
-		projectId: v.string()
+		storeId: v.string()
 	}),
 	true,
 	async ({ validatedPayload }) => {
 		const { fetch } = getRequestEvent();
-		const { type, projectId } = validatedPayload;
+		const { type, storeId } = validatedPayload;
 		let { content } = validatedPayload;
 		let url: string | undefined;
 		if (type === 'url') {
@@ -72,7 +72,7 @@ const _createCapture = enhancedValidatedMutation(
 			embedding,
 			url,
 			type,
-			projectId
+			storeId
 		};
 		const createdCapture = await captureRepository.create(payload);
 		const created = createdCapture.first();
@@ -87,7 +87,7 @@ const _createCapture = enhancedValidatedMutation(
 		}
 		loggers.data.info('Created capture');
 
-		await _readCaptures.refresh({ projectId });
+		await _readCaptures.refresh({ storeId });
 	}
 );
 
@@ -102,10 +102,10 @@ const _createCaptures = enhancedValidatedMutation(
 	async ({ validatedPayload }) => {
 		const result = await captureRepository.createMany(validatedPayload.captures as Capture[]);
 		const createdCapture = result.first();
-		const projectId = createdCapture?.projectId ?? validatedPayload.captures[0]?.projectId;
+		const storeId = createdCapture?.storeId ?? validatedPayload.captures[0]?.storeId;
 
-		if (projectId) {
-			await _readCaptures.refresh({ projectId });
+		if (storeId) {
+			await _readCaptures.refresh({ storeId });
 		}
 	}
 );
@@ -116,13 +116,13 @@ const _updateCaptureEnabled = enhancedValidatedMutation(
 	v.object({
 		id: v.string(),
 		enabled: v.boolean(),
-		projectId: v.string()
+		storeId: v.string()
 	}),
 	true,
 	async ({ validatedPayload }) => {
 		await captureRepository.updateByPredicate(
 			validatedPayload.id,
-			eq(captureTable.projectId, validatedPayload.projectId),
+			eq(captureTable.storeId, validatedPayload.storeId),
 			{
 				enabled: validatedPayload.enabled
 			}
@@ -140,7 +140,7 @@ const _updateCapture = enhancedValidatedMutation(
 		originalContent: v.string(),
 		originalUrl: v.optional(v.string()),
 		content: v.string(),
-		projectId: v.string(),
+		storeId: v.string(),
 		type: v.enum(Type)
 	}),
 	true,
@@ -183,7 +183,7 @@ const _updateCapture = enhancedValidatedMutation(
 		};
 		await captureRepository.updateByPredicate(
 			id,
-			eq(captureTable.projectId, validatedPayload.projectId),
+			eq(captureTable.storeId, validatedPayload.storeId),
 			payload
 		);
 		if (contentChanged) {
@@ -209,7 +209,7 @@ export const formUpdateCapture = _updateCapture.form;
 const _deleteCapture = enhancedValidatedMutation(
 	v.object({
 		id: v.string(),
-		projectId: v.string()
+		storeId: v.string()
 	}),
 	true,
 	async ({ validatedPayload }) => {
@@ -225,13 +225,13 @@ export const commandDeleteCapture = _deleteCapture.command;
 const _deleteCaptures = enhancedValidatedMutation(
 	v.object({
 		captureIds: v.array(v.string()),
-		projectId: v.string()
+		storeId: v.string()
 	}),
 	true,
 	async ({ validatedPayload }) => {
 		await captureRepository.deleteByPredicate(
 			and(
-				eq(captureTable.projectId, validatedPayload.projectId),
+				eq(captureTable.storeId, validatedPayload.storeId),
 				inArray(captureTable.id, validatedPayload.captureIds)
 			)!!
 		);

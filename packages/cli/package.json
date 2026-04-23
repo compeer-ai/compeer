@@ -1,7 +1,7 @@
 {
   "name": "@compeer-ai/cli",
   "version": "0.0.1",
-  "description": "CLI for capturing project content",
+  "description": "CLI for Compeer",
   "module": "src/index.ts",
   "type": "module",
   "bin": {

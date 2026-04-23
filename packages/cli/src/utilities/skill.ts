@@ -1,9 +1,9 @@
-import { type Project } from "$lib/repository/projectRepository";
+import { type Store } from "$lib/repository/storeRepository";
 import { mkdir } from "fs/promises";
 import path from "path";
 
-async function sync(agent: string, project: Project) {
-  const skillName = project.name.toLocaleLowerCase().split(" ").join("-");
+async function sync(agent: string, store: Store) {
+  const skillName = store.name.toLocaleLowerCase().split(" ").join("-");
   const skillPath = path.join(process.cwd(), `.${agent}/skills/${skillName}`);
   await mkdir(skillPath, {
     recursive: true,
@@ -11,12 +11,12 @@ async function sync(agent: string, project: Project) {
   const header = [
     "---",
     `name: ${skillName}`,
-    `description: ${project.description}`,
+    `description: ${store.description}`,
     "---",
     "",
   ].join("\n");
   const body = [
-    `# ${project.name}`,
+    `# ${store.name}`,
     "",
     "## Search Knowledge Base",
     "",
@@ -51,8 +51,8 @@ async function sync(agent: string, project: Project) {
   await Bun.write(path.join(skillPath, "SKILL.md"), header + body);
 }
 
-async function syncAll(agent: string, projects: Project[]) {
-  await Promise.all(projects.map((project) => sync(agent, project)));
+async function syncAll(agent: string, stores: Store[]) {
+  await Promise.all(stores.map((store) => sync(agent, store)));
 }
 
 export const skill = {

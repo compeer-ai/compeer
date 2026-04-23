@@ -4,7 +4,7 @@
   import Loading from "./Loading.svelte";
   import { dispatcher } from "$lib/utilities/dispatcher";
   import { delay } from "$lib/utilities/delay";
-	import { readProjects } from "$lib/remotes/project.remote";
+	import { readStores } from "$lib/remotes/store.remote";
 	import { readWorkspace } from "$lib/remotes/workspace.remote";
 	import { page } from "$app/state";
 

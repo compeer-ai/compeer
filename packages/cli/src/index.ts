@@ -2,7 +2,7 @@
 import { run } from "@drizzle-team/brocli";
 import { capture } from "./commands/capture";
 import { search } from "./commands/search";
-import { projects } from "./commands/projects";
+import { stores } from "./commands/stores";
 import { config } from "./utilities/config";
 import { agent } from "./utilities/agent";
 import { pull } from "./commands/pull";
@@ -19,7 +19,7 @@ async function checkBarqueServer(server: string) {
   }
 }
 
-run([capture, search, projects, pull, web], {
+run([capture, search, stores, pull, web], {
   name: "barque",
   description: "CLI for Barque",
   argSource: ["bun", "barque", ...ARGS],

@@ -4,7 +4,7 @@
   import {
     formCreateProject,
 	formImportProject,
-  } from "$lib/remotes/project.remote";
+  } from "$lib/remotes/store.remote";
   import HiddenInput from "../common/HiddenInput.svelte";
 	import FileInput from "../common/FileInput.svelte";
 
@@ -17,8 +17,8 @@
 </script>
 
 <Form
-  toastMessage={"Imported Project"}
-  submitButtonTitle={`Import Project`}
+  toastMessage={"Imported Store"}
+  submitButtonTitle={`Import Store`}
   remote={formImportProject}
   onSuccess={invalidate}
   className="space-y-5"
