@@ -5,7 +5,7 @@ export default defineConfig({
 	openApi: {
 		openapi: '3.0.0',
 		info: {
-			title: 'Barque API',
+			title: 'Compeer API',
 			version: '1.0.0',
 			description: 'API for managing stores, captures, and search functionality'
 		},

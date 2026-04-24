@@ -3,7 +3,7 @@ title: API
 order: 4
 ---
 
-The Barque API allows you to create custom functionality for your agenetic workflow. All endpoints are served under `/api/v1` and return JSON.
+The Compeer API allows you to create custom functionality for your agenetic workflow. All endpoints are served under `/api/v1` and return JSON.
 
 ## Endpoints
 

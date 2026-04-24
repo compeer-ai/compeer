@@ -43,7 +43,7 @@
   );
 </script>
 
-<Metadata title="Barque: Captures" description="Give AI Eyes" />
+<Metadata title="Compeer: Captures" description="Give AI Eyes" />
 {#if captures.ready}
 <section
     class="space-y-5 p-7 overflow-y-auto"

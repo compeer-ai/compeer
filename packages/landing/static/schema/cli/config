@@ -6,7 +6,7 @@
       "type": "string",
       "format": "uri",
       "default": "http://localhost:5173",
-      "description": "The Barque server URL. Defaults to the local dev server."
+      "description": "The Compeer server URL. Defaults to the local dev server."
     },
     "workspace": {
       "type": "string",

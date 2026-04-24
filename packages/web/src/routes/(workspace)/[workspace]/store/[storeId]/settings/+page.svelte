@@ -24,7 +24,7 @@
   const deleteInvalidate = () => workspace.current && readStores({ workspaceId: workspace.current?.id }).refresh()
 </script>
 
-<Metadata title="Barque: Store Settings" description="Give AI eyes" />
+<Metadata title="Compeer: Store Settings" description="Give AI eyes" />
 {#if store.ready && workspace.ready}
   <section
     class="space-y-5 p-7 h-screen-minus-header overflow-y-auto"

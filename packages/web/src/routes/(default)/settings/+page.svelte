@@ -34,7 +34,7 @@
   const invalidate = () => readTheme().refresh();
 </script>
 
-<Metadata title="Barque: Settings" description="Give AI Eyes to your Data" />
+<Metadata title="Compeer: Settings" description="Give AI Eyes to your Data" />
 <section class="space-y-5 p-7" use:animations.fadeInForward>
   <h1 class="text-xl font-semibold text-black">Settings</h1>
   <div class="space-y-5">

@@ -113,15 +113,15 @@
 </section>
 <section class="space-y-10">
     <div class="space-y-3">
-        <h2 class="text-xl text-black font-semibold">What is Barque?</h2>
-        <p>Barque is an open-source, fast context layer for agents. It stores your store knowledge as captures, makes it searchable, and keeps usage history so agents always have the right context.</p>
+        <h2 class="text-xl text-black font-semibold">What is Compeer?</h2>
+        <p>Compeer is an open-source, fast context layer for agents. It stores your store knowledge as captures, makes it searchable, and keeps usage history so agents always have the right context.</p>
 		<a href="/docs/quickstart">
 			<Button>Learn More</Button>
 		</a>
     </div>
     <div class="space-y-3">
         <h2 class="text-xl text-black font-semibold">Gather Context From Everywhere</h2>
-        <p>Add text, data, or websites. Barque can scrape content, embed it locally, and return the most relevant context so answers stay grounded.</p>
+        <p>Add text, data, or websites. Compeer can scrape content, embed it locally, and return the most relevant context so answers stay grounded.</p>
 		<a href="/docs/quickstart">
 			<Button>Learn More</Button>
 		</a>
@@ -142,6 +142,6 @@
     </div>
     <div class="space-y-3">
         <h2 class="text-xl text-black font-semibold">Get Involved</h2>
-        <p>Found a bug? File it on <a href="https://github.com/barque-ai" class="underline text-black">Github</a>. Have some ideas or want to share how you're using Barque? Join our <a href="https://discord.com" class="underline text-black">Discord</a>.</p>
+        <p>Found a bug? File it on <a href="https://github.com/barque-ai" class="underline text-black">Github</a>. Have some ideas or want to share how you're using Compeer? Join our <a href="https://discord.com" class="underline text-black">Discord</a>.</p>
     </div>
 </section>

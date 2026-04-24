@@ -32,7 +32,7 @@ export async function read() {
   }
   const file = Bun.file(CONFIG_FILE);
   if (!(await file.exists())) {
-    console.error("Barque is not configured for this directory");
+    console.error("Compeer is not configured for this directory");
     process.exit(1);
   }
   const json = await file.json();

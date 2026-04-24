@@ -3,7 +3,7 @@ title: Quickstart
 order: 1
 ---
 
-Barque runs as a Docker container. Make sure Docker is installed first:
+Compeer runs as a Docker container. Make sure Docker is installed first:
 https://docs.docker.com/get-docker/
 
 Then start the server:

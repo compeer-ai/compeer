@@ -31,7 +31,7 @@
   const invalidate = () => stores!!.refresh()
 </script>
 
-<Metadata title="Barque: Home" />
+<Metadata title="Compeer: Home" />
 {#if stores?.ready && workspace.ready}
 <section class="space-y-5 p-7" use:animations.fadeInForward>
   <div class="flex justify-between">
