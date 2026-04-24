@@ -2,7 +2,7 @@ import { prerender } from '$app/server';
 import { readdir } from 'node:fs/promises';
 import path from 'node:path';
 import matter from 'gray-matter';
-import z from 'zod';
+import * as v from 'valibot'
 import { compile } from 'mdsvex';
 import { createHighlighter } from "shiki";
 
@@ -36,8 +36,8 @@ async function _readCookbook() {
 export const readCookbooks = prerender(_readCookbook);
 
 export const readCookbook = prerender(
-	z.object({
-		slug: z.string()
+	v.object({
+		slug: v.string()
 	}),
 	async (validatedPayload) => {
 		const entryLocation = path.join(ROOT, `./src/lib/markdown/cookbook`, `${validatedPayload.slug}.svx`);

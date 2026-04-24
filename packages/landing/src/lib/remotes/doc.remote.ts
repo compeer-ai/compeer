@@ -2,7 +2,7 @@ import { prerender } from '$app/server';
 import { readdir } from 'node:fs/promises';
 import path from 'node:path';
 import matter from 'gray-matter';
-import z from 'zod';
+import * as v from "valibot";
 import { compile } from 'mdsvex';
 import { createHighlighter } from "shiki";
 
@@ -37,8 +37,8 @@ async function _readDocs() {
 export const readDocs = prerender(_readDocs);
 
 export const readDoc = prerender(
-	z.object({
-		slug: z.string()
+	v.object({
+		slug: v.string()
 	}),
 	async (validatedPayload) => {
 		const docLocation = path.join(ROOT, `./src/lib/markdown/docs`, `${validatedPayload.slug}.svx`);

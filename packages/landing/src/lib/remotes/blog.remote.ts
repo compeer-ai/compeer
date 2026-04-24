@@ -30,8 +30,8 @@ async function _readBlogs() {
 export const readBlogs = prerender(_readBlogs);
 
 export const readBlog = prerender(
-	z.object({
-		slug: z.string()
+	v.object({
+		slug: v.string()
 	}),
 	async (validatedPayload) => {
 		const blogLocation = path.join(ROOT, `./src/lib/markdown/blog`, `${validatedPayload.slug}.svx`);
