@@ -3,7 +3,7 @@ title: Web Application
 order: 7
 ---
 
-Barque includes a local web app for managing stores, captures, and usage.
+Compeer includes a local web app for managing stores, captures, and usage.
 
 ## Open the app
 

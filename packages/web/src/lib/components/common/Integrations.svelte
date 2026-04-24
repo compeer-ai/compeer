@@ -58,7 +58,7 @@
         {brands[index]}
       </div>
 
-      <p>into Barque</p>
+      <p>into Compeer</p>
     </div>
   </div>
   <div class="w-1/2">

@@ -14,20 +14,20 @@ async function checkBarqueServer(server: string) {
   try {
     await fetch(server);
   } catch {
-    console.error("Barque server is not configured");
+    console.error("Compeer server is not configured");
     process.exit(1);
   }
 }
 
 run([capture, search, stores, pull, web], {
   name: "barque",
-  description: "CLI for Barque",
+  description: "CLI for Compeer",
   argSource: ["bun", "barque", ...ARGS],
   hook: async (event: "before" | "after") => {
     if (event === "before") {
       const currentConfig = await config.safeRead();
       if (!currentConfig) {
-        console.error("Barque is not configured for this directory");
+        console.error("Compeer is not configured for this directory");
         process.exit(1);
       }
       if (currentConfig) {

@@ -35,7 +35,7 @@ async function openUrl(url: URL) {
 
 export const web = command({
   name: "web",
-  desc: "Web dashboard for Barque workspace",
+  desc: "Web dashboard for Compeer workspace",
   aliases: ["w"],
   options: {
     pretty: boolean().default(false),

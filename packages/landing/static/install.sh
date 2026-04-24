@@ -19,4 +19,4 @@ pull_docker_image() {
 pull_docker_image
 install_cli
 
-echo "Successfully installed Barque"
+echo "Successfully installed Compeer"
