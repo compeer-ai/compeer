@@ -7,8 +7,9 @@ import { readSearchCaptures } from '$lib/remotes/capture.remote';
 import openApiSpec from '../../../openapi/openapi.json' with { type: 'json' };
 import { readWorkspace, readWorkspaces } from '$lib/remotes/workspace.remote';
 import Bun from 'bun';
-import { join, dirname } from 'path';
+import { join } from 'path';
 import { fileURLToPath } from 'url';
+import { OIDC_SERVER } from '$env/static/private';
 
 const paramsValidator = vValidator(
 	'param',
@@ -26,6 +27,9 @@ const Type = {
 export const router = new Hono()
 	.get('/alive', (c) => {
 		return c.json({ alive: true });
+	})
+	.get('/oidc', (c) => {
+		return c.json(OIDC_SERVER !== null);
 	})
 	.get('/openapi', (c) => {
 		return c.json(openApiSpec);
