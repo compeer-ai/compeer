@@ -8,6 +8,10 @@ import { OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_SERVER } from '$env/static/pri
 import { oidc } from '$lib/utilities/oidc';
 import { jwt } from '$lib/utilities/jwt';
 
+function protectedRoute(url: URL, ...pathnames: string[]) {
+	return pathnames.some((pathname) => pathname.startsWith(url.pathname));
+}
+
 async function login(cookies: Cookies) {
 	const { authorizationUrl, codeVerifier } = await oidc.login();
 	cookies.set('codeVerifier', codeVerifier, {
@@ -19,14 +23,11 @@ async function login(cookies: Cookies) {
 export const handle: Handle = async ({ event, resolve }) => {
 	const cookies = event.cookies;
 	const oidcEnabled = OIDC_SERVER && OIDC_CLIENT_SECRET && OIDC_CLIENT_ID;
-	const notAuth = event.url.pathname !== '/auth';
-	if (oidcEnabled && notAuth) {
+	if (protectedRoute(event.url, '/auth', '/api/v1') && oidcEnabled) {
 		const currentJwt = cookies.get('jwt');
-		if (!currentJwt) {
-			return login(cookies);
-		}
-		const verifiedJwt = await jwt.verify(currentJwt);
-		if (!verifiedJwt) {
+		if (!currentJwt) return login(cookies);
+		const decodedJwt = await jwt.verify(currentJwt);
+		if (!decodedJwt) {
 			cookies.delete('user', {
 				path: '/'
 			});
@@ -36,6 +37,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			return login(cookies);
 		}
 	}
+
 	return resolve(event);
 };
 

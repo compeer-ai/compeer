@@ -12,17 +12,7 @@ async function encode(payload: JWTPayload) {
 	return jwt;
 }
 
-async function decode(token: string) {
-	try {
-		const { payload } = decodeJwt(token);
-		return payload;
-	} catch (err) {
-		loggers.security.child({ err }).error('Failed to decode JWT');
-		return null;
-	}
-}
-
-async function verify(token: string): Promise<object | null> {
+async function verify(token: string) {
 	const encoder = new TextEncoder();
 	try {
 		const { payload } = await jwtVerify(token, encoder.encode(JWT_SECRET));
@@ -35,6 +25,5 @@ async function verify(token: string): Promise<object | null> {
 
 export const jwt = {
 	encode,
-	decode,
 	verify
 };
