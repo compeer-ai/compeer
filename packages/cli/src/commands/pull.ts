@@ -3,16 +3,19 @@ import { backend } from "../utilities/backend";
 import { config } from "../utilities/config";
 import { skill } from "../utilities/skill";
 
-export const pull = command({
+export const pullCommand = command({
   name: "pull",
   desc: "Pull bases",
   aliases: ["pl"],
+  options: {
+    workspace: positional("workspace").required(),
+  },
   transform: async (opts) => {
     const currentConfig = await config.read();
     return { ...currentConfig, ...opts };
   },
   handler: async (opts) => {
-    const { workspace } = opts;
+    const { workspace, agent } = opts;
     try {
       const result = await backend.client.api.v1[":workspace"].stores.$get({
         param: {
@@ -21,7 +24,7 @@ export const pull = command({
       });
       if (result.ok) {
         const json = await result.json();
-        await skill.syncAll(opts.agent!!, json);
+        await skill.syncAll(workspace, agent, json);
         console.log(`Pulled ${json.length} stores`);
         return;
       }

@@ -1,39 +1,32 @@
 #!/usr/bin/env bun
 import { run } from "@drizzle-team/brocli";
-import { capture } from "./commands/capture";
-import { search } from "./commands/search";
-import { stores } from "./commands/stores";
+import { captureCommand } from "./commands/capture";
+import { searchCommand } from "./commands/search";
+import { storesCommand } from "./commands/stores";
 import { config } from "./utilities/config";
 import { agent } from "./utilities/agent";
-import { pull } from "./commands/pull";
-import { web } from "./commands/web";
+import { pullCommand } from "./commands/pull";
+import { webCommand } from "./commands/web";
 
-const ARGS = process.argv.slice(2);
+(async () => {
+  const ARGS = process.argv.slice(2);
+  const currentConfig = await config.safeRead();
+  if (!currentConfig) {
+    console.error("Compeer is not yet configured");
+    process.exit(1);
+  } else {
+    await agent.setup(currentConfig.agent);
+  }
 
-async function checkBarqueServer(server: string) {
   try {
-    await fetch(server);
+    await fetch(currentConfig.server);
   } catch {
-    console.error("Compeer server is not configured");
+    console.error("Compeer server is not currently alive");
     process.exit(1);
   }
-}
-
-run([capture, search, stores, pull, web], {
-  name: "barque",
-  description: "CLI for Compeer",
-  argSource: ["bun", "barque", ...ARGS],
-  hook: async (event: "before" | "after") => {
-    if (event === "before") {
-      const currentConfig = await config.safeRead();
-      if (!currentConfig) {
-        console.error("Compeer is not configured for this directory");
-        process.exit(1);
-      }
-      if (currentConfig) {
-        await agent.setup(currentConfig.agent);
-        await checkBarqueServer(currentConfig.server);
-      }
-    }
-  },
-});
+  run([captureCommand, searchCommand, storesCommand, pullCommand, webCommand], {
+    name: "compeer",
+    description: "CLI for Compeer",
+    argSource: ["bun", "compeer", ...ARGS],
+  });
+})();

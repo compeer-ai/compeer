@@ -3,7 +3,7 @@
   import { animations } from "$lib/utilities/animations";
   import Metadata from "$lib/components/common/Metadata.svelte";
   import ProjectForm from "$lib/components/forms/ProjectForm.svelte";
-  import { commandExportProject, formDeleteProject, readStore, readStores } from "$lib/remotes/store.remote";
+  import { commandExportStore, commandDeleteStore, readStore, readStores, formDeleteStore } from "$lib/remotes/store.remote";
   import { page } from "$app/state";
   import { goto } from "$app/navigation";
   import DeleteForm from "$lib/components/forms/DeleteForm.svelte";
@@ -48,7 +48,7 @@
       <Card title="Export Store" collaspable>
         <div class="p-5">
           <Button variant='wide' onclick={async () => {
-            const backup = await commandExportProject({ id: page.params.storeId!! });
+            const backup = await commandExportStore({ id: page.params.storeId!! });
             download.start(backup, `${store.current.name}_backup.barque`)
           }}>
             Export
@@ -66,7 +66,7 @@
           <DeleteForm
             id={page.params.storeId!!}
             toastMessage={"Deleted Store"}
-            remote={formDeleteProject}
+            remote={formDeleteStore}
             onSuccess={async () => {
               await deleteInvalidate();
               goto(`/${workspace.current.name}`);

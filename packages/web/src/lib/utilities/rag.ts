@@ -66,7 +66,7 @@ async function mainContext(query: string, workspace: string) {
 		JOIN capture c ON c.id = cc.captureId
 		JOIN store p ON p.id = c.storeId
 		JOIN workspace w on w.id = p.workspaceId
-		WHERE w.name = ? AND c.enabled = 1 AND c.deleted = 0 
+		WHERE w.name = ? AND c.enabled = 1
 		ORDER BY distance ASC
 		LIMIT 7
 		`,
@@ -94,7 +94,7 @@ async function projectContext(query: string, workspace: string, store: string) {
 		JOIN capture c ON c.id = cc.captureId
 		JOIN store p ON p.id = c.storeId
 		JOIN workspace w on p.workspaceId = w.id
-		WHERE p.name = ? AND w.name = ? AND c.enabled = 1 AND c.deleted = 0
+		WHERE p.name = ? AND w.name = ? AND c.enabled = 1
 		ORDER BY distance ASC
 		LIMIT 7
 		`,

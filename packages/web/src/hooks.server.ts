@@ -1,10 +1,9 @@
-import { redirect, type Cookies, type Handle, type ServerInit } from '@sveltejs/kit';
+import { type Cookies, type Handle, type ServerInit } from '@sveltejs/kit';
 import { db } from '$lib/utilities/sqlite';
 import { loggers } from '$lib/utilities/loggers';
 import { readdir } from 'node:fs/promises';
 import pkg from '../package.json';
 import { config } from '$lib/utilities/config';
-import { OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_SERVER } from '$env/static/private';
 import { oidc } from '$lib/utilities/oidc';
 import { jwt } from '$lib/utilities/jwt';
 
@@ -22,8 +21,7 @@ async function login(cookies: Cookies) {
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const cookies = event.cookies;
-	const oidcEnabled = OIDC_SERVER && OIDC_CLIENT_SECRET && OIDC_CLIENT_ID;
-	if (protectedRoute(event.url, '/auth', '/api/v1') && oidcEnabled) {
+	if (protectedRoute(event.url, '/auth', '/api/v1') && oidc.enabled()) {
 		const currentJwt = cookies.get('jwt');
 		if (!currentJwt) return login(cookies);
 		const decodedJwt = await jwt.verify(currentJwt);

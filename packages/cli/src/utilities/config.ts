@@ -3,15 +3,14 @@ import { CONFIG_FILE } from "./constants";
 
 const configSchema = z.object({
   server: z.string().default("http://localhost:5173"),
-  workspace: z.string(),
   agent: z.enum(["opencode", "gemini-cli", "github-copilot", "claude-code"]),
 });
 
-type Config = z.infer<typeof configSchema>;
+export type Config = z.infer<typeof configSchema>;
 
 let cacheConfig: Config | null = null;
 
-export async function safeRead() {
+async function safeRead() {
   if (cacheConfig) {
     return cacheConfig;
   }
@@ -26,7 +25,7 @@ export async function safeRead() {
   }
 }
 
-export async function read() {
+async function read() {
   if (cacheConfig) {
     return cacheConfig;
   }
