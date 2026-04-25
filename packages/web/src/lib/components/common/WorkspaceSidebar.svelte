@@ -80,7 +80,7 @@
     </div>
     {#if stores.length}
       <div class="space-y-3 px-7">
-        <h2 class="font-semibold text-black text-sm">Projects</h2>
+        <h2 class="font-semibold text-black text-sm">Stores</h2>
         <div class="space-y-2 font-medium flex flex-col">
           {#each stores as store}
             <a href={`/${workspace}/store/${store.id}/captures`}>
