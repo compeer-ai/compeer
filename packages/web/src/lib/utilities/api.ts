@@ -10,6 +10,7 @@ import Bun from 'bun';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
 import { OIDC_SERVER } from '$env/static/private';
+import { jwt } from './jwt';
 
 const paramsValidator = vValidator(
 	'param',
@@ -24,15 +25,26 @@ const Type = {
 	Url: 'url'
 } as const;
 
+const oidcEnabled = OIDC_SERVER && OIDC_CLIENT_SECRET && OIDC_CLIENT_ID;
+
 export const router = new Hono()
 	.get('/alive', (c) => {
 		return c.json({ alive: true });
 	})
 	.get('/oidc', (c) => {
-		return c.json(OIDC_SERVER !== null);
+		return c.json(oidcEnabled);
 	})
 	.get('/openapi', (c) => {
 		return c.json(openApiSpec);
+	})
+	.use(async (c, next) => {
+		if (!oidcEnabled) return next();
+		const authorization = c.req.header('Authorization');
+		if (!authorization) return c.status(401);
+		const bearer = authorization.replace('Bearer ', '');
+		const decodedJwt = await jwt.verify(bearer);
+		if (!decodedJwt) return c.status(401);
+		return next();
 	})
 	.get('/backup', async (c) => {
 		const sqliteDir = fileURLToPath(new URL('../../../', import.meta.url));

@@ -25,11 +25,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const oidcEnabled = OIDC_SERVER && OIDC_CLIENT_SECRET && OIDC_CLIENT_ID;
 	if (protectedRoute(event.url, '/auth', '/api/v1') && oidcEnabled) {
 		const currentJwt = cookies.get('jwt');
-		if (!currentJwt) {
-			return login(cookies);
-		}
-		const verifiedJwt = await jwt.verify(currentJwt);
-		if (!verifiedJwt) {
+		if (!currentJwt) return login(cookies);
+		const decodedJwt = await jwt.verify(currentJwt);
+		if (!decodedJwt) {
 			cookies.delete('user', {
 				path: '/'
 			});
