@@ -7,9 +7,6 @@ export const pullCommand = command({
   name: "pull",
   desc: "Pull bases",
   aliases: ["pl"],
-  options: {
-    workspace: positional("workspace").required(),
-  },
   transform: async (opts) => {
     const currentConfig = await config.read();
     return { ...currentConfig, ...opts };

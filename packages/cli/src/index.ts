@@ -8,6 +8,7 @@ import { agent } from "./utilities/agent";
 import { pullCommand } from "./commands/pull";
 import { webCommand } from "./commands/web";
 import { initCommand } from "./commands/init";
+import { workspacesCommand } from "./commands/workspaces";
 
 (async () => {
   const ARGS = process.argv.slice(2);
@@ -20,6 +21,7 @@ import { initCommand } from "./commands/init";
       storesCommand,
       pullCommand,
       webCommand,
+      workspacesCommand,
     ],
     {
       name: "compeer",

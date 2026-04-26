@@ -7,7 +7,6 @@ export const storesCommand = command({
   desc: "Get all stores",
   aliases: ["p"],
   options: {
-    workspace: positional().desc("Name of workspace").required(),
     pretty: boolean().default(false),
   },
   transform: async (opts) => {

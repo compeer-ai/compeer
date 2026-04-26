@@ -14,7 +14,7 @@ export const initCommand = command({
   handler: async (opts) => {
     const { server } = opts;
     const url = new URL("/initilize", server);
-    const initilizationCallbackServer = callbackServer.create();
+    const initilizationCallbackServer = callbackServer.start();
     const initilizationUrl = new URL(
       `/initilize?redirectUri=${initilizationCallbackServer.url.toString()}`,
       server,
@@ -26,7 +26,7 @@ export const initCommand = command({
     const workspace = redirectUri.searchParams.get("workspace");
     const schmea = z.object({
       workspace: z.string(),
-      token: z.string(),
+      jwt: z.string().optional(),
       agent: z.enum([
         "claude-code",
         "codex",
@@ -43,6 +43,5 @@ export const initCommand = command({
       process.exit(1);
     }
     await config.create({ ...result.data, server });
-    await open(url);
   },
 });

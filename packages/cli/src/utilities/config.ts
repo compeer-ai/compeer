@@ -2,13 +2,17 @@ import type { Config } from "../models/config";
 import { CONFIG_FILE } from "./constants";
 import { mkdir } from "fs/promises";
 import { join } from "path";
+import pkg from "../../package.json";
 
 await mkdir(join(process.cwd(), ".compeer"), { recursive: true });
 
 let cacheConfig: Config | null = null;
 
-async function create(config: Config) {
-  await Bun.write(CONFIG_FILE, JSON.stringify(config, null, 2));
+async function create(config: Omit<Config, "version">) {
+  await Bun.write(
+    CONFIG_FILE,
+    JSON.stringify({ ...config, version: pkg.version }, null, 2),
+  );
 }
 
 async function safeRead() {

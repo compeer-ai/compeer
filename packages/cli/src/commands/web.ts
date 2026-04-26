@@ -14,7 +14,7 @@ export const webCommand = command({
     return { ...currentConfig, ...opts };
   },
   handler: async (opts) => {
-    const url = new URL(`/`, opts.server);
+    const url = new URL(`/${opts.workspace}`, opts.server);
     await open(url);
   },
 });
