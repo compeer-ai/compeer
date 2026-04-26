@@ -13,7 +13,6 @@ export const initCommand = command({
   },
   handler: async (opts) => {
     const { server } = opts;
-    const url = new URL("/initilize", server);
     const initilizationCallbackServer = callbackServer.start();
     const initilizationUrl = new URL(
       `/initilize?redirectUri=${initilizationCallbackServer.url.toString()}`,
