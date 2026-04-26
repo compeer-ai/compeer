@@ -20,8 +20,7 @@ function create() {
     },
   });
 
-  const callbackUrl = `http://localhost:${server.port}/callback`;
-
+  const callbackUrl = new URL(`/callback`, `http://localhost:${server.port}`);
   return {
     url: callbackUrl,
     wait: async () => {
@@ -32,6 +31,6 @@ function create() {
   };
 }
 
-export const server = {
+export const callbackServer = {
   create,
 };

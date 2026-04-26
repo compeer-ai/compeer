@@ -15,10 +15,17 @@ export const initCommand = command({
     const { server } = opts;
     const url = new URL("/initilize", server);
     const initilizationCallbackServer = callbackServer.create();
+    const initilizationUrl = new URL(
+      `/initilize?redirectUri=${initilizationCallbackServer.url.toString()}`,
+      server,
+    );
+    await open(initilizationUrl);
     const redirectUri = await initilizationCallbackServer.wait();
     const token = redirectUri.searchParams.get("token");
     const agent = redirectUri.searchParams.get("agent");
+    const workspace = redirectUri.searchParams.get("workspace");
     const schmea = z.object({
+      workspace: z.string(),
       token: z.string(),
       agent: z.enum([
         "claude-code",
@@ -28,7 +35,7 @@ export const initCommand = command({
         "github-copilot",
       ]),
     });
-    const result = await schmea.safeParseAsync({ token, agent });
+    const result = await schmea.safeParseAsync({ token, agent, workspace });
     if (!result.success) {
       console.error(
         "Invalidate parameters recieved by Compeer instance during initilization",
