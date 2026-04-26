@@ -13,7 +13,7 @@ const workspaceRepository = new WorkspaceRepository();
 
 const _readWorkspace = enhancedValidatedQuery(
 	'read_workspace',
-	true,
+	null,
 	v.object({
 		name: v.pipe(
 			v.string(),
@@ -40,7 +40,7 @@ const _deleteWorkspace = enhancedValidatedMutation(
 	v.object({
 		id: v.string()
 	}),
-	config.flags.deleteWorkspaces,
+	'deleteWorkspaces',
 	async ({ validatedPayload }) => {
 		await workspaceRepository.deleteById(validatedPayload.id);
 		_readWorkspaces.refresh();
@@ -49,7 +49,7 @@ const _deleteWorkspace = enhancedValidatedMutation(
 
 export const deleteWorkspace = _deleteWorkspace.form;
 
-const _readWorkspaces = enhancedQuery('read_workspaces', true, async () => {
+const _readWorkspaces = enhancedQuery('read_workspaces', null, async () => {
 	const workspaces = await workspaceRepository.readAll();
 	return workspaces;
 });
@@ -63,7 +63,7 @@ const _createWorkspace = enhancedValidatedMutation(
 			v.transform((input) => input.toLocaleLowerCase().replaceAll(' ', '-'))
 		)
 	}),
-	config.flags.createWorkspaces,
+	'createWorkspaces',
 	async ({ validatedPayload }) => {
 		await workspaceRepository.create({ name: validatedPayload.name });
 		_readWorkspaces.refresh();
@@ -77,7 +77,7 @@ const _updateWorkspace = enhancedValidatedMutation(
 		id: v.string(),
 		name: v.string()
 	}),
-	config.flags.updateWorkspaces,
+	'updateWorkspaces',
 	async ({ validatedPayload }) => {
 		const result = await workspaceRepository.update(validatedPayload.id, validatedPayload);
 		const updatedWorkspace = result.first();

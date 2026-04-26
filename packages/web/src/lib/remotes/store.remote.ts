@@ -8,14 +8,12 @@ import * as v from 'valibot';
 import { enhancedValidatedMutation, enhancedValidatedQuery } from '../utilities/remote';
 import { captureSchema } from '$lib/repository/captureRepository';
 import { commandCreateCaptures, readCaptures } from './capture.remote';
-import { config } from '$lib/utilities/config';
-import { error } from '@sveltejs/kit';
 
 const storeRepository = new StoreRepository();
 
 const _readStore = enhancedValidatedQuery(
 	'read_store',
-	true,
+	null,
 	v.object({
 		id: v.string()
 	}),
@@ -34,7 +32,7 @@ export const readStore = _readStore.query;
 
 const _readStores = enhancedValidatedQuery(
 	'read_stores',
-	true,
+	null,
 	v.object({
 		workspaceId: v.string()
 	}),
@@ -51,7 +49,7 @@ export const readStores = _readStores.query;
 
 const _readStoreByNameAndWorkspaceId = enhancedValidatedQuery(
 	'read_store_by_name_and_workspace_id',
-	true,
+	null,
 	v.object({
 		name: v.string(),
 		workspaceId: v.string()
@@ -78,7 +76,7 @@ const _deleteStore = enhancedValidatedMutation(
 	v.object({
 		id: v.string()
 	}),
-	config.flags.deleteProjects,
+	'deleteProjects',
 	async ({ validatedPayload }) => {
 		const result = await storeRepository.deleteByPredicate(eq(storeTable.id, validatedPayload.id));
 		const store = result.first();
@@ -99,7 +97,7 @@ const _updateStore = enhancedValidatedMutation(
 		id: v.string(),
 		description: v.string()
 	}),
-	config.flags.updateProjects,
+	'updateProjects',
 	async ({ validatedPayload }) => {
 		const result = await storeRepository.update(validatedPayload.id, validatedPayload);
 		const updatedStore = await result.first();
@@ -122,7 +120,7 @@ const _createStore = enhancedValidatedMutation(
 		description: v.nullish(v.string()),
 		workspaceId: v.string()
 	}),
-	config.flags.createProjects,
+	'createProjects',
 	async ({ validatedPayload }) => {
 		const result = await storeRepository.create(validatedPayload);
 		const createdStore = await result.first();
@@ -138,7 +136,7 @@ const _exportStore = enhancedValidatedMutation(
 	v.object({
 		id: v.string()
 	}),
-	config.flags.exportProjects,
+	'exportProjects',
 	async ({ validatedPayload }) => {
 		const [store, captures] = await Promise.all([
 			_readStore.query({ id: validatedPayload.id }),
@@ -158,7 +156,7 @@ const _importStore = enhancedValidatedMutation(
 		file: v.blob(),
 		workspaceId: v.string()
 	}),
-	config.flags.importProjects,
+	'importProjects',
 	async ({ validatedPayload }) => {
 		const { file } = validatedPayload;
 		const text = await file.text();

@@ -10,7 +10,7 @@ const _updateTheme = enhancedValidatedMutation(
 	v.object({
 		theme: v.string()
 	}),
-	true,
+	null,
 	async ({ validatedPayload }) => {
 		await configRepository.upsert({
 			key: 'theme',
@@ -22,7 +22,7 @@ const _updateTheme = enhancedValidatedMutation(
 
 export const updateThemeCommand = _updateTheme.command;
 
-const _readTheme = enhancedQuery('read_theme', true, async () => {
+const _readTheme = enhancedQuery('read_theme', null, async () => {
 	const result = await configRepository.readByPredicate(eq(configTable.key, 'theme'));
 	const config = result.first();
 	if (config) {

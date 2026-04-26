@@ -5,11 +5,18 @@ import { loggers } from './loggers';
 import { version } from '../../../package.json';
 import * as v from 'valibot';
 import { errors } from './errors';
+import { config } from './config';
+import type { DotPaths } from '$lib/models/dotPaths';
+import { readUser } from '$lib/remotes/user.remote';
 
-export function enhancedQuery<T>(key: string, flag: boolean, fn: () => T) {
+export function enhancedQuery<T>(key: string, flag: keyof typeof config.flags | null, fn: () => T) {
 	const _query = query(async () => {
 		const { url } = getRequestEvent();
-		if (!flag) {
+		const user = await readUser();
+		if (flag && !config.readFlag(flag)) {
+			throw errors.badRequest(url, 'Remote function not enabled');
+		}
+		if (user && flag && !config.readUserScopedFlag(user.email, flag)) {
 			throw errors.badRequest(url, 'Remote function not enabled');
 		}
 		const cacheKey = `${version}:${key}`;
@@ -32,7 +39,7 @@ export function enhancedQuery<T>(key: string, flag: boolean, fn: () => T) {
 
 export function enhancedValidatedQuery<S extends v.ObjectSchema<any, any>, T>(
 	key: string,
-	flag: boolean,
+	flag: keyof typeof config.flags | null,
 	schema: S,
 	fn: (args: { validatedPayload: v.InferOutput<S> }) => T
 ): {
@@ -41,7 +48,11 @@ export function enhancedValidatedQuery<S extends v.ObjectSchema<any, any>, T>(
 } {
 	const _query = query(schema, async (validatedPayload: v.InferOutput<S>) => {
 		const { url } = getRequestEvent();
-		if (!flag) {
+		const user = await readUser();
+		if (flag && !config.readFlag(flag)) {
+			throw errors.badRequest(url, 'Remote function not enabled');
+		}
+		if (user && flag && !config.readUserScopedFlag(user.email, flag)) {
 			throw errors.badRequest(url, 'Remote function not enabled');
 		}
 		const computedCacheKey = `${version}:${key}:${Object.entries(validatedPayload)
@@ -70,7 +81,7 @@ export function enhancedValidatedQuery<S extends v.ObjectSchema<any, any>, T>(
 
 export function enhancedValidatedMutation<S extends v.ObjectSchema<any, any>, T>(
 	schema: S,
-	flag: boolean,
+	flag: keyof typeof config.flags | null,
 	fn: (args: { validatedPayload: v.InferOutput<S> }) => T
 ): {
 	command: RemoteCommand<v.InferOutput<S>, T>;
@@ -78,7 +89,11 @@ export function enhancedValidatedMutation<S extends v.ObjectSchema<any, any>, T>
 } {
 	const _form = form(schema, async (validatedPayload: v.InferOutput<S>) => {
 		const { url } = getRequestEvent();
-		if (!flag) {
+		const user = await readUser();
+		if (flag && !config.readFlag(flag)) {
+			throw errors.badRequest(url, 'Remote function not enabled');
+		}
+		if (user && flag && !config.readUserScopedFlag(user.email, flag)) {
 			throw errors.badRequest(url, 'Remote function not enabled');
 		}
 		const result = await Promise.resolve(
@@ -91,7 +106,7 @@ export function enhancedValidatedMutation<S extends v.ObjectSchema<any, any>, T>
 
 	const _command = command(schema, async (validatedPayload: v.InferOutput<S>) => {
 		const { url } = getRequestEvent();
-		if (!flag) {
+		if (flag && !config[flag as keyof typeof config]) {
 			throw errors.badRequest(url, 'Remote function not enabled');
 		}
 		const result = fn({
@@ -107,10 +122,14 @@ export function enhancedValidatedMutation<S extends v.ObjectSchema<any, any>, T>
 	};
 }
 
-export function enhancedMutation<T>(flag: boolean, fn: () => T) {
+export function enhancedMutation<T>(flag: keyof typeof config.flags | null, fn: () => T) {
 	const _form = form('unchecked', async () => {
 		const { url } = getRequestEvent();
-		if (!flag) {
+		const user = await readUser();
+		if (flag && !config.readFlag(flag)) {
+			throw errors.badRequest(url, 'Remote function not enabled');
+		}
+		if (user && flag && !config.readUserScopedFlag(user.email, flag)) {
 			throw errors.badRequest(url, 'Remote function not enabled');
 		}
 		const result = fn();
@@ -119,7 +138,7 @@ export function enhancedMutation<T>(flag: boolean, fn: () => T) {
 
 	const _command = command('unchecked', async () => {
 		const { url } = getRequestEvent();
-		if (!flag) {
+		if (flag && !config[flag as keyof typeof config]) {
 			throw errors.badRequest(url, 'Remote function not enabled');
 		}
 		const result = fn();
