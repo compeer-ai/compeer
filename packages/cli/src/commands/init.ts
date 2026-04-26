@@ -35,7 +35,7 @@ export const initCommand = command({
       );
       process.exit(1);
     }
-    config.create({ ...result.data, server });
+    await config.create({ ...result.data, server });
     await open(url);
   },
 });
