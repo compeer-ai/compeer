@@ -1,7 +1,7 @@
 {
 	"$schema": "https://compeer.dev/schema/server/config",
 	"url": "http://localhost:5173",
-	"version": "1.0.0",
+	"version": "0.0.1",
 	"flags": {
 		"importProjects": true,
 		"createProjects": true,

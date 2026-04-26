@@ -31,7 +31,7 @@ import { workspacesCommand } from "./commands/workspaces";
         if (event === "before" && command.name !== "init") {
           const currentConfig = await config.safeRead();
           if (!currentConfig) {
-            console.error("Compeer is not yet initilized for this project");
+            console.error("Compeer is not yet initialized for this project");
             process.exit(1);
           } else {
             await agent.setup(currentConfig.agent);

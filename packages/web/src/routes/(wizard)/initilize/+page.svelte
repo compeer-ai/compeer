@@ -64,8 +64,14 @@
         <section class="space-y-3" use:animations.fadeInForward>
             <h1 class="text-xl font-semibold text-black">Select a Agent</h1>
             {@render selection({ items: agents, onSelect: async (selectedAgent) =>{
-                const url = new URL(`?jwt=${jwt.current}&workspace=${workspace}&agent=${selectedAgent.value}`, data.redirectUri)
-                await fetch(url);
+                const urlSearchParams = new URLSearchParams({
+                    agent: selectedAgent.value,
+                    workspace: workspace as string
+                });
+                if (jwt.current) {
+                    urlSearchParams.set('jwt', jwt.current)
+                }
+                await fetch(`${data.redirectUri}?${urlSearchParams.toString()}`);
                 step = Step.end
             }})}
         </section>

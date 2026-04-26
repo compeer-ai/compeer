@@ -33,7 +33,7 @@ export const readSearchCaptures = query(
 
 const _readCaptures = enhancedValidatedQuery(
 	'read_captures',
-	true,
+	null,
 	v.object({
 		storeId: v.string()
 	}),
@@ -55,7 +55,7 @@ const _createCapture = enhancedValidatedMutation(
 		content: v.string(),
 		storeId: v.string()
 	}),
-	true,
+	null,
 	async ({ validatedPayload }) => {
 		const { fetch } = getRequestEvent();
 		const { type, storeId } = validatedPayload;
@@ -98,7 +98,7 @@ const _createCaptures = enhancedValidatedMutation(
 	v.object({
 		captures: v.array(captureSchema)
 	}),
-	true,
+	null,
 	async ({ validatedPayload }) => {
 		const result = await captureRepository.createMany(validatedPayload.captures as Capture[]);
 		const createdCapture = result.first();
@@ -118,7 +118,7 @@ const _updateCaptureEnabled = enhancedValidatedMutation(
 		enabled: v.boolean(),
 		storeId: v.string()
 	}),
-	true,
+	null,
 	async ({ validatedPayload }) => {
 		await captureRepository.updateByPredicate(
 			validatedPayload.id,
@@ -143,7 +143,7 @@ const _updateCapture = enhancedValidatedMutation(
 		storeId: v.string(),
 		type: v.enum(Type)
 	}),
-	true,
+	null,
 	async ({ validatedPayload }) => {
 		console.log(validatedPayload);
 		const { fetch } = getRequestEvent();
@@ -211,7 +211,7 @@ const _deleteCapture = enhancedValidatedMutation(
 		id: v.string(),
 		storeId: v.string()
 	}),
-	true,
+	null,
 	async ({ validatedPayload }) => {
 		await captureRepository.deleteById(validatedPayload.id);
 		loggers.data.info('Deleted capture');
@@ -227,7 +227,7 @@ const _deleteCaptures = enhancedValidatedMutation(
 		captureIds: v.array(v.string()),
 		storeId: v.string()
 	}),
-	true,
+	null,
 	async ({ validatedPayload }) => {
 		await captureRepository.deleteByPredicate(
 			and(

@@ -20,7 +20,7 @@ export const initCommand = command({
     );
     await open(initilizationUrl);
     const redirectUri = await initilizationCallbackServer.wait();
-    const token = redirectUri.searchParams.get("token");
+    const jwt = redirectUri.searchParams.get("jwt");
     const agent = redirectUri.searchParams.get("agent");
     const workspace = redirectUri.searchParams.get("workspace");
     const Agent = {
@@ -35,7 +35,7 @@ export const initCommand = command({
       jwt: v.nullable(v.string()),
       agent: v.enum(Agent),
     });
-    const result = await v.safeParseAsync(schmea, { token, agent, workspace });
+    const result = await v.safeParseAsync(schmea, { jwt, agent, workspace });
     if (!result.success) {
       console.error(
         "Invalidate parameters recieved by Compeer instance during initilization",
@@ -43,5 +43,6 @@ export const initCommand = command({
       process.exit(1);
     }
     await config.create({ ...result.output, server });
+    console.log("Succesfully initialized Compeer");
   },
 });
