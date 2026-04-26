@@ -1,5 +1,5 @@
 import { commandCreateCapture } from '$lib/remotes/capture.remote';
-import { readStores } from '$lib/remotes/store.remote';
+import { readStoreByNameAndWorkspaceId, readStores } from '$lib/remotes/store.remote';
 import { Hono } from 'hono';
 import * as v from 'valibot';
 import { vValidator } from '@hono/valibot-validator';
@@ -9,8 +9,8 @@ import { readWorkspace, readWorkspaces } from '$lib/remotes/workspace.remote';
 import Bun from 'bun';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
-import { OIDC_SERVER } from '$env/static/private';
 import { jwt } from './jwt';
+import { oidc } from './oidc';
 
 const paramsValidator = vValidator(
 	'param',
@@ -25,25 +25,24 @@ const Type = {
 	Url: 'url'
 } as const;
 
-const oidcEnabled = OIDC_SERVER && OIDC_CLIENT_SECRET && OIDC_CLIENT_ID;
-
 export const router = new Hono()
 	.get('/alive', (c) => {
 		return c.json({ alive: true });
 	})
 	.get('/oidc', (c) => {
-		return c.json(oidcEnabled);
+		return c.json(oidc.enabled());
 	})
 	.get('/openapi', (c) => {
 		return c.json(openApiSpec);
 	})
 	.use(async (c, next) => {
-		if (!oidcEnabled) return next();
+		if (!oidc.enabled()) return next();
 		const authorization = c.req.header('Authorization');
 		if (!authorization) return c.status(401);
 		const bearer = authorization.replace('Bearer ', '');
 		const decodedJwt = await jwt.verify(bearer);
 		if (!decodedJwt) return c.status(401);
+		console.log('Authorized');
 		return next();
 	})
 	.get('/backup', async (c) => {
@@ -82,18 +81,24 @@ export const router = new Hono()
 		return c.json(workspaces);
 	})
 	.post(
-		'/capture',
+		'/:workspace/capture',
+		paramsValidator,
 		vValidator(
 			'json',
 			v.object({
 				type: v.enum(Type),
 				content: v.string(),
-				storeId: v.string()
+				store: v.string()
 			})
 		),
 		async (c) => {
-			const args = c.req.valid('json');
-			await commandCreateCapture(args);
+			const args = { ...c.req.valid('json'), ...c.req.valid('param') };
+			const workspace = await readWorkspace({ name: args.workspace });
+			const store = await readStoreByNameAndWorkspaceId({
+				name: args.store,
+				workspaceId: workspace.id
+			});
+			await commandCreateCapture({ ...args, storeId: store.id });
 			return c.json({ success: true });
 		}
 	);

@@ -1,32 +1,35 @@
-import { z } from "zod";
+import type { Config } from "../models/config";
 import { CONFIG_FILE } from "./constants";
+import { mkdir } from "fs/promises";
+import { join } from "path";
+import pkg from "../../package.json";
 
-const configSchema = z.object({
-  server: z.string().default("http://localhost:5173"),
-  workspace: z.string(),
-  agent: z.enum(["opencode", "gemini-cli", "github-copilot", "claude-code"]),
-});
-
-type Config = z.infer<typeof configSchema>;
+await mkdir(join(process.cwd(), ".compeer"), { recursive: true });
 
 let cacheConfig: Config | null = null;
 
-export async function safeRead() {
+async function create(config: Omit<Config, "version">) {
+  await Bun.write(
+    CONFIG_FILE,
+    JSON.stringify({ ...config, version: pkg.version }, null, 2),
+  );
+}
+
+async function safeRead() {
   if (cacheConfig) {
     return cacheConfig;
   }
   const file = Bun.file(CONFIG_FILE);
   if (await file.exists()) {
     const json = await file.json();
-    const { data } = await configSchema.safeParseAsync(json);
-    if (data) {
-      cacheConfig = data;
-      return data;
+    if (json) {
+      cacheConfig = json;
+      return json as Config;
     }
   }
 }
 
-export async function read() {
+async function read() {
   if (cacheConfig) {
     return cacheConfig;
   }
@@ -36,11 +39,11 @@ export async function read() {
     process.exit(1);
   }
   const json = await file.json();
-  const data = await configSchema.parseAsync(json);
-  return data;
+  return json as Config;
 }
 
 export const config = {
   read,
   safeRead,
+  create,
 };

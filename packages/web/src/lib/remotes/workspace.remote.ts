@@ -17,7 +17,7 @@ const _readWorkspace = enhancedValidatedQuery(
 	v.object({
 		name: v.pipe(
 			v.string(),
-			v.transform((value) => value.toLowerCase())
+			v.transform((value) => value.toLowerCase().replaceAll(' ', '-'))
 		)
 	}),
 	async ({ validatedPayload }) => {
@@ -58,7 +58,10 @@ export const readWorkspaces = _readWorkspaces.query;
 
 const _createWorkspace = enhancedValidatedMutation(
 	v.object({
-		name: v.string()
+		name: v.pipe(
+			v.string(),
+			v.transform((input) => input.toLocaleLowerCase().replaceAll(' ', '-'))
+		)
 	}),
 	config.flags.createWorkspaces,
 	async ({ validatedPayload }) => {

@@ -1,8 +1,8 @@
-import { boolean, command } from "@drizzle-team/brocli";
+import { boolean, command, positional, string } from "@drizzle-team/brocli";
 import { backend } from "../utilities/backend";
 import { config } from "../utilities/config";
 
-export const stores = command({
+export const storesCommand = command({
   name: "stores",
   desc: "Get all stores",
   aliases: ["p"],

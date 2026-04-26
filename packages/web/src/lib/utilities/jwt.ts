@@ -1,8 +1,9 @@
-import { decodeJwt, jwtVerify, SignJWT, type JWTPayload } from 'jose';
+import { jwtVerify, SignJWT, type JWTPayload } from 'jose';
 import { loggers } from './loggers';
-import { JWT_SECRET } from '$env/static/private';
+import { secrets } from './secrets';
 
 async function encode(payload: JWTPayload) {
+	const JWT_SECRET = secrets.read('JWT_SECRET');
 	const encoder = new TextEncoder();
 	const jwt = await new SignJWT(payload)
 		.setProtectedHeader({ alg: 'HS256' })
@@ -13,6 +14,7 @@ async function encode(payload: JWTPayload) {
 }
 
 async function verify(token: string) {
+	const JWT_SECRET = secrets.read('JWT_SECRET');
 	const encoder = new TextEncoder();
 	try {
 		const { payload } = await jwtVerify(token, encoder.encode(JWT_SECRET));

@@ -2,13 +2,14 @@ import { boolean, command, positional, string } from "@drizzle-team/brocli";
 import { backend } from "../utilities/backend";
 import { config } from "../utilities/config";
 
-export const search = command({
+export const searchCommand = command({
   name: "search",
   desc: "Search store captures",
   aliases: ["s"],
   options: {
-    query: positional("query").desc("Search query").required(),
-    store: string("store").desc("Store"),
+    workspace: positional("workspace").desc("Name of workspace").required(),
+    store: positional("store").desc("Name of store").required(),
+    query: string("query").desc("Search query").required(),
     pretty: boolean().default(false),
   },
   transform: async (opts) => {

@@ -1,12 +1,13 @@
-import { command, positional, string } from "@drizzle-team/brocli";
+import { command, positional } from "@drizzle-team/brocli";
 import { backend } from "../utilities/backend";
 
-export const capture = command({
+export const captureCommand = command({
   name: "capture",
   desc: "Capture content for a store",
   aliases: ["c"],
   options: {
-    store: string("store").desc("Name of the store").required(),
+    workspace: positional("workspace").desc("Name of workspace").required(),
+    store: positional("store").desc("Name of the store").required(),
     content: positional("content").desc("Capture content").required(),
   },
   transform: (opts) => {
@@ -17,20 +18,30 @@ export const capture = command({
     try {
       JSON.parse(opts.content);
       return { ...opts, type: "data" };
-    } catch (_) {}
+    } catch (e) {
+      console.log(e);
+    }
     return { ...opts, type: "text" };
   },
   handler: async (opts) => {
     try {
-      const result = await backend.client.api.v1.capture.$post({
+      const result = await backend.client.api.v1[":workspace"].capture.$post({
+        param: {
+          workspace: opts.workspace,
+        },
         json: {
           ...opts,
           type: opts.type as "data" | "url" | "text",
-          storeId: opts.store,
+          store: opts.store,
         },
       });
       if (result.ok) {
-        console.log(`${opts.type} captured successfully`);
+        const typeMapper: Record<typeof opts.type, string> = {
+          data: "Data",
+          url: "Url",
+          text: "Text",
+        };
+        console.log(`${typeMapper[opts.type]} captured successfully`);
         return;
       }
       console.error(

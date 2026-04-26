@@ -2,7 +2,7 @@ import { type Store } from "$lib/repository/storeRepository";
 import { mkdir } from "fs/promises";
 import path from "path";
 
-async function sync(agent: string, store: Store) {
+async function sync(agent: string, workspace: string, store: Store) {
   const skillName = store.name.toLocaleLowerCase().split(" ").join("-");
   const skillPath = path.join(process.cwd(), `.${agent}/skills/${skillName}`);
   await mkdir(skillPath, {
@@ -23,7 +23,7 @@ async function sync(agent: string, store: Store) {
     "You can search this knowledge base using the `search` command. Example:",
     "",
     "```bash",
-    `barque ${skillName} search \"Frontend design specification\"`,
+    `compeer search "${workspace}" "${store.name}" \"Frontend design specification\"`,
     "```",
     "",
     "## Add to Knowledge Base",
@@ -33,26 +33,26 @@ async function sync(agent: string, store: Store) {
     "Example of capturing text:",
     "",
     "```bash",
-    `barque ${skillName} capture \"\"`,
+    `compeer capture "${workspace}" "${store.name}" \"This project is for UI development\"`,
     "```",
     "",
     "Example of capturing a website:",
     "",
     "```bash",
-    `barque ${skillName} capture \"https://barque.ai\"`,
+    `compeer capture "${workspace}" "${store.name}" \"https://compeer.ai\"`,
     "```",
     "",
     "Example of capturing a data payload:",
     "",
     "```bash",
-    `barque ${skillName} capture \"{'hello': 'world'}\"`,
+    `compeer capture  "${workspace}" "${store.name}" \"{'hello': 'world'}\"`,
     "```",
   ].join("\n");
   await Bun.write(path.join(skillPath, "SKILL.md"), header + body);
 }
 
-async function syncAll(agent: string, stores: Store[]) {
-  await Promise.all(stores.map((store) => sync(agent, store)));
+async function syncAll(workspace: string, agent: string, stores: Store[]) {
+  await Promise.all(stores.map((store) => sync(agent, workspace, store)));
 }
 
 export const skill = {

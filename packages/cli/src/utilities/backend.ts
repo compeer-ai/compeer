@@ -1,10 +1,9 @@
 import { createClient } from "@web/client";
 import { BASE_URL } from "./constants";
-import { config } from "./config";
 
 const headers = {
   "Content-Type": "application/json",
-  "User-Agent": "@barque/cli",
+  "User-Agent": "@compeer/cli",
 };
 
 const client = createClient(BASE_URL, { headers });

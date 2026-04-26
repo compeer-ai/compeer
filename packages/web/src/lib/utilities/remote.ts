@@ -73,7 +73,7 @@ export function enhancedValidatedMutation<S extends v.ObjectSchema<any, any>, T>
 	flag: boolean,
 	fn: (args: { validatedPayload: v.InferOutput<S> }) => T
 ): {
-	command: RemoteCommand<v.InferOutput<S>, Promise<T>>;
+	command: RemoteCommand<v.InferOutput<S>, T>;
 	form: RemoteForm<v.InferOutput<S>, T>;
 } {
 	const _form = form(schema, async (validatedPayload: v.InferOutput<S>) => {
@@ -81,9 +81,11 @@ export function enhancedValidatedMutation<S extends v.ObjectSchema<any, any>, T>
 		if (!flag) {
 			throw errors.badRequest(url, 'Remote function not enabled');
 		}
-		const result = fn({
-			validatedPayload: validatedPayload
-		});
+		const result = await Promise.resolve(
+			fn({
+				validatedPayload: validatedPayload
+			})
+		);
 		return result;
 	});
 
@@ -95,6 +97,7 @@ export function enhancedValidatedMutation<S extends v.ObjectSchema<any, any>, T>
 		const result = fn({
 			validatedPayload: validatedPayload
 		});
+
 		return result;
 	});
 

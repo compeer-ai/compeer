@@ -2,8 +2,8 @@
   import Form from "../common/Form.svelte";
   import Input from "../common/Input.svelte";
   import {
-    formCreateProject,
-	formImportProject,
+    formCreateStore,
+	formImportStore,
   } from "$lib/remotes/store.remote";
   import HiddenInput from "../common/HiddenInput.svelte";
 	import FileInput from "../common/FileInput.svelte";
@@ -19,13 +19,14 @@
 <Form
   toastMessage={"Imported Store"}
   submitButtonTitle={`Import Store`}
-  remote={formImportProject}
+  remote={formImportStore}
   onSuccess={invalidate}
   className="space-y-5"
 >
-  <HiddenInput {...formCreateProject.fields.workspaceId.as("hidden", workspaceId)} />
+  <HiddenInput {...formCreateStore.fields.workspaceId.as("hidden", workspaceId)} />
   <FileInput
-    {...formImportProject.fields.file}
+    {...formImportStore.fields.file}
+    name="file"
     label="File"
     placeholder="Name"
     required

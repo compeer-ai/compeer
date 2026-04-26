@@ -2,13 +2,14 @@ import { errors } from '$lib/utilities/errors';
 import { loggers } from '$lib/utilities/loggers';
 import { StoreRepository, projectSchema } from '$lib/repository/storeRepository';
 import { getRequestEvent } from '$app/server';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { storeTable } from '$lib/utilities/schema';
 import * as v from 'valibot';
 import { enhancedValidatedMutation, enhancedValidatedQuery } from '../utilities/remote';
 import { captureSchema } from '$lib/repository/captureRepository';
 import { commandCreateCaptures, readCaptures } from './capture.remote';
 import { config } from '$lib/utilities/config';
+import { error } from '@sveltejs/kit';
 
 const storeRepository = new StoreRepository();
 
@@ -29,6 +30,8 @@ const _readStore = enhancedValidatedQuery(
 	}
 );
 
+export const readStore = _readStore.query;
+
 const _readStores = enhancedValidatedQuery(
 	'read_stores',
 	true,
@@ -44,8 +47,32 @@ const _readStores = enhancedValidatedQuery(
 	}
 );
 
-export const readStore = _readStore.query;
 export const readStores = _readStores.query;
+
+const _readStoreByNameAndWorkspaceId = enhancedValidatedQuery(
+	'read_store_by_name_and_workspace_id',
+	true,
+	v.object({
+		name: v.string(),
+		workspaceId: v.string()
+	}),
+	async ({ validatedPayload }) => {
+		const { url } = getRequestEvent();
+		const result = await storeRepository.readByPredicate(
+			and(
+				eq(storeTable.name, validatedPayload.name),
+				eq(storeTable.workspaceId, validatedPayload.workspaceId)
+			)!!
+		);
+		const store = result.first();
+		if (!store) {
+			throw errors.notFound(url, 'Store not found');
+		}
+		return store;
+	}
+);
+
+export const readStoreByNameAndWorkspaceId = _readStoreByNameAndWorkspaceId.query;
 
 const _deleteStore = enhancedValidatedMutation(
 	v.object({
@@ -55,17 +82,18 @@ const _deleteStore = enhancedValidatedMutation(
 	async ({ validatedPayload }) => {
 		const result = await storeRepository.deleteByPredicate(eq(storeTable.id, validatedPayload.id));
 		const store = result.first();
-		console.log(store);
 		loggers.data.child(store).info('Deleted store');
 
 		await _readStore.refresh(store);
-		_readStores.refresh(store);
+		await _readStoreByNameAndWorkspaceId.refresh(store);
+		await _readStores.refresh(store);
 	}
 );
 
-export const formDeleteProject = _deleteStore.form;
+export const formDeleteStore = _deleteStore.form;
+export const commandDeleteStore = _deleteStore.command;
 
-const _updateProject = enhancedValidatedMutation(
+const _updateStore = enhancedValidatedMutation(
 	v.object({
 		name: v.string(),
 		id: v.string(),
@@ -78,15 +106,19 @@ const _updateProject = enhancedValidatedMutation(
 		loggers.data.info('Updated store');
 
 		await _readStore.refresh({ id: validatedPayload.id });
+		await _readStore.refresh(validatedPayload);
 		await _readStores.refresh(updatedStore);
 	}
 );
 
-export const formUpdateProject = _updateProject.form;
+export const formUpdateStore = _updateStore.form;
 
-const _createProject = enhancedValidatedMutation(
+const _createStore = enhancedValidatedMutation(
 	v.object({
-		name: v.string(),
+		name: v.pipe(
+			v.string(),
+			v.transform((input) => input.toLowerCase().replaceAll(' ', '-'))
+		),
 		description: v.nullish(v.string()),
 		workspaceId: v.string()
 	}),
@@ -96,13 +128,13 @@ const _createProject = enhancedValidatedMutation(
 		const createdStore = await result.first();
 		loggers.data.info('Created Store');
 
-		_readStores.refresh(createdStore);
+		await _readStores.refresh(createdStore);
 	}
 );
 
-export const formCreateProject = _createProject.form;
+export const formCreateStore = _createStore.form;
 
-const _exportProject = enhancedValidatedMutation(
+const _exportStore = enhancedValidatedMutation(
 	v.object({
 		id: v.string()
 	}),
@@ -119,9 +151,9 @@ const _exportProject = enhancedValidatedMutation(
 	}
 );
 
-export const commandExportProject = _exportProject.command;
+export const commandExportStore = _exportStore.command;
 
-const _importProject = enhancedValidatedMutation(
+const _importStore = enhancedValidatedMutation(
 	v.object({
 		file: v.blob(),
 		workspaceId: v.string()
@@ -139,11 +171,11 @@ const _importProject = enhancedValidatedMutation(
 			captures: v.array(captureSchema)
 		});
 		const data = await v.parseAsync(schema, json);
-		await _createProject.command(data.store);
+		await _createStore.command(data.store);
 		if (data.captures.length) {
 			await commandCreateCaptures({ captures: data.captures });
 		}
 	}
 );
 
-export const formImportProject = _importProject.form;
+export const formImportStore = _importStore.form;
