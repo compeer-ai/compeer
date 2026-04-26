@@ -8,7 +8,6 @@
   },
   "scripts": {
     "ci:web": "bun run ./src/web.ts",
-    "ci:extension": "bun run ./src/extension.ts",
     "ci:landing": "bun run ./src/landing.ts",
     "ci:cli": "bun run ./src/cli.ts"
   },
