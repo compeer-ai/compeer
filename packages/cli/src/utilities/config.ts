@@ -1,5 +1,9 @@
 import type { Config } from "../models/config";
 import { CONFIG_FILE } from "./constants";
+import { mkdir } from "fs/promises";
+import { join } from "path";
+
+await mkdir(join(process.cwd(), ".compeer"), { recursive: true });
 
 let cacheConfig: Config | null = null;
 
