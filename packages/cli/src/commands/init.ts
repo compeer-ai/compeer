@@ -2,7 +2,7 @@ import { command, string } from "@drizzle-team/brocli";
 import { open } from "../utilities/open";
 import { callbackServer } from "../utilities/callbackServer";
 import { config } from "../utilities/config";
-import z from "zod";
+import * as v from "valibot";
 
 export const initCommand = command({
   name: "init",
@@ -13,7 +13,6 @@ export const initCommand = command({
   },
   handler: async (opts) => {
     const { server } = opts;
-    const url = new URL("/initilize", server);
     const initilizationCallbackServer = callbackServer.start();
     const initilizationUrl = new URL(
       `/initilize?redirectUri=${initilizationCallbackServer.url.toString()}`,
@@ -24,24 +23,25 @@ export const initCommand = command({
     const token = redirectUri.searchParams.get("token");
     const agent = redirectUri.searchParams.get("agent");
     const workspace = redirectUri.searchParams.get("workspace");
-    const schmea = z.object({
-      workspace: z.string(),
-      jwt: z.string().optional(),
-      agent: z.enum([
-        "claude-code",
-        "codex",
-        "opencode",
-        "gemini-cli",
-        "github-copilot",
-      ]),
+    const Agent = {
+      claudeCode: "claude-code",
+      code: "codex",
+      opencode: "opencode",
+      geminiCli: "gemini-cli",
+      githubCopilot: "github-copilot",
+    } as const;
+    const schmea = v.object({
+      workspace: v.string(),
+      jwt: v.nullable(v.string()),
+      agent: v.enum(Agent),
     });
-    const result = await schmea.safeParseAsync({ token, agent, workspace });
+    const result = await v.safeParseAsync(schmea, { token, agent, workspace });
     if (!result.success) {
       console.error(
         "Invalidate parameters recieved by Compeer instance during initilization",
       );
       process.exit(1);
     }
-    await config.create({ ...result.data, server });
+    await config.create({ ...result.output, server });
   },
 });
