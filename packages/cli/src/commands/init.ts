@@ -1,5 +1,8 @@
 import { command, string } from "@drizzle-team/brocli";
 import { open } from "../utilities/open";
+import { callbackServer } from "../utilities/callbackServer";
+import { config } from "../utilities/config";
+import z from "zod";
 
 export const initCommand = command({
   name: "init",
@@ -11,6 +14,28 @@ export const initCommand = command({
   handler: async (opts) => {
     const { server } = opts;
     const url = new URL("/initilize", server);
+    const initilizationCallbackServer = callbackServer.create();
+    const redirectUri = await initilizationCallbackServer.wait();
+    const token = redirectUri.searchParams.get("token");
+    const agent = redirectUri.searchParams.get("agent");
+    const schmea = z.object({
+      token: z.string(),
+      agent: z.enum([
+        "claude-code",
+        "codex",
+        "opencode",
+        "gemini-cli",
+        "github-copilot",
+      ]),
+    });
+    const result = await schmea.safeParseAsync({ token, agent });
+    if (!result.success) {
+      console.error(
+        "Invalidate parameters recieved by Compeer instance during initilization",
+      );
+      process.exit(1);
+    }
+    config.create({ ...result.data, server });
     await open(url);
   },
 });
