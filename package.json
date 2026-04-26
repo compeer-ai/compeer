@@ -6,8 +6,5 @@
   },
   "workspaces": [
     "packages/*"
-  ],
-  "dependencies": {
-    "zod": "^4.3.6"
-  }
+  ]
 }
