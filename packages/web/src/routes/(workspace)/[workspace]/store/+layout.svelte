@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import StoreSubheader from "$lib/components/common/StroeSubheader.svelte";
+  import StoreSubheader from "$lib/components/common/StoreSubheader.svelte";
 	import type { LayoutProps } from "./$types";
   const { children }: LayoutProps = $props();
 </script>

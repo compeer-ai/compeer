@@ -14,8 +14,9 @@ export const workspacesCommand = command({
   },
   handler: async (opts) => {
     try {
-      const { pretty } = opts;
-      const response = await backend.client.api.v1.workspaces.$get();
+      const { pretty, jwt } = opts;
+      const client = backend.client(jwt);
+      const response = await client.workspaces.$get();
       const workspaces = await response.json();
       if (pretty) {
         console.table(workspaces);

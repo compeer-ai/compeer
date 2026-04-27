@@ -1,4 +1,4 @@
-import { command, positional } from "@drizzle-team/brocli";
+import { command } from "@drizzle-team/brocli";
 import { backend } from "../utilities/backend";
 import { config } from "../utilities/config";
 import { skill } from "../utilities/skill";
@@ -12,9 +12,11 @@ export const pullCommand = command({
     return { ...currentConfig, ...opts };
   },
   handler: async (opts) => {
-    const { workspace, agent } = opts;
+    const { workspace, agent, jwt } = opts;
     try {
-      const result = await backend.client.api.v1[":workspace"].stores.$get({
+      const client = backend.client(jwt);
+
+      const result = await client[":workspace"].stores.$get({
         param: {
           workspace,
         },
