@@ -1,12 +1,17 @@
 import { createClient } from "@web/client";
 import { BASE_URL } from "./constants";
 
-const headers = {
+let headers: Record<string, string> = {
   "Content-Type": "application/json",
   "User-Agent": "@compeer/cli",
 };
 
-const client = createClient(BASE_URL, { headers });
 export const backend = {
-  client,
+  client: (jwt: string | null) =>
+    createClient(
+      BASE_URL,
+      jwt
+        ? { headers: { ...headers, Authorization: `Bearer ${jwt}` } }
+        : { headers },
+    ).api.v1,
 };

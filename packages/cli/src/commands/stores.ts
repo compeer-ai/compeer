@@ -14,9 +14,10 @@ export const storesCommand = command({
     return { ...currentConfig, ...opts };
   },
   handler: async (opts) => {
-    const { pretty, workspace } = opts;
+    const { pretty, workspace, jwt } = opts;
     try {
-      const result = await backend.client.api.v1[":workspace"].stores.$get({
+      const client = backend.client(jwt);
+      const result = await client[":workspace"].stores.$get({
         param: {
           workspace,
         },

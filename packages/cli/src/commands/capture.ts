@@ -1,5 +1,6 @@
 import { command, positional } from "@drizzle-team/brocli";
 import { backend } from "../utilities/backend";
+import { config } from "../utilities/config";
 
 export const captureCommand = command({
   name: "capture",
@@ -10,22 +11,24 @@ export const captureCommand = command({
     store: positional("store").desc("Name of the store").required(),
     content: positional("content").desc("Capture content").required(),
   },
-  transform: (opts) => {
+  transform: async (opts) => {
+    const currentConfig = await config.read();
     try {
       new URL(opts.content);
-      return { ...opts, type: "url" };
+      return { ...opts, ...currentConfig, type: "url" };
     } catch (_) {}
     try {
       JSON.parse(opts.content);
-      return { ...opts, type: "data" };
+      return { ...opts, ...currentConfig, type: "data" };
     } catch (e) {
       console.log(e);
     }
-    return { ...opts, type: "text" };
+    return { ...opts, ...currentConfig, type: "text" };
   },
   handler: async (opts) => {
     try {
-      const result = await backend.client.api.v1[":workspace"].capture.$post({
+      const client = backend.client(opts.jwt);
+      const result = await client[":workspace"].capture.$post({
         param: {
           workspace: opts.workspace,
         },

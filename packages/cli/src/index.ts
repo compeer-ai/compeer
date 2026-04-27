@@ -27,7 +27,7 @@ import { workspacesCommand } from "./commands/workspaces";
       name: "compeer",
       description: "CLI for Compeer",
       argSource: ["bun", "compeer", ...ARGS],
-      hook: async (event, command, globals) => {
+      hook: async (event, command) => {
         if (event === "before" && command.name !== "init") {
           const currentConfig = await config.safeRead();
           if (!currentConfig) {

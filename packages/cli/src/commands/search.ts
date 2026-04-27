@@ -17,9 +17,10 @@ export const searchCommand = command({
     return { ...currentConfig, ...opts };
   },
   handler: async (opts) => {
-    const { workspace, query, store } = opts;
+    const { workspace, query, store, jwt } = opts;
     try {
-      const result = await backend.client.api.v1[":workspace"].search.$get({
+      const client = backend.client(jwt);
+      const result = await client[":workspace"].search.$get({
         param: {
           workspace,
         },
