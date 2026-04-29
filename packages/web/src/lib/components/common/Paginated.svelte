@@ -2,6 +2,8 @@
 	import { ChevronLeft } from "@lucide/svelte";
 	import type { Snippet } from "svelte";
 	import Icon from "./Icon.svelte";
+	import { page  as _page} from "$app/state";
+	import { goto } from "$app/navigation";
 
     interface Props {
         limit: number;
@@ -10,17 +12,29 @@
         children: (args: { subset: T[] }) => ReturnType<Snippet>
     }
     const { limit, offset, data, children }: Props = $props();
-    let cursor = $derived(0);
+    const pageParam = _page.url.searchParams.get('page');
+    let page = $derived(pageParam ? Number(pageParam) : 1);
+    function updatePage(value: number) {
+        page = Math.max(value - limit, 0)
+        const url = new URL(_page.url);
+        url.searchParams.set('page', page.toString());
+        
+        goto(url.href, { 
+            replaceState: true, 
+            noScroll: true,     
+            keepFocus: true     
+        });
+    }
 </script>
 
 <div class="space-y-4">
-    {@render children({ subset: data.slice(cursor, Math.min(offset, data.length)) })}
+    {@render children({ subset: data.slice(page, Math.min(offset, data.length)) })}
     <div class="flex justify-between">
-        <button class="space-x-2 flex items-center"  onclick={() => cursor = Math.max(cursor - limit, 0)}>
+        <button class="space-x-2 flex items-center"  onclick={() => updatePage(Math.max(0, page - 1))}>
             <Icon icon={ChevronLeft} />
             <span>Previous</span>
         </button>
-        <button class="space-x-2 flex items-center" onclick={() => cursor = Math.min(cursor + limit, data.length)}>
+        <button class="space-x-2 flex items-center" onclick={() => updatePage(Math.min(page + limit, data.length))}>
             <span>Next</span>
             <Icon icon={ChevronLeft} />
         </button>
