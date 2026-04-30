@@ -6,16 +6,17 @@
   import Icon from "$lib/components/common/Icon.svelte";
   import { dispatcher } from "$lib/utilities/dispatcher";
   import ProjectForm from "$lib/components/forms/ProjectForm.svelte";
-  import type { Store as IProject } from "$lib/repository/storeRepository";
-  import Store from "$lib/components/common/Store.svelte";
+  import type { Store as IStore } from "$lib/repository/storeRepository";
   import { readStores } from "$lib/remotes/store.remote";
 	import { readWorkspace } from "$lib/remotes/workspace.remote";
 	import { page } from "$app/state";
 	import ImportProjectForm from "$lib/components/forms/ImportProjectForm.svelte";
 	import { config } from "$lib/utilities/config";
+	import Store from "$lib/components/common/Store.svelte";
+	import Paginated from "$lib/components/common/Paginated.svelte";
 
   let query = $state("");
-  function filterProjects(stores: IProject[], query: string) {
+  function filterProjects(stores: IStore[], query: string) {
     if (!query.length) return stores;
     return stores.filter((store) =>
       store.name.toLowerCase().includes(query.toLowerCase()),
@@ -69,15 +70,19 @@
     {/if}
   </div>
   </div>
-  {#if filterProjects(stores.current, query).length}
+  {#snippet paginatedSubset(args: { subset: IStore[] })}
+  {@const { subset: stores } = args}
+  {#if filterProjects(stores, query).length}
     <div
       class="border border-gray-300 divide-y divide-gray-300 rounded-lg shadow-sm shadow-gray-100 bg-white overflow-hidden"
       use:animations.fadeIn
     >
-      {#each filterProjects(stores.current, query) as store}
+      {#each filterProjects(stores, query) as store}
         <Store {store} />
       {/each}
     </div>
-  {/if}
+  {/if}    
+  {/snippet}
+  <Paginated offset={10} data={stores.current} children={(subset) => paginatedSubset(subset)} />
 </section>
 {/if}

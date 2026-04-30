@@ -13,6 +13,7 @@
   import UpdateCaptureForm from "../forms/UpdateCaptureForm.svelte";
   import classNames from "classnames";
   import { delay } from "$lib/utilities/delay";
+	import Paginated from "./Paginated.svelte";
 
   interface Props {
     captures: Capture[];
@@ -39,6 +40,8 @@
   }
 </script>
 
+{#snippet paginatedSubset(args: { subset: Capture[] })}
+{@const { subset: captures } = args}
 <div
   class="border border-gray-300 bg-white rounded-lg shadow-sm shadow-gray-100 divide-y divide-gray-300"
 >
@@ -156,3 +159,5 @@
     </div>
   {/each}
 </div>
+{/snippet}
+<Paginated offset={15} data={captures} children={(subset) => paginatedSubset(subset)}/>
