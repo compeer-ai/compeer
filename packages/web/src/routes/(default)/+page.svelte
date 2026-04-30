@@ -1,5 +1,6 @@
 <script lang='ts'>
 	import Icon from "$lib/components/common/Icon.svelte";
+	import Paginated from "$lib/components/common/Paginated.svelte";
 	import Search from "$lib/components/common/Search.svelte";
 	import Workspace from "$lib/components/common/Workspace.svelte";
 	import WorkspaceForm from "$lib/components/forms/WorkspaceForm.svelte";
@@ -43,14 +44,18 @@
     {/if}
   </div>
   {#if filerWorkspaces(workspaces.current, query).length}
-    <div
+  {#snippet paginatedSubset(args: { subset: IWorkspace[] })}
+  {@const { subset: workspaces } = args}
+  <div
       class="border border-gray-300 divide-y divide-gray-300 rounded-lg shadow-sm shadow-gray-100 bg-white overflow-hidden"
       use:animations.fadeIn
     >
-      {#each filerWorkspaces(workspaces.current, query) as workspace}
+      {#each filerWorkspaces(workspaces, query) as workspace}
         <Workspace {workspace} />
       {/each}
     </div>
+  {/snippet}
+  <Paginated offset={10} data={workspaces.current} children={(subset) => paginatedSubset(subset)} />
   {/if}
 </div>
 {/if}

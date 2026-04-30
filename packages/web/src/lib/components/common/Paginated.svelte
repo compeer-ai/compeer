@@ -6,18 +6,16 @@
 	import { goto } from "$app/navigation";
 
     interface Props {
-        limit: number;
+        data: T[];
         offset: number;
-        data: T[]
         children: (args: { subset: T[] }) => ReturnType<Snippet>
     }
-    const { limit, offset, data, children }: Props = $props();
+    const { offset, data, children }: Props = $props();
     const pageParam = _page.url.searchParams.get('page');
     let page = $derived(pageParam ? Number(pageParam) : 1);
     function updatePage(value: number) {
-        page = Math.max(value - limit, 0)
         const url = new URL(_page.url);
-        url.searchParams.set('page', page.toString());
+        url.searchParams.set('page', value.toString());
         
         goto(url.href, { 
             replaceState: true, 
@@ -34,7 +32,7 @@
             <Icon icon={ChevronLeft} />
             <span>Previous</span>
         </button>
-        <button class="space-x-2 flex items-center" onclick={() => updatePage(Math.min(page + limit, data.length))}>
+        <button class="space-x-2 flex items-center" onclick={() => updatePage(Math.min(page + 1, (data.length / offset)))}>
             <span>Next</span>
             <Icon icon={ChevronLeft} />
         </button>
