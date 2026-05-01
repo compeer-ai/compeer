@@ -1,5 +1,4 @@
 import { WorkspaceRepository } from '$lib/repository/workspaceRepository';
-import { config } from '$lib/utilities/config';
 import {
 	enhancedQuery,
 	enhancedValidatedMutation,
@@ -15,20 +14,16 @@ const _readWorkspace = enhancedValidatedQuery(
 	'read_workspace',
 	null,
 	v.object({
-		name: v.string(),
-		limit: v.number(),
-		offset: v.number()
+		name: v.string()
 	}),
 	async ({ validatedPayload }) => {
 		const result = await workspaceRepository.readByPredicate(
-			eq(workspaceTable.name, validatedPayload.name),
-			validatedPayload.limit,
-			validatedPayload.offset
+			eq(workspaceTable.name, validatedPayload.name)
 		);
 		const workspace = result.first();
 		if (!workspace) {
 			const createdWorkspace = await workspaceRepository.create({ name: validatedPayload.name });
-			_readWorkspaces.refresh();
+			_readWorkspaces.refreshAll();
 			return createdWorkspace.first();
 		}
 		return workspace;
@@ -44,16 +39,27 @@ const _deleteWorkspace = enhancedValidatedMutation(
 	'deleteWorkspaces',
 	async ({ validatedPayload }) => {
 		await workspaceRepository.deleteById(validatedPayload.id);
-		_readWorkspaces.refresh();
+		_readWorkspaces.refreshAll();
 	}
 );
 
 export const deleteWorkspace = _deleteWorkspace.form;
 
-const _readWorkspaces = enhancedQuery('read_workspaces', null, async () => {
-	const workspaces = await workspaceRepository.readAll();
-	return workspaces;
-});
+const _readWorkspaces = enhancedValidatedQuery(
+	'read_workspaces',
+	null,
+	v.object({
+		limit: v.number(),
+		offset: v.number()
+	}),
+	async ({ validatedPayload }) => {
+		const workspaces = await workspaceRepository.readAll(
+			validatedPayload.limit,
+			validatedPayload.offset
+		);
+		return workspaces;
+	}
+);
 
 export const readWorkspaces = _readWorkspaces.query;
 
@@ -67,7 +73,7 @@ const _createWorkspace = enhancedValidatedMutation(
 	'createWorkspaces',
 	async ({ validatedPayload }) => {
 		await workspaceRepository.create({ name: validatedPayload.name });
-		_readWorkspaces.refresh();
+		_readWorkspaces.refreshAll();
 	}
 );
 
@@ -82,8 +88,7 @@ const _updateWorkspace = enhancedValidatedMutation(
 	async ({ validatedPayload }) => {
 		const result = await workspaceRepository.update(validatedPayload.id, validatedPayload);
 		const updatedWorkspace = result.first();
-
-		_readWorkspaces.refresh();
+		_readWorkspaces.refreshAll();
 		await _readWorkspace.refresh(updatedWorkspace);
 	}
 );

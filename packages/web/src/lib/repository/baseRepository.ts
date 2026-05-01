@@ -153,8 +153,15 @@ export class BaseRepoistory<T extends AnySQLiteTable, K> {
 		};
 	}
 
-	async readAll() {
-		const result = (await db.select().from(this.table as SQLiteTable)) as InferSelectModel<T>[];
+	async readAll(limit?: number, offset?: number) {
+		const query = db.select().from(this.table as SQLiteTable);
+		if (limit) {
+			query.limit(limit);
+		}
+		if (offset) {
+			query.offset(offset);
+		}
+		const result = (await query) as InferSelectModel<T>[];
 		return result;
 	}
 
