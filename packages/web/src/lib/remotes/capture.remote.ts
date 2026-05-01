@@ -35,11 +35,15 @@ const _readCaptures = enhancedValidatedQuery(
 	'read_captures',
 	null,
 	v.object({
-		storeId: v.string()
+		storeId: v.string(),
+		offset: v.optional(v.number()),
+		limit: v.optional(v.number())
 	}),
 	async ({ validatedPayload }) => {
 		const result = await captureRepository.readByPredicate(
-			eq(captureTable.storeId, validatedPayload.storeId)
+			eq(captureTable.storeId, validatedPayload.storeId),
+			validatedPayload.offset,
+			validatedPayload.limit
 		);
 		const captures = result.all();
 		const formattedCaptures = captures.map(({ embedding, ...others }) => others);
@@ -87,7 +91,7 @@ const _createCapture = enhancedValidatedMutation(
 		}
 		loggers.data.info('Created capture');
 
-		await _readCaptures.refresh({ storeId });
+		_readCaptures.refreshAll();
 	}
 );
 
@@ -100,13 +104,9 @@ const _createCaptures = enhancedValidatedMutation(
 	}),
 	null,
 	async ({ validatedPayload }) => {
-		const result = await captureRepository.createMany(validatedPayload.captures as Capture[]);
-		const createdCapture = result.first();
-		const storeId = createdCapture?.storeId ?? validatedPayload.captures[0]?.storeId;
+		await captureRepository.createMany(validatedPayload.captures as Capture[]);
 
-		if (storeId) {
-			await _readCaptures.refresh({ storeId });
-		}
+		_readCaptures.refreshAll();
 	}
 );
 
@@ -128,7 +128,7 @@ const _updateCaptureEnabled = enhancedValidatedMutation(
 			}
 		);
 
-		await _readCaptures.refresh(validatedPayload);
+		await _readCaptures.refreshAll();
 	}
 );
 export const commandUpdateCaptureEnabled = _updateCaptureEnabled.command;
@@ -200,7 +200,7 @@ const _updateCapture = enhancedValidatedMutation(
 		}
 		loggers.data.info('Updated capture');
 
-		await _readCaptures.refresh(validatedPayload);
+		await _readCaptures.refreshAll();
 	}
 );
 
@@ -216,7 +216,7 @@ const _deleteCapture = enhancedValidatedMutation(
 		await captureRepository.deleteById(validatedPayload.id);
 		loggers.data.info('Deleted capture');
 
-		await _readCaptures.refresh(validatedPayload);
+		await _readCaptures.refreshAll();
 	}
 );
 
@@ -236,7 +236,7 @@ const _deleteCaptures = enhancedValidatedMutation(
 			)!!
 		);
 
-		await _readCaptures.refresh(validatedPayload);
+		await _readCaptures.refreshAll();
 	}
 );
 

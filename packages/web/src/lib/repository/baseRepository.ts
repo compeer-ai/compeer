@@ -63,11 +63,18 @@ export class BaseRepoistory<T extends AnySQLiteTable, K> {
 		};
 	}
 
-	async readByPredicate(predicate: SQL) {
-		const result = (await db
+	async readByPredicate(predicate: SQL, limit?: number, offset?: number) {
+		let query = db
 			.select()
 			.from(this.table as SQLiteTable)
-			.where(predicate)) as InferSelectModel<T>[];
+			.where(predicate);
+		if (limit) {
+			query.limit(limit);
+		}
+		if (offset) {
+			query.offset(offset);
+		}
+		const result = (await query) as InferSelectModel<T>[];
 
 		function first() {
 			if (result.length) {
@@ -146,8 +153,15 @@ export class BaseRepoistory<T extends AnySQLiteTable, K> {
 		};
 	}
 
-	async readAll() {
-		const result = (await db.select().from(this.table as SQLiteTable)) as InferSelectModel<T>[];
+	async readAll(limit?: number, offset?: number) {
+		const query = db.select().from(this.table as SQLiteTable);
+		if (limit) {
+			query.limit(limit);
+		}
+		if (offset) {
+			query.offset(offset);
+		}
+		const result = (await query) as InferSelectModel<T>[];
 		return result;
 	}
 

@@ -6,7 +6,6 @@ import { version } from '../../../package.json';
 import * as v from 'valibot';
 import { errors } from './errors';
 import { config } from './config';
-import type { DotPaths } from '$lib/models/dotPaths';
 import { readUser } from '$lib/remotes/user.remote';
 
 export function enhancedQuery<T>(key: string, flag: keyof typeof config.flags | null, fn: () => T) {
@@ -45,6 +44,7 @@ export function enhancedValidatedQuery<S extends v.ObjectSchema<any, any>, T>(
 ): {
 	query: RemoteQueryFunction<v.InferOutput<S>, T>;
 	refresh: (validatedPayload: v.InferOutput<S>) => Promise<void>;
+	refreshAll: () => void;
 } {
 	const _query = query(schema, async (validatedPayload: v.InferOutput<S>) => {
 		const { url } = getRequestEvent();
@@ -59,7 +59,9 @@ export function enhancedValidatedQuery<S extends v.ObjectSchema<any, any>, T>(
 			.map(([key, value]) => `(${key}=${value})`)
 			.join('')}`;
 		const hashedComputedCacheKey = Bun.hash(computedCacheKey).toString();
-		const result = await cache.read(hashedComputedCacheKey, () => fn({ validatedPayload }));
+		const result = await cache.read(`${version}:${key}`, () =>
+			cache.read(hashedComputedCacheKey, () => fn({ validatedPayload }))
+		);
 		return result;
 	});
 
@@ -73,9 +75,15 @@ export function enhancedValidatedQuery<S extends v.ObjectSchema<any, any>, T>(
 		cache.invalidate(hashedComputedCacheKey);
 	}
 
+	function refreshAll() {
+		loggers.data.info(`Invalidating ${key}`);
+		cache.invalidate(`${version}:${key}`);
+	}
+
 	return {
 		query: _query,
-		refresh
+		refresh,
+		refreshAll
 	};
 }
 
