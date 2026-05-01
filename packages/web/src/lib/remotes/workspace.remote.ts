@@ -15,14 +15,15 @@ const _readWorkspace = enhancedValidatedQuery(
 	'read_workspace',
 	null,
 	v.object({
-		name: v.pipe(
-			v.string(),
-			v.transform((value) => value.toLowerCase().replaceAll(' ', '-'))
-		)
+		name: v.string(),
+		limit: v.number(),
+		offset: v.number()
 	}),
 	async ({ validatedPayload }) => {
 		const result = await workspaceRepository.readByPredicate(
-			eq(workspaceTable.name, validatedPayload.name)
+			eq(workspaceTable.name, validatedPayload.name),
+			validatedPayload.limit,
+			validatedPayload.offset
 		);
 		const workspace = result.first();
 		if (!workspace) {

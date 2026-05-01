@@ -35,11 +35,15 @@ const _readCaptures = enhancedValidatedQuery(
 	'read_captures',
 	null,
 	v.object({
-		storeId: v.string()
+		storeId: v.string(),
+		offset: v.number(),
+		limit: v.number()
 	}),
 	async ({ validatedPayload }) => {
 		const result = await captureRepository.readByPredicate(
-			eq(captureTable.storeId, validatedPayload.storeId)
+			eq(captureTable.storeId, validatedPayload.storeId),
+			validatedPayload.offset,
+			validatedPayload.limit
 		);
 		const captures = result.all();
 		const formattedCaptures = captures.map(({ embedding, ...others }) => others);
