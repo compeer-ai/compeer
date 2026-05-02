@@ -38,12 +38,12 @@
   </div>
 {/snippet}
 <div class="w-100 flex flex-col justify-between">
-  <div class=" space-y-7"  data-sveltekit-preload-data="hover">
+  <div class="space-y-7"  data-sveltekit-preload-data="hover">
     <div class="border-b border-gray-300 px-7 h-18 flex items-center justify-between">
       <a href={`/`}>
         <Logo />
       </a>
-      <button onclick={() => dispatcher.send('drawer', drawerContent)}  class="border shadow-sm shadow-gray-100 hover:bg-gray-100/30 ease-in-out rounded-lg text-black font-medium space-x-2 border-gray-300 h-10 flex items-center text-sm px-3">
+      <button onclick={() => dispatcher.send('drawer', drawerContent)}  class="border max-w-40 shadow-sm truncate shadow-gray-100 hover:bg-gray-100/30 ease-in-out rounded-lg text-black font-medium space-x-2 border-gray-300 h-10 flex items-center text-sm px-3">
         <span>
           {page.params.workspace}
         </span>
