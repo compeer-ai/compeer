@@ -1,5 +1,6 @@
 {
   "lockfileVersion": 1,
+  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "barque",
@@ -90,7 +91,7 @@
     },
     "packages/web": {
       "name": "@compeer-ai/web",
-      "version": "1.0.0",
+      "version": "0.0.1",
       "dependencies": {
         "@compeer-ai/scrape": "workspace:*",
         "@hono/valibot-validator": "^0.6.1",

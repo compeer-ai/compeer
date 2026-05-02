@@ -9,6 +9,8 @@
 	import Button from "$lib/components/common/Button.svelte";
 	import { animate } from "motion";
 	import { onDestroy, onMount } from "svelte";
+	import { ArrowRightLeft, Blocks, Boxes, Cable, Code, Lock, Share2 } from "@lucide/svelte";
+	import Icon from "$lib/components/common/Icon.svelte";
 
 	const agents = [
 		{ label: "Claude Code", icon: "claude" },
@@ -73,6 +75,7 @@
 	<Github size={20} />
 {/snippet}
 
+<main class="">
 <section class="space-y-3 text-center py-14">
 	<h1 class="text-2xl font-semibold text-black inline-flex items-center justify-center gap-2">
 		<span>Help</span>
@@ -111,37 +114,89 @@
         </a>
     </div>
 </section>
-<section class="space-y-10">
-    <div class="space-y-3">
-        <h2 class="text-xl text-black font-semibold">What is Compeer?</h2>
-        <p>Compeer is an open-source, fast context layer for agents. It stores your store knowledge as captures, makes it searchable, and keeps usage history so agents always have the right context.</p>
-		<a href="/docs/quickstart">
-			<Button>Learn More</Button>
-		</a>
-    </div>
-    <div class="space-y-3">
-        <h2 class="text-xl text-black font-semibold">Gather Context From Everywhere</h2>
-        <p>Add text, data, or websites. Compeer can scrape content, embed it locally, and return the most relevant context so answers stay grounded.</p>
-		<a href="/docs/quickstart">
-			<Button>Learn More</Button>
-		</a>
-    </div>
-    <div class="space-y-3">
-        <h2 class="text-xl text-black font-semibold">Connect to any Agent</h2>
-        <p>Use the HTTP API, CLI, or our MCP server to connect any agent. Search across stores, pull the best captures, and share context across your tools.</p>
-		<a href="/docs/quickstart">
-			<Button>Learn More</Button>
-		</a>
-    </div>
-    <div class="space-y-3">
-        <h2 class="text-xl text-black font-semibold">Easy to Setup</h2>
-        <p>Runs with a local SQLite database and a single Bun build. Docker support keeps deployment simple and fast, with minimal configuration.</p>
-		<a href="/docs/quickstart">
-			<Button>Learn More</Button>
-		</a>
-    </div>
-    <div class="space-y-3">
-        <h2 class="text-xl text-black font-semibold">Get Involved</h2>
-        <p>Found a bug? File it on <a href="https://github.com/barque-ai" class="underline text-black">Github</a>. Have some ideas or want to share how you're using Compeer? Join our <a href="https://discord.com" class="underline text-black">Discord</a>.</p>
-    </div>
+<section class="p-10  flex items-center">
+	<div class="text-center space-y-2 w-full">
+		<h2 class="text-black text-lg font-semibold">Agents Need Our Help</h2>
+		<p>Everytime you spawn a new session with your coding assistant, it has to learn. <span class="text-black font-medium">Compeer is knowledge transfer for your agent.</span> Humans need it. Agents do too. Increase your agent's performance and save tokens.</p>
+	</div>
 </section>
+<section class="p-10  space-y-5">
+	<div class="text-center space-y-2 w-full">
+		<h2 class="text-black text-lg font-semibold">See what's possible</h2>
+		<p>Compeer is more than just context for your agents</p>
+	</div>
+	<div class="grid-cols-3 grid gap-4">
+		<div class="p-5 border border-gray-300 rounded-lg space-y-2">
+		<div class="space-x-2 flex items-center text-black">
+			<Icon icon={ArrowRightLeft} />
+			<h3 class="font-medium">Bidirectional Context</h3>
+		</div>
+		</div>
+		<div class="p-5 border border-gray-300 rounded-lg">
+		<div class="space-x-2 flex items-center text-black">
+			<Icon icon={Blocks} />
+			<h3 class="font-medium">Multiple Modalities</h3>
+		</div>		
+	</div>
+		<div class="p-5 border border-gray-300 rounded-lg">
+	<div class="space-x-2 flex items-center text-black">
+			<Icon icon={Share2} />
+			<h3 class="font-medium">Collaboration</h3>
+		</div>					</div>
+		<div class="p-5 border border-gray-300 rounded-lg">
+<div class="space-x-2 flex items-center text-black">
+			<Icon icon={Cable} />
+			<h3 class="font-medium">Interporability</h3>
+		</div>			</div>
+		<div class="p-5 border border-gray-300 rounded-lg space-y-2">
+<div class="space-x-2 flex items-center text-black">
+			<Icon icon={Code} />
+			<h3 class="font-medium">SDKs</h3>
+		</div>		</div>
+		<div class="p-5 border border-gray-300 rounded-lg">
+<div class="space-x-2 flex items-center text-black">
+			<Icon icon={Lock} />
+			<h3 class="font-medium">Entreprise Ready</h3>
+		</div>			</div>
+
+	</div>
+</section>
+<section class="p-10 space-y-5">
+	<div class="text-center space-y-2 w-full">
+		<h2 class="text-black text-lg font-semibold">Start Building</h2>
+		<p>Compeer is batteries included. Start making stries today.</p>
+	</div>
+	<div class="divide-x divide-gray-300 border border-gray-300 rounded-lg flex">
+		<div class="space-y-4 p-5 w-1/3">
+			<h3 class="font-medium text-black">CLI</h3>
+			<p>
+				<span class="text-black">For your Agent.</span>
+				 A CLI for your agent to get context and store its own context as it sees fit.</p>
+					<Button>Learn More</Button>
+
+				</div>
+		<div class="space-y-4 p-5 w-1/3">
+			<h3 class="font-medium text-black">Web</h3>
+			<p>	<span class="text-black">For your Team.</span>
+				An interface for you and your team to capture text, data, and websites for your agents to learn from.
+			</p>	
+							<Button>Learn More</Button>
+
+			</div>
+		<div class="space-y-4 p-5 w-1/3">
+			<h3 class="font-medium text-black">API and SDKs</h3>
+			<p><span class="text-black">For your systems.</span>
+			Abstractions for your to integrate Compeer with your greater agenetic infrastructure.
+		</p>
+				<Button>Learn More</Button>
+
+		</div>
+	</div>
+</section>
+<section class="p-10 flex items-center">
+	<div class="text-center space-y-2 w-full">
+		<h2 class="text-black text-lg font-semibold">Join the Community</h2>
+		<p></p>
+	</div>
+</section>
+</main>
