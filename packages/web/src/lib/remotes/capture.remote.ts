@@ -145,7 +145,6 @@ const _updateCapture = enhancedValidatedMutation(
 	}),
 	null,
 	async ({ validatedPayload }) => {
-		console.log(validatedPayload);
 		const { fetch } = getRequestEvent();
 		const { content, enabled, id, type } = validatedPayload;
 		let embedding: number[] | undefined;

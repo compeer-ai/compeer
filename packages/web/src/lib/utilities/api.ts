@@ -42,7 +42,6 @@ export const router = new Hono()
 		const bearer = authorization.replace('Bearer ', '');
 		const decodedJwt = await jwt.verify(bearer);
 		if (!decodedJwt) return c.status(401);
-		console.log('Authorized');
 		return next();
 	})
 	.get('/backup', async (c) => {

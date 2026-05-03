@@ -23,7 +23,6 @@
     type="text"
     oninput={(e) => {
       const value = (e.target as HTMLInputElement).value;
-      console.log(value)
       onChange?.(value)
       query = value;
     }}
