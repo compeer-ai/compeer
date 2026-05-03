@@ -49,8 +49,8 @@ const _readWorkspaces = enhancedValidatedQuery(
 	'read_workspaces',
 	null,
 	v.object({
-		limit: v.number(),
-		offset: v.number()
+		limit: v.optional(v.number()),
+		offset: v.optional(v.number())
 	}),
 	async ({ validatedPayload }) => {
 		const workspaces = await workspaceRepository.readAll(

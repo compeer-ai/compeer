@@ -11,7 +11,10 @@
 	import { dispatcher } from "$lib/utilities/dispatcher";
 	import { Plus } from "@lucide/svelte";
 
-  const workspaces = readWorkspaces();
+  const workspaces = readWorkspaces({
+    limit: undefined,
+    offset: undefined
+  });
   let query = $state("");
   function filerWorkspaces(workspaces: IWorkspace[], query: string) {
         if (!query.length) return workspaces;
@@ -44,18 +47,17 @@
     {/if}
   </div>
   {#if filerWorkspaces(workspaces.current, query).length}
-  {#snippet paginatedSubset(args: { subset: IWorkspace[] })}
-  {@const { subset: workspaces } = args}
-  <div
-      class="border border-gray-300 divide-y divide-gray-300 rounded-lg shadow-sm shadow-gray-100 bg-white overflow-hidden"
-      use:animations.fadeIn
-    >
-      {#each filerWorkspaces(workspaces, query) as workspace}
-        <Workspace {workspace} />
-      {/each}
+  {#snippet paginatedSubset(subset: IWorkspace[])}
+    <div
+        class="border border-gray-300 divide-y divide-gray-300 rounded-lg shadow-sm shadow-gray-100 bg-white overflow-hidden"
+        use:animations.fadeIn
+      >
+        {#each filerWorkspaces(subset, query) as workspace}
+          <Workspace {workspace} />
+        {/each}
     </div>
   {/snippet}
-  <Paginated offset={10} data={workspaces.current} children={(subset) => paginatedSubset(subset)} />
+  <Paginated offset={5} data={workspaces.current} children={paginatedSubset} />
   {/if}
 </div>
 {/if}

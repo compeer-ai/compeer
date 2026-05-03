@@ -33,6 +33,7 @@ class LRUCache {
 }
 
 const lru = new LRUCache();
+const namespaces: Record<string, string[]> = {};
 
 async function read<T>(key: string, onVacant: () => Promise<T> | T) {
 	const storedValue = lru.get<T>(key);
@@ -48,7 +49,22 @@ function invalidate(...keys: string[]) {
 	keys.forEach((key) => lru.delete(key));
 }
 
+function link(name: string, key: string) {
+	if (name in namespaces) {
+		namespaces[name].push(key)
+	} else {
+		namespaces[name] = [key]
+	}
+}
+
+function invalidateNamespace(namespace: string) {
+	const keys = namespaces[namespace] || [];
+	invalidate(...keys)
+}
+
 export const cache = {
 	read,
-	invalidate
+	invalidate,
+	link,
+	invalidateNamespace
 };

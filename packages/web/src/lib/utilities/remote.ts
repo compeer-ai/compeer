@@ -59,9 +59,8 @@ export function enhancedValidatedQuery<S extends v.ObjectSchema<any, any>, T>(
 			.map(([key, value]) => `(${key}=${value})`)
 			.join('')}`;
 		const hashedComputedCacheKey = Bun.hash(computedCacheKey).toString();
-		const result = await cache.read(`${version}:${key}`, () =>
-			cache.read(hashedComputedCacheKey, () => fn({ validatedPayload }))
-		);
+		cache.link(`${version}:${key}`, hashedComputedCacheKey)
+		const result = await cache.read(hashedComputedCacheKey, () => fn({ validatedPayload }));
 		return result;
 	});
 
@@ -77,7 +76,7 @@ export function enhancedValidatedQuery<S extends v.ObjectSchema<any, any>, T>(
 
 	function refreshAll() {
 		loggers.data.info(`Invalidating ${key}`);
-		cache.invalidate(`${version}:${key}`);
+		cache.invalidateNamespace(`${version}:${key}`);
 	}
 
 	return {
