@@ -74,9 +74,8 @@ async function mainContext(query: string, workspace: string) {
 	});
 
 	const formattedResult = result.rows.map((row: any) => ({
-		captureId: row.captureId,
-		content: row.content,
-		percentageMatch: (1 - row.distance / 2) * 100
+		captureId: row.captureId as string,
+		content: row.content as string
 	}));
 	return formattedResult;
 }
@@ -102,9 +101,8 @@ async function projectContext(query: string, workspace: string, store: string) {
 	});
 
 	const formattedResult = result.rows.map((row: any) => ({
-		captureId: row.captureId,
-		content: row.content,
-		percentageMatch: (1 - row.distance / 2) * 100
+		captureId: row.captureId as string,
+		content: row.content as string,
 	}));
 	return formattedResult;
 }
