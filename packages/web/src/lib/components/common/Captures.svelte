@@ -18,6 +18,7 @@
   interface Props {
     captures: Capture[];
     storeId: string;
+    paginationPage: number;
     invalidate: () => Promise<void>
     selected?: Set<string>;
   }
@@ -25,6 +26,7 @@
   let {
     captures,
     storeId,
+    paginationPage = $bindable(1),
     invalidate,
     selected = $bindable(new Set<string>()),
   }: Props = $props();
@@ -159,4 +161,4 @@
   {/each}
 </div>
 {/snippet}
-<Paginated limit={10} data={captures} children={paginatedSubset}/>
+<Paginated limit={10} data={captures} children={paginatedSubset} bind:page={paginationPage} />
