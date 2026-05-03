@@ -3,14 +3,13 @@
   import { animations } from "$lib/utilities/animations";
   import Metadata from "$lib/components/common/Metadata.svelte";
   import ProjectForm from "$lib/components/forms/ProjectForm.svelte";
-  import { commandExportStore, commandDeleteStore, readStore, readStores, formDeleteStore } from "$lib/remotes/store.remote";
+  import { commandExportStore, readStore, readStores, formDeleteStore } from "$lib/remotes/store.remote";
   import { page } from "$app/state";
   import { goto } from "$app/navigation";
   import DeleteForm from "$lib/components/forms/DeleteForm.svelte";
 	import { readWorkspace } from "$lib/remotes/workspace.remote";
 	import Button from "$lib/components/common/Button.svelte";
 	import { download } from "$lib/utilities/download";
-	import Input from "$lib/components/common/Input.svelte";
   import { config } from "$lib/utilities/config";
 
   const workspace = $derived(readWorkspace({
@@ -34,13 +33,6 @@
       <Card title="Update Store" collaspable>
         <div class="space-y-3 p-5">
           <ProjectForm store={store.current} workspaceId={workspace.current.id} invalidate={updateInvalidate} />
-        </div>
-      </Card>
-    {/if}
-    {#if config.flags.configureProjectMcps}
-      <Card title="Configure MCP" collaspable>
-        <div class="space-y-3 p-5">
-          <Input label='URL' name="url" placeholder="URL" value={`${page.url.origin}/workspace/${workspace.current.name}/store/${store.current.id}/mcp`} />
         </div>
       </Card>
     {/if}

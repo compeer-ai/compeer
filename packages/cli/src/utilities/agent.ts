@@ -1,9 +1,12 @@
 import path from "node:path";
 import { mkdir, writeFile } from "node:fs/promises";
 
-const SKILL = await Bun.file(
-  new URL("../assets/SKILL.md", import.meta.url),
-).text();
+const SKILL = `
+---
+name: barque
+description: something cool
+---
+`
 
 export const AGENTS = {
   "claude-code": async () => {
