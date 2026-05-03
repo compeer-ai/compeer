@@ -16,6 +16,8 @@
 	import Paginated from "$lib/components/common/Paginated.svelte";
 
   let query = $state("");
+  let paginationPage = $state(1);
+
   function filterProjects(stores: IStore[], query: string) {
     if (!query.length) return stores;
     return stores.filter((store) =>
@@ -23,11 +25,13 @@
     );
   }
 
-  const workspace = readWorkspace({
+  const workspace = $derived(readWorkspace({
     name: page.params.workspace!!
-  })
+  }));
   const stores = $derived.by(() => workspace.current && readStores({
-    workspaceId: workspace.current.id
+    workspaceId: workspace.current.id,
+    limit: undefined,
+    offset: undefined
   }));
   const invalidate = () => stores!!.refresh()
 </script>
@@ -36,7 +40,7 @@
 {#if stores?.ready && workspace.ready}
 <section class="space-y-5 p-7" use:animations.fadeInForward>
   <div class="flex justify-between">
-    <Search bind:query placeholder="Search for a store..." />
+    <Search bind:query placeholder="Search for a store..." onChange={() => paginationPage = 1} />
     {#snippet addProjectDrawerContent()}
       <div class="px-5">
         <ProjectForm workspaceId={workspace.current.id} {invalidate} />
@@ -70,19 +74,19 @@
     {/if}
   </div>
   </div>
-  {#snippet paginatedSubset(args: { subset: IStore[] })}
-  {@const { subset: stores } = args}
-  {#if filterProjects(stores, query).length}
+  {#snippet paginatedSubset(subset: IStore[])}
+  {@const stores = subset}
+  {#if stores.length}
     <div
       class="border border-gray-300 divide-y divide-gray-300 rounded-lg shadow-sm shadow-gray-100 bg-white overflow-hidden"
       use:animations.fadeIn
     >
-      {#each filterProjects(stores, query) as store}
+      {#each stores as store}
         <Store {store} />
       {/each}
     </div>
   {/if}    
   {/snippet}
-  <Paginated offset={10} data={stores.current} children={(subset) => paginatedSubset(subset)} />
+  <Paginated limit={10} bind:page={paginationPage} data={filterProjects(stores.current, query)} children={paginatedSubset} />
 </section>
 {/if}

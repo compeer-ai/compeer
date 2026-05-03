@@ -23,7 +23,7 @@ body {
 }
 
 ::selection {
-	background-color: var(--color-highlight);
+	background-color: var(--color-selection);
 }
 
 button {
@@ -35,7 +35,7 @@ button {
 	--color-primary-hover: theme(colors.blue.900);
 	--color-primary-from: theme(colors.blue.800);
 	--color-primary-to: color-mix(in oklab, theme(colors.blue.800) 95%, transparent);
-	--color-highlight: theme(colors.blue.800) 50%;
+	--color-selection: theme(colors.blue.800) 50%;
 }
 
 @layer theme {
@@ -44,35 +44,35 @@ button {
 		--color-primary-hover: theme(colors.rose.900);
 		--color-primary-from: theme(colors.rose.800);
 		--color-primary-to: color-mix(in oklab, theme(colors.rose.800) 95%, transparent);
-		--color-highlight: theme(colors.rose.200);
+		--color-selection: theme(colors.rose.200);
 	}
 	[data-theme='amber'] {
 		--color-primary: theme(colors.amber.800);
 		--color-primary-hover: theme(colors.amber.900);
 		--color-primary-from: theme(colors.amber.800);
 		--color-primary-to: color-mix(in oklab, theme(colors.amber.800) 95%, transparent);
-		--color-highlight: theme(colors.amber.200);
+		--color-selection: theme(colors.amber.200);
 	}
 	[data-theme='emerald'] {
 		--color-primary: theme(colors.emerald.800);
 		--color-primary-hover: theme(colors.emerald.900);
 		--color-primary-from: theme(colors.emerald.800);
 		--color-primary-to: color-mix(in oklab, theme(colors.emerald.800) 95%, transparent);
-		--color-highlight: theme(colors.emerald.200);
+		--color-selection: theme(colors.emerald.200);
 	}
 	[data-theme='violet'] {
 		--color-primary: theme(colors.violet.800);
 		--color-primary-hover: theme(colors.violet.900);
 		--color-primary-from: theme(colors.violet.800);
 		--color-primary-to: color-mix(in oklab, theme(colors.violet.800) 95%, transparent);
-		--color-highlight: theme(colors.violet.200);
+		--color-selection: theme(colors.violet.200);
 	}
 	[data-theme='fuchsia'] {
 		--color-primary: theme(colors.fuchsia.800);
 		--color-primary-hover: theme(colors.fuchsia.900);
 		--color-primary-from: theme(colors.fuchsia.800);
 		--color-primary-to: color-mix(in oklab, theme(colors.fuchsia.800) 95%, transparent);
-		--color-highlight: theme(colors.fuchsia.200);
+		--color-selection: theme(colors.fuchsia.200);
 	}
 }
 

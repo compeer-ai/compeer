@@ -84,11 +84,11 @@ const _deleteStore = enhancedValidatedMutation(
 	async ({ validatedPayload }) => {
 		const result = await storeRepository.deleteByPredicate(eq(storeTable.id, validatedPayload.id));
 		const store = result.first();
-		loggers.data.child(store).info('Deleted store');
+		loggers.data.info('Deleted store');
 
 		await _readStore.refresh(store);
 		await _readStoreByNameAndWorkspaceId.refresh(store);
-		await _readStores.refresh(store);
+		await _readStores.refresh({...store, limit: undefined, offset: undefined});
 	}
 );
 
@@ -109,7 +109,7 @@ const _updateStore = enhancedValidatedMutation(
 
 		await _readStore.refresh({ id: validatedPayload.id });
 		await _readStore.refresh(validatedPayload);
-		await _readStores.refresh(updatedStore);
+		await _readStores.refresh({ ...updatedStore, limit: undefined, offset: undefined });
 	}
 );
 
@@ -130,7 +130,7 @@ const _createStore = enhancedValidatedMutation(
 		const createdStore = await result.first();
 		loggers.data.info('Created Store');
 
-		await _readStores.refresh(createdStore);
+		await _readStores.refresh({...createdStore, limit: undefined, offset: undefined });
 	}
 );
 

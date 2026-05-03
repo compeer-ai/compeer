@@ -23,7 +23,7 @@ const _readWorkspace = enhancedValidatedQuery(
 		const workspace = result.first();
 		if (!workspace) {
 			const createdWorkspace = await workspaceRepository.create({ name: validatedPayload.name });
-			_readWorkspaces.refreshAll();
+			await _readWorkspaces.refresh({ limit: undefined, offset: undefined });
 			return createdWorkspace.first();
 		}
 		return workspace;
@@ -39,7 +39,7 @@ const _deleteWorkspace = enhancedValidatedMutation(
 	'deleteWorkspaces',
 	async ({ validatedPayload }) => {
 		await workspaceRepository.deleteById(validatedPayload.id);
-		_readWorkspaces.refreshAll();
+		await _readWorkspaces.refresh({ limit: undefined, offset: undefined });
 	}
 );
 
@@ -49,8 +49,8 @@ const _readWorkspaces = enhancedValidatedQuery(
 	'read_workspaces',
 	null,
 	v.object({
-		limit: v.number(),
-		offset: v.number()
+		limit: v.optional(v.number()),
+		offset: v.optional(v.number())
 	}),
 	async ({ validatedPayload }) => {
 		const workspaces = await workspaceRepository.readAll(
@@ -72,8 +72,9 @@ const _createWorkspace = enhancedValidatedMutation(
 	}),
 	'createWorkspaces',
 	async ({ validatedPayload }) => {
-		await workspaceRepository.create({ name: validatedPayload.name });
-		_readWorkspaces.refreshAll();
+		const result = await workspaceRepository.create({ name: validatedPayload.name });
+		const createdWorkspace = result.first();
+		await _readWorkspaces.refresh({ ...createdWorkspace, limit: undefined, offset: undefined });
 	}
 );
 
@@ -88,7 +89,7 @@ const _updateWorkspace = enhancedValidatedMutation(
 	async ({ validatedPayload }) => {
 		const result = await workspaceRepository.update(validatedPayload.id, validatedPayload);
 		const updatedWorkspace = result.first();
-		_readWorkspaces.refreshAll();
+		await _readWorkspaces.refresh({ ...updatedWorkspace, limit: undefined, offset: undefined });
 		await _readWorkspace.refresh(updatedWorkspace);
 	}
 );

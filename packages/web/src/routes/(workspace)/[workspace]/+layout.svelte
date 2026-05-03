@@ -12,7 +12,10 @@
     name: page.params.workspace!!
   });
   const user = readUser();
-  const workspaces = readWorkspaces();
+  const workspaces = readWorkspaces({
+    limit: undefined,
+    offset: undefined
+  });
   const stores = $derived.by(() => workspace.current && readStores({
     workspaceId: workspace.current.id
   }));

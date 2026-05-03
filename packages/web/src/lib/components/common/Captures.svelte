@@ -18,6 +18,7 @@
   interface Props {
     captures: Capture[];
     storeId: string;
+    paginationPage: number;
     invalidate: () => Promise<void>
     selected?: Set<string>;
   }
@@ -25,6 +26,7 @@
   let {
     captures,
     storeId,
+    paginationPage = $bindable(1),
     invalidate,
     selected = $bindable(new Set<string>()),
   }: Props = $props();
@@ -40,12 +42,11 @@
   }
 </script>
 
-{#snippet paginatedSubset(args: { subset: Capture[] })}
-{@const { subset: captures } = args}
+{#snippet paginatedSubset(subset: Capture[])}
 <div
   class="border border-gray-300 bg-white rounded-lg shadow-sm shadow-gray-100 divide-y divide-gray-300"
 >
-  {#each captures as capture}
+  {#each subset as capture}
     <div use:animations.fadeIn>
       <div
         class="flex items-center justify-between hover:bg-gray-100/30 transition ease-in-out cursor-pointer"
@@ -160,4 +161,4 @@
   {/each}
 </div>
 {/snippet}
-<Paginated offset={15} data={captures} children={(subset) => paginatedSubset(subset)}/>
+<Paginated limit={10} data={captures} children={paginatedSubset} bind:page={paginationPage} />
