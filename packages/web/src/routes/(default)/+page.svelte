@@ -16,6 +16,8 @@
     offset: undefined
   });
   let query = $state("");
+  let paginationPage = $state(1);
+
   function filerWorkspaces(workspaces: IWorkspace[], query: string) {
         if (!query.length) return workspaces;
         return workspaces.filter((workspace) =>
@@ -33,7 +35,7 @@
 {/snippet}
 <div class="p-7 space-y-5" use:animations.fadeInForward>
   <div class="flex justify-between">
-    <Search bind:query placeholder="Search for a workspace..." />
+    <Search bind:query placeholder="Search for a workspace..." onChange={() => paginationPage = 1} />
       {#if config.flags.createWorkspaces}
         <button
         class="bg-primary-gradient hover:bg-primary flex h-12 cursor-pointer items-center space-x-2 rounded-lg px-3 text-white transition ease-in-out"
@@ -46,18 +48,18 @@
       </button>
     {/if}
   </div>
-  {#if filerWorkspaces(workspaces.current, query).length}
   {#snippet paginatedSubset(subset: IWorkspace[])}
     <div
         class="border border-gray-300 divide-y divide-gray-300 rounded-lg shadow-sm shadow-gray-100 bg-white overflow-hidden"
         use:animations.fadeIn
       >
-        {#each filerWorkspaces(subset, query) as workspace}
+        {#each subset as workspace}
           <Workspace {workspace} />
         {/each}
     </div>
   {/snippet}
-  <Paginated limit={5} data={workspaces.current} children={paginatedSubset} />
+  {#if filerWorkspaces(workspaces.current, query).length}
+    <Paginated limit={5} bind:page={paginationPage} data={filerWorkspaces(workspaces.current, query)} children={paginatedSubset} />
   {/if}
 </div>
 {/if}

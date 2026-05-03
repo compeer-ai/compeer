@@ -27,7 +27,9 @@
   }
 
   const captures = readCaptures({
-    storeId: page.params.storeId!!
+    storeId: page.params.storeId!!,
+    offset: undefined,
+    limit: undefined
   });
   const invalidate = () => captures.refresh();
 

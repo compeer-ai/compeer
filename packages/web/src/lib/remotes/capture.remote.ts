@@ -91,7 +91,7 @@ const _createCapture = enhancedValidatedMutation(
 		}
 		loggers.data.info('Created capture');
 
-		await _readCaptures.refresh({ storeId, limit: undefined, offset: undefined });
+		await _readCaptures.refresh({ storeId, offset: undefined, limit: undefined });
 	}
 );
 
@@ -106,7 +106,7 @@ const _createCaptures = enhancedValidatedMutation(
 	async ({ validatedPayload }) => {
 		const result = await captureRepository.createMany(validatedPayload.captures as Capture[]);
 		const createdCapture = result.first();
-		await _readCaptures.refresh({ ...createdCapture, limit: undefined, offset: undefined });
+		await _readCaptures.refresh({ ...createdCapture, offset: undefined, limit: undefined });
 	}
 );
 
@@ -128,7 +128,7 @@ const _updateCaptureEnabled = enhancedValidatedMutation(
 			}
 		);
 
-		await _readCaptures.refresh({ ...validatedPayload, limit: undefined, offset: undefined });
+		await _readCaptures.refresh({ ...validatedPayload, offset: undefined, limit: undefined });
 	}
 );
 export const commandUpdateCaptureEnabled = _updateCaptureEnabled.command;
@@ -200,7 +200,7 @@ const _updateCapture = enhancedValidatedMutation(
 		}
 		loggers.data.info('Updated capture');
 
-		await _readCaptures.refresh({ ...validatedPayload, limit: undefined, offset: undefined });
+		await _readCaptures.refresh({ ...validatedPayload, offset: undefined, limit: undefined });
 	}
 );
 
@@ -217,7 +217,7 @@ const _deleteCapture = enhancedValidatedMutation(
 		const createdCapture = result.first()
 		loggers.data.info('Deleted capture');
 
-		await _readCaptures.refresh({ ...createdCapture, limit: undefined, offset: undefined });
+		await _readCaptures.refresh({ ...createdCapture, offset: undefined, limit: undefined });
 	}
 );
 
@@ -238,7 +238,7 @@ const _deleteCaptures = enhancedValidatedMutation(
 		);
 		const deletedCapture = result.first();
 
-		await _readCaptures.refresh({ ...deletedCapture, limit: undefined, offset: undefined });
+		await _readCaptures.refresh({ ...deletedCapture, offset: undefined, limit: undefined });
 	}
 );
 
