@@ -27,7 +27,9 @@
     name: page.params.workspace!!
   })
   const stores = $derived.by(() => workspace.current && readStores({
-    workspaceId: workspace.current.id
+    workspaceId: workspace.current.id,
+    limit: undefined,
+    offset: undefined
   }));
   const invalidate = () => stores!!.refresh()
 </script>
@@ -70,8 +72,8 @@
     {/if}
   </div>
   </div>
-  {#snippet paginatedSubset(args: { subset: IStore[] })}
-  {@const { subset: stores } = args}
+  {#snippet paginatedSubset(subset: IStore[])}
+  {@const stores = subset}
   {#if filterProjects(stores, query).length}
     <div
       class="border border-gray-300 divide-y divide-gray-300 rounded-lg shadow-sm shadow-gray-100 bg-white overflow-hidden"
@@ -83,6 +85,6 @@
     </div>
   {/if}    
   {/snippet}
-  <Paginated offset={10} data={stores.current} children={(subset) => paginatedSubset(subset)} />
+  <Paginated limit={10} data={stores.current} children={paginatedSubset} />
 </section>
 {/if}

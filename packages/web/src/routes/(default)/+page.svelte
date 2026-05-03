@@ -57,7 +57,7 @@
         {/each}
     </div>
   {/snippet}
-  <Paginated offset={5} data={workspaces.current} children={paginatedSubset} />
+  <Paginated limit={5} data={workspaces.current} children={paginatedSubset} />
   {/if}
 </div>
 {/if}

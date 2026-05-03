@@ -7,13 +7,13 @@
 
     interface Props {
         data: T[];
-        offset: number;
+        limit: number;
         children: Snippet<[T[]]>
     }
-    const { offset, data, children }: Props = $props();
+    const { limit, data, children }: Props = $props();
     const pageParam = $derived(_page.url.searchParams.get('page'));
     let page = $derived(pageParam ? Number(pageParam) : 1);
-    let totalPages = $derived(Math.ceil(data.length / offset));
+    let totalPages = $derived(Math.ceil(data.length / limit));
     let canGoPrevious = $derived(page > 1);
     let canGoNext = $derived(page < totalPages);
     function updatePage(value: number) {
@@ -29,7 +29,7 @@
 </script>
 
 <div class="space-y-4">
-    {@render children(data.slice((page - 1) * offset, Math.min(page * offset, data.length)))}
+    {@render children(data.slice((page - 1) * limit, Math.min(page * limit, data.length)))}
     <div class="flex justify-between text-black">
         {#if canGoPrevious}
             <button class="space-x-2 flex items-center"  onclick={() => updatePage(page - 1)}>

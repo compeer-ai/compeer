@@ -78,12 +78,12 @@ const _createCapture = enhancedValidatedMutation(
 			type,
 			storeId
 		};
-		const createdCapture = await captureRepository.create(payload);
-		const created = createdCapture.first();
-		if (created && chunkEmbeddings.length > 0) {
+		const result = await captureRepository.create(payload);
+		const createdCapture = result.first();
+		if (chunkEmbeddings.length > 0) {
 			await db.insert(captureChunkTable).values(
 				chunkEmbeddings.map((chunk) => ({
-					captureId: created.id,
+					captureId: createdCapture.id,
 					content: chunk.content,
 					embedding: chunk.embedding
 				}))
@@ -91,7 +91,7 @@ const _createCapture = enhancedValidatedMutation(
 		}
 		loggers.data.info('Created capture');
 
-		_readCaptures.refreshAll();
+		await _readCaptures.refresh({ storeId, limit: undefined, offset: undefined });
 	}
 );
 
@@ -104,9 +104,9 @@ const _createCaptures = enhancedValidatedMutation(
 	}),
 	null,
 	async ({ validatedPayload }) => {
-		await captureRepository.createMany(validatedPayload.captures as Capture[]);
-
-		_readCaptures.refreshAll();
+		const result = await captureRepository.createMany(validatedPayload.captures as Capture[]);
+		const createdCapture = result.first();
+		await _readCaptures.refresh({ ...createdCapture, limit: undefined, offset: undefined });
 	}
 );
 
@@ -128,7 +128,7 @@ const _updateCaptureEnabled = enhancedValidatedMutation(
 			}
 		);
 
-		await _readCaptures.refreshAll();
+		await _readCaptures.refresh({ ...validatedPayload, limit: undefined, offset: undefined });
 	}
 );
 export const commandUpdateCaptureEnabled = _updateCaptureEnabled.command;
@@ -200,7 +200,7 @@ const _updateCapture = enhancedValidatedMutation(
 		}
 		loggers.data.info('Updated capture');
 
-		await _readCaptures.refreshAll();
+		await _readCaptures.refresh({ ...validatedPayload, limit: undefined, offset: undefined });
 	}
 );
 
@@ -213,10 +213,11 @@ const _deleteCapture = enhancedValidatedMutation(
 	}),
 	null,
 	async ({ validatedPayload }) => {
-		await captureRepository.deleteById(validatedPayload.id);
+		const result = await captureRepository.deleteById(validatedPayload.id);
+		const createdCapture = result.first()
 		loggers.data.info('Deleted capture');
 
-		await _readCaptures.refreshAll();
+		await _readCaptures.refresh({ ...createdCapture, limit: undefined, offset: undefined });
 	}
 );
 
@@ -229,14 +230,15 @@ const _deleteCaptures = enhancedValidatedMutation(
 	}),
 	null,
 	async ({ validatedPayload }) => {
-		await captureRepository.deleteByPredicate(
+		const result = await captureRepository.deleteByPredicate(
 			and(
 				eq(captureTable.storeId, validatedPayload.storeId),
 				inArray(captureTable.id, validatedPayload.captureIds)
 			)!!
 		);
+		const deletedCapture = result.first();
 
-		await _readCaptures.refreshAll();
+		await _readCaptures.refresh({ ...deletedCapture, limit: undefined, offset: undefined });
 	}
 );
 

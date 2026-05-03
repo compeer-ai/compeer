@@ -12,7 +12,10 @@
         agent: 1,
         end: 2
     } as const;
-    const workspaces = readWorkspaces();
+    const workspaces = readWorkspaces({
+        limit: undefined,
+        offset: undefined
+    });
     const jwt = readJwt();
     const agents = [
         {
