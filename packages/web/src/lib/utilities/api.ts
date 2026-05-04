@@ -6,9 +6,8 @@ import { vValidator } from '@hono/valibot-validator';
 import { readSearchCaptures } from '$lib/remotes/capture.remote';
 import openApiSpec from '../../../openapi/openapi.json' with { type: 'json' };
 import { readWorkspace, readWorkspaces } from '$lib/remotes/workspace.remote';
-import Bun from 'bun';
-import { join } from 'path';
-import { fileURLToPath } from 'url';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { jwt } from './jwt';
 import { oidc } from './oidc';
 
@@ -55,7 +54,7 @@ export const router = new Hono()
 	.get('/:workspace/stores', paramsValidator, async (c) => {
 		const { workspace } = c.req.valid('param');
 		const { id: workspaceId } = await readWorkspace({ name: workspace });
-		const result = await readStores({ workspaceId });
+		const result = await readStores({ workspaceId, limit: undefined, offset: undefined });
 		return c.json(result);
 	})
 	.get(
@@ -76,7 +75,7 @@ export const router = new Hono()
 		}
 	)
 	.get('/workspaces', async (c) => {
-		const workspaces = await readWorkspaces();
+		const workspaces = await readWorkspaces({ limit: undefined, offset: undefined });
 		return c.json(workspaces);
 	})
 	.post(

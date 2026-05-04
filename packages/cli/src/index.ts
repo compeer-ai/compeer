@@ -30,7 +30,7 @@ import { mcpCommand } from "./commands/mcp";
       description: "CLI for Compeer",
       argSource: ["bun", "compeer", ...ARGS],
       hook: async (event, command) => {
-        if (event === "before") {
+        if (event === "before" && command.name !== 'init') {
           const currentConfig = await config.safeRead();
           try {
             await fetch(
@@ -44,13 +44,11 @@ import { mcpCommand } from "./commands/mcp";
             process.exit(1);
           }
 
-          if (command.name !== "init") {
-            if (!currentConfig) {
-              console.error("Compeer is not yet initialized for this project");
-              process.exit(1);
-            } else {
-              await agent.setup(currentConfig.agent);
-            }
+          if (!currentConfig) {
+            console.error("Compeer is not yet initialized for this project");
+            process.exit(1);
+          } else {
+            await agent.setup(currentConfig.agent);
           }
         }
       },

@@ -1,5 +1,4 @@
 import { createClient } from "@web/client";
-import { BASE_URL } from "./constants";
 
 let headers: Record<string, string> = {
   "Content-Type": "application/json",
@@ -7,9 +6,9 @@ let headers: Record<string, string> = {
 };
 
 export const backend = {
-  client: (jwt: string | null) =>
+  client: (server: string, jwt: string | null) =>
     createClient(
-      BASE_URL,
+      server,
       jwt
         ? { headers: { ...headers, Authorization: `Bearer ${jwt}` } }
         : { headers },

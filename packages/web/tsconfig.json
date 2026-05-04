@@ -11,12 +11,13 @@
 		"strict": true,
 		"moduleResolution": "bundler",
 		"experimentalDecorators": true,
-		"composite": true
+		"composite": true,
+		"types": ["bun"]
 	},
 	"typedocOptions": {
 		"entryPoints": ["./src/lib/utilities/*"],
 		"out": "docs"
-	}
+	},
 	// Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias
 	// except $lib which is handled by https://svelte.dev/docs/kit/configuration#files
 	//

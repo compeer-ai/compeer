@@ -27,7 +27,7 @@ export const captureCommand = command({
   },
   handler: async (opts) => {
     try {
-      const client = backend.client(opts.jwt);
+      const client = backend.client(opts.server, opts.jwt);
       const result = await client[":workspace"].capture.$post({
         param: {
           workspace: opts.workspace,

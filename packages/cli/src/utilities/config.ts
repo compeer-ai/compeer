@@ -3,6 +3,7 @@ import { CONFIG_FILE } from "./constants";
 import { mkdir } from "fs/promises";
 import { join } from "path";
 import pkg from "../../package.json";
+import { version } from "os";
 
 await mkdir(join(process.cwd(), ".compeer"), { recursive: true });
 
@@ -13,6 +14,7 @@ async function create(config: Omit<Config, "version">) {
     CONFIG_FILE,
     JSON.stringify({ ...config, version: pkg.version }, null, 2),
   );
+  return { ...config, version: pkg.version }
 }
 
 async function safeRead() {
