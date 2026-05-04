@@ -14,8 +14,11 @@ RUN bun run --cwd packages/web build
 
 COPY packages/web/ddl packages/web/build/server/ddl
 
-ENV ORIGIN=http://localhost:3000 
+ENV ORIGIN=http://localhost:3000
+ENV SQLITE=file:app/data/sqlite.db
 
 CMD ["bun", "packages/web/build/index.js"]
 
 EXPOSE 3000
+
+VOLUME ["/data"]
