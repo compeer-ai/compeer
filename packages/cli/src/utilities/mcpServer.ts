@@ -38,7 +38,7 @@ export function mcpServer(config: Config, workspace: string, store?: string) {
       }),
     },
     async ({ query }) => {
-      const client = backend.client(config.jwt);
+      const client = backend.client(config.server, config.jwt);
       const result = await client[":workspace"].search.$get({
         param: {
           workspace,

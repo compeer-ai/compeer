@@ -3,13 +3,23 @@ import { open } from "../utilities/open";
 import { callbackServer } from "../utilities/callbackServer";
 import { config } from "../utilities/config";
 import * as v from "valibot";
+import { pullCommandHanndler } from "./pull";
 
 export const initCommand = command({
   name: "init",
   options: {
     server: string()
       .desc("Server of your Compeer instance")
-      .default("http://localhost:5173"),
+      .default("http://localhost:3000"),
+  },
+  transform: async (opts) => {
+    try {
+      await fetch(new URL(`/api/v1/alive`, opts.server));
+      return opts;
+    } catch {
+      console.error("Compeer server is not currently online");
+      process.exit(1);
+    }
   },
   handler: async (opts) => {
     const { server } = opts;
@@ -42,7 +52,8 @@ export const initCommand = command({
       );
       process.exit(1);
     }
-    await config.create({ ...result.output, server });
+    const createdConfig = await config.create({ ...result.output, server });
     console.log("Succesfully initialized Compeer");
+    await pullCommandHanndler(createdConfig)
   },
 });

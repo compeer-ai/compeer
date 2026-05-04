@@ -1,7 +1,7 @@
 {
-  "workspace": "assdfadsf",
+  "workspace": "test",
   "jwt": null,
   "agent": "opencode",
-  "server": "http://localhost:5173",
+  "server": "http://localhost:3000",
   "version": "0.0.1"
 }

@@ -19,7 +19,7 @@ export const searchCommand = command({
   handler: async (opts) => {
     const { workspace, query, store, jwt } = opts;
     try {
-      const client = backend.client(jwt);
+      const client = backend.client(opts.server, jwt);
       const result = await client[":workspace"].search.$get({
         param: {
           workspace,
@@ -28,7 +28,8 @@ export const searchCommand = command({
       });
       if (result.ok) {
         const json = await result.json();
-        opts.pretty ? console.table(json) : console.log(JSON.stringify(json));
+        const content = json.map((item) => item.content);
+        opts.pretty ? console.table(content) : console.log(JSON.stringify(content));
         return;
       }
       console.error(

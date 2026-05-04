@@ -16,7 +16,7 @@ export const storesCommand = command({
   handler: async (opts) => {
     const { pretty, workspace, jwt } = opts;
     try {
-      const client = backend.client(jwt);
+      const client = backend.client(opts.server, jwt);
       const result = await client[":workspace"].stores.$get({
         param: {
           workspace,
