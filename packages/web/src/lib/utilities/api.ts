@@ -10,6 +10,10 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { jwt } from './jwt';
 import { oidc } from './oidc';
+import defaultConfiguration from '../assets/defaultConfig.json';
+import configuration from '../assets/config.json';
+
+export const API_KEYS = configuration.apiKeys || defaultConfiguration.apiKeys || [];
 
 const paramsValidator = vValidator(
 	'param',
@@ -36,11 +40,16 @@ export const router = new Hono()
 	})
 	.use(async (c, next) => {
 		if (!oidc.enabled()) return next();
+		const apiKey = c.req.header("X-Api-Key")
+		if (apiKey) {
+			return API_KEYS.includes(apiKey) ? next() : c.status(401);
+		}
 		const authorization = c.req.header('Authorization');
 		if (!authorization) return c.status(401);
 		const bearer = authorization.replace('Bearer ', '');
 		const decodedJwt = await jwt.verify(bearer);
 		if (!decodedJwt) return c.status(401);
+
 		return next();
 	})
 	.get('/backup', async (c) => {

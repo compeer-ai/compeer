@@ -2,7 +2,6 @@
 	"$schema": "https://compeer.dev/schema/server/config",
 	"url": "http://localhost:5173",
 	"version": "0.0.1",
-
 	"flags": {
 		"importProjects": true,
 		"createProjects": true,
@@ -14,5 +13,6 @@
 		"createWorkspaces": true,
 		"updateWorkspaces": true,
 		"deleteWorkspaces": true
-	}
+	},
+	"apiKeys": ["$API_KEY"]
 }

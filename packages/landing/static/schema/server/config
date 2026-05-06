@@ -29,6 +29,10 @@
         "updateWorkspaces",
         "deleteWorkspaces"
       ]
+    },
+    "apiKeys": {
+      "type": "array",
+      "items": { "type": "string" }
     }
   },
   "required": ["flags"]
