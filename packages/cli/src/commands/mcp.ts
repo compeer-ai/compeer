@@ -1,11 +1,12 @@
-import { command, string } from "@drizzle-team/brocli";
+import { command, positional, string } from "@drizzle-team/brocli";
 import { config } from "../utilities/config";
 import { mcpServer } from "../utilities/mcpServer";
 
 export const mcpCommand = command({
     name: 'mcp',
     options: {
-        store: string('store')
+        workspace: positional('workspace').required(),
+        store: positional('store')
     },
     transform: async (opts) => {
         const currentConfig = await config.read();
