@@ -20,6 +20,8 @@ function readUserScopedFlag(email: string, flag: keyof typeof configuration.flag
 	return userScopedFlags[flag];
 }
 
+export const apiKeys = configuration.apiKeys;
+
 export const config = {
 	url: configuration.url,
 	flags: configuration.flags,

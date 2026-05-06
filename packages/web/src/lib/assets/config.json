@@ -13,5 +13,6 @@
 		"createWorkspaces": true,
 		"updateWorkspaces": true,
 		"deleteWorkspaces": true
-	}
+	},
+	"apiKeys": ["$API_KEY"]
 }
