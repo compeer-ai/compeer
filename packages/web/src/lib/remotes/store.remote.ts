@@ -1,6 +1,6 @@
 import { errors } from '$lib/utilities/errors';
 import { loggers } from '$lib/utilities/loggers';
-import { StoreRepository, projectSchema } from '$lib/repository/storeRepository';
+import { StoreRepository, storeSchema } from '$lib/repository/storeRepository';
 import { getRequestEvent } from '$app/server';
 import { and, eq } from 'drizzle-orm';
 import { storeTable } from '$lib/utilities/schema';
@@ -167,7 +167,7 @@ const _importStore = enhancedValidatedMutation(
 		const json = JSON.parse(text);
 		const schema = v.object({
 			store: v.pipe(
-				projectSchema,
+				storeSchema,
 				v.transform((value) => ({ ...value, workspaceId: validatedPayload.workspaceId }))
 			),
 			captures: v.array(captureSchema)
