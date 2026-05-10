@@ -80,7 +80,7 @@ const _deleteStore = enhancedValidatedMutation(
 	v.object({
 		id: v.string()
 	}),
-	'deleteProjects',
+	'deleteStores',
 	async ({ validatedPayload }) => {
 		const result = await storeRepository.deleteByPredicate(eq(storeTable.id, validatedPayload.id));
 		const store = result.first();
@@ -101,7 +101,7 @@ const _updateStore = enhancedValidatedMutation(
 		id: v.string(),
 		description: v.string()
 	}),
-	'updateProjects',
+	'updateStores',
 	async ({ validatedPayload }) => {
 		const result = await storeRepository.update(validatedPayload.id, validatedPayload);
 		const updatedStore = await result.first();
@@ -124,7 +124,7 @@ const _createStore = enhancedValidatedMutation(
 		description: v.nullish(v.string()),
 		workspaceId: v.string()
 	}),
-	'createProjects',
+	'createStores',
 	async ({ validatedPayload }) => {
 		const result = await storeRepository.create(validatedPayload);
 		const createdStore = await result.first();
@@ -140,7 +140,7 @@ const _exportStore = enhancedValidatedMutation(
 	v.object({
 		id: v.string()
 	}),
-	'exportProjects',
+	'exportStores',
 	async ({ validatedPayload }) => {
 		const [store, captures] = await Promise.all([
 			_readStore.query({ id: validatedPayload.id }),
@@ -160,7 +160,7 @@ const _importStore = enhancedValidatedMutation(
 		file: v.blob(),
 		workspaceId: v.string()
 	}),
-	'importProjects',
+	'importStores',
 	async ({ validatedPayload }) => {
 		const { file } = validatedPayload;
 		const text = await file.text();
