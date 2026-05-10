@@ -50,5 +50,5 @@ function invalidate(...keys: string[]) {
 
 export const cache = {
 	read,
-	invalidate
+	invalidate,
 };

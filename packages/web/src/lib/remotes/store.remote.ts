@@ -1,6 +1,6 @@
 import { errors } from '$lib/utilities/errors';
 import { loggers } from '$lib/utilities/loggers';
-import { StoreRepository, projectSchema } from '$lib/repository/storeRepository';
+import { StoreRepository, storeSchema } from '$lib/repository/storeRepository';
 import { getRequestEvent } from '$app/server';
 import { and, eq } from 'drizzle-orm';
 import { storeTable } from '$lib/utilities/schema';
@@ -80,15 +80,15 @@ const _deleteStore = enhancedValidatedMutation(
 	v.object({
 		id: v.string()
 	}),
-	'deleteProjects',
+	'deleteStores',
 	async ({ validatedPayload }) => {
 		const result = await storeRepository.deleteByPredicate(eq(storeTable.id, validatedPayload.id));
 		const store = result.first();
-		loggers.data.child(store).info('Deleted store');
+		loggers.data.info('Deleted store');
 
 		await _readStore.refresh(store);
 		await _readStoreByNameAndWorkspaceId.refresh(store);
-		await _readStores.refresh(store);
+		await _readStores.refresh({...store, limit: undefined, offset: undefined});
 	}
 );
 
@@ -101,7 +101,7 @@ const _updateStore = enhancedValidatedMutation(
 		id: v.string(),
 		description: v.string()
 	}),
-	'updateProjects',
+	'updateStores',
 	async ({ validatedPayload }) => {
 		const result = await storeRepository.update(validatedPayload.id, validatedPayload);
 		const updatedStore = await result.first();
@@ -109,7 +109,7 @@ const _updateStore = enhancedValidatedMutation(
 
 		await _readStore.refresh({ id: validatedPayload.id });
 		await _readStore.refresh(validatedPayload);
-		await _readStores.refresh(updatedStore);
+		await _readStores.refresh({ ...updatedStore, limit: undefined, offset: undefined });
 	}
 );
 
@@ -124,13 +124,13 @@ const _createStore = enhancedValidatedMutation(
 		description: v.nullish(v.string()),
 		workspaceId: v.string()
 	}),
-	'createProjects',
+	'createStores',
 	async ({ validatedPayload }) => {
 		const result = await storeRepository.create(validatedPayload);
 		const createdStore = await result.first();
 		loggers.data.info('Created Store');
 
-		await _readStores.refresh(createdStore);
+		await _readStores.refresh({...createdStore, limit: undefined, offset: undefined });
 	}
 );
 
@@ -140,7 +140,7 @@ const _exportStore = enhancedValidatedMutation(
 	v.object({
 		id: v.string()
 	}),
-	'exportProjects',
+	'exportStores',
 	async ({ validatedPayload }) => {
 		const [store, captures] = await Promise.all([
 			_readStore.query({ id: validatedPayload.id }),
@@ -160,14 +160,14 @@ const _importStore = enhancedValidatedMutation(
 		file: v.blob(),
 		workspaceId: v.string()
 	}),
-	'importProjects',
+	'importStores',
 	async ({ validatedPayload }) => {
 		const { file } = validatedPayload;
 		const text = await file.text();
 		const json = JSON.parse(text);
 		const schema = v.object({
 			store: v.pipe(
-				projectSchema,
+				storeSchema,
 				v.transform((value) => ({ ...value, workspaceId: validatedPayload.workspaceId }))
 			),
 			captures: v.array(captureSchema)

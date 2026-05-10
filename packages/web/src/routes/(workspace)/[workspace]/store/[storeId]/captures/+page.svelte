@@ -16,6 +16,7 @@
   import { delay } from "$lib/utilities/delay";
 
   let query = $state("");
+  let paginationPage = $state(1);
   let selectedCaptures = $state<Set<string>>(new Set());
   function filterCaptures(captures: ICapture[], query: string) {
     return captures.filter((capture) => {
@@ -27,7 +28,9 @@
   }
 
   const captures = readCaptures({
-    storeId: page.params.storeId!!
+    storeId: page.params.storeId!!,
+    offset: undefined,
+    limit: undefined
   });
   const invalidate = () => captures.refresh();
 
@@ -50,7 +53,7 @@
     use:animations.fadeInForward
   >
     <div class="flex items-center justify-between">
-      <Search bind:query placeholder="Search captures..." />
+      <Search bind:query placeholder="Search captures..." onChange={() => paginationPage = 1}/>
       {#snippet addCaptureDrawerContent()}
         <div class="px-5">
           <CaptureForm storeId={page.params.storeId!!} {invalidate} />
@@ -101,6 +104,7 @@
         captures={filteredCaptures}
         {invalidate}
         storeId={page.params.storeId!!}
+        bind:paginationPage={paginationPage}
         bind:selected={selectedCaptures}
       />
     {/if}

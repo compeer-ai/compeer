@@ -15,14 +15,14 @@
     "tsgo": "tsgo",
     "test:types": "tsgo --noEmit",
     "build": "bun run build:linux",
-    "build:linux": "bun build --compile --minify --sourcemap ./src/index.ts --outfile build/barque",
-    "build:macos": "bun build --compile --minify --sourcemap --target=bun-darwin-arm64 ./src/index.ts --outfile build/barque-macos",
-    "build:windows": "bun build --compile --minify --sourcemap --target=bun-windows-x64 ./src/index.ts --outfile build/barque.exe",
+    "build:linux": "bun build --compile --minify --sourcemap ./src/index.ts --outfile build/compeer",
+    "build:macos": "bun build --compile --minify --sourcemap --target=bun-darwin-arm64 ./src/index.ts --outfile build/compeer-macos",
+    "build:windows": "bun build --compile --minify --sourcemap --target=bun-windows-x64 ./src/index.ts --outfile build/compeer.exe",
     "build:all": "bun run build:linux && bun run build:macos && bun run build:windows",
     "prepublishOnly": "bun run build"
   },
   "devDependencies": {
-    "@types/bun": "^1.3.11",
+    "@types/bun": "^1.3.13",
     "@typescript/native-preview": "^7.0.0-dev.20260214.1"
   },
   "peerDependencies": {
@@ -30,6 +30,9 @@
   },
   "dependencies": {
     "@drizzle-team/brocli": "^0.11.0",
+    "@tmcp/adapter-valibot": "^0.1.5",
+    "@tmcp/transport-stdio": "^0.4.2",
+    "tmcp": "^1.19.3",
     "valibot": "^1.3.1"
   },
   "engines": {

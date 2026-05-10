@@ -5,9 +5,10 @@
   interface Props {
     placeholder?: string;
     query: string;
+    onChange?: (query: string) => void;
   }
 
-  let { placeholder = "Search...", query = $bindable("") }: Props = $props();
+  let { placeholder = "Search...", query = $bindable(""), onChange  }: Props = $props();
 </script>
 
 <div
@@ -20,7 +21,11 @@
   </div>
   <input
     type="text"
-    bind:value={query}
+    oninput={(e) => {
+      const value = (e.target as HTMLInputElement).value;
+      onChange?.(value)
+      query = value;
+    }}
     class="h-12 w-full p-3 ps-10 text-sm placeholder:text-gray-400 focus:outline-none"
     {placeholder}
     required

@@ -3,15 +3,16 @@
 	"url": "http://localhost:5173",
 	"version": "0.0.1",
 	"flags": {
-		"importProjects": true,
-		"createProjects": true,
-		"updateProjects": true,
-		"configureProjectMcps": true,
-		"exportProjects": true,
-		"deleteProjects": true,
+		"importStores": true,
+		"createStores": true,
+		"updateStores": true,
+		"exportStores": true,
+		"deleteStores": true,
 
 		"createWorkspaces": true,
 		"updateWorkspaces": true,
-		"deleteWorkspaces": true
-	}
+		"deleteWorkspaces": true,
+		"exportWorkspaces": true
+	},
+	"apiKeys": ["$API_KEY"]
 }

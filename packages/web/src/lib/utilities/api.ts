@@ -2,22 +2,23 @@ import { commandCreateCapture } from '$lib/remotes/capture.remote';
 import { readStoreByNameAndWorkspaceId, readStores } from '$lib/remotes/store.remote';
 import { Hono } from 'hono';
 import * as v from 'valibot';
-import { vValidator } from '@hono/valibot-validator';
 import { readSearchCaptures } from '$lib/remotes/capture.remote';
-import openApiSpec from '../../../openapi/openapi.json' with { type: 'json' };
 import { readWorkspace, readWorkspaces } from '$lib/remotes/workspace.remote';
-import Bun from 'bun';
-import { join } from 'path';
-import { fileURLToPath } from 'url';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { jwt } from './jwt';
 import { oidc } from './oidc';
+import defaultConfiguration from '../assets/defaultConfig.json';
+import configuration from '../assets/config.json';
+import { describeRoute, openAPIRouteHandler, resolver, validator } from 'hono-openapi';
+import { storeSchema } from '$lib/repository/storeRepository';
+import { workspaceSchema } from '$lib/repository/workspaceRepository';
 
-const paramsValidator = vValidator(
-	'param',
-	v.object({
-		workspace: v.string()
-	})
-);
+export const API_KEYS = configuration.apiKeys || defaultConfiguration.apiKeys || [];
+
+const paramsSchema = v.object({
+	workspace: v.string()
+});
 
 const Type = {
 	Text: 'text',
@@ -26,26 +27,57 @@ const Type = {
 } as const;
 
 export const router = new Hono()
-	.get('/alive', (c) => {
+	.get('/alive', describeRoute({
+			description: "Get a workspace's stores",
+			responses: {
+				200: {
+					description: 'Successful response',
+					content: {
+						'application/json': { schema: resolver(storeSchema) }
+					}
+				}
+			}
+		}),(c) => {
 		return c.json({ alive: true });
 	})
-	.get('/oidc', (c) => {
+	.get('/oidc', describeRoute({
+			description: "Get a workspace's stores",
+			responses: {
+				200: {
+					description: 'Successful response',
+					content: {
+						'application/json': { schema: resolver(storeSchema) }
+					}
+				}
+			}
+		}), (c) => {
 		return c.json(oidc.enabled());
-	})
-	.get('/openapi', (c) => {
-		return c.json(openApiSpec);
 	})
 	.use(async (c, next) => {
 		if (!oidc.enabled()) return next();
+		const apiKey = c.req.header('X-Api-Key');
+		if (apiKey) {
+			return API_KEYS.includes(apiKey) ? next() : c.status(401);
+		}
 		const authorization = c.req.header('Authorization');
 		if (!authorization) return c.status(401);
 		const bearer = authorization.replace('Bearer ', '');
 		const decodedJwt = await jwt.verify(bearer);
 		if (!decodedJwt) return c.status(401);
-		console.log('Authorized');
+
 		return next();
 	})
-	.get('/backup', async (c) => {
+	.get('/backup', describeRoute({
+			description: "Get a workspace's stores",
+			responses: {
+				200: {
+					description: 'Successful response',
+					content: {
+						'application/json': { schema: resolver(storeSchema) }
+					}
+				}
+			}
+		}),async (c) => {
 		const sqliteDir = fileURLToPath(new URL('../../../', import.meta.url));
 		const dbPath = join(sqliteDir, 'sqlite.db');
 		const buffer = await Bun.file(dbPath).arrayBuffer();
@@ -53,20 +85,53 @@ export const router = new Hono()
 		c.header('Content-Disposition', `attachment; filename="sqlite.db"`);
 		return c.body(buffer);
 	})
-	.get('/:workspace/stores', paramsValidator, async (c) => {
-		const { workspace } = c.req.valid('param');
-		const { id: workspaceId } = await readWorkspace({ name: workspace });
-		const result = await readStores({ workspaceId });
-		return c.json(result);
-	})
+	.get(
+		'/:workspace/stores',
+		describeRoute({
+			description: "Get a workspace's stores",
+			responses: {
+				200: {
+					description: 'Successful response',
+					content: {
+						'application/json': { schema: resolver(storeSchema) }
+					}
+				}
+			}
+		}),
+		validator('param', paramsSchema),
+		async (c) => {
+			const { workspace } = c.req.valid('param');
+			const { id: workspaceId } = await readWorkspace({ name: workspace });
+			const result = await readStores({ workspaceId, limit: undefined, offset: undefined });
+			return c.json(result);
+		}
+	)
 	.get(
 		'/:workspace/search',
-		paramsValidator,
-		vValidator(
+		describeRoute({
+			description: "Get a workspace's stores",
+			responses: {
+				200: {
+					description: 'Successful response',
+					content: {
+						'application/json': {
+							schema: resolver(
+								v.object({
+									captureId: v.string(),
+									content: v.string()
+								})
+							)
+						}
+					}
+				}
+			}
+		}),
+		validator('param', paramsSchema),
+		validator(
 			'query',
 			v.object({
-				query: v.string(),
-				store: v.optional(v.string())
+				store: v.optional(v.string()),
+				query: v.string()
 			})
 		),
 		async (c) => {
@@ -76,14 +141,47 @@ export const router = new Hono()
 			return c.json(result);
 		}
 	)
-	.get('/workspaces', async (c) => {
-		const workspaces = await readWorkspaces();
-		return c.json(workspaces);
-	})
+	.get(
+		'/workspaces',
+		describeRoute({
+			description: 'Get all workspaces',
+			responses: {
+				200: {
+					description: 'Successful response',
+					content: {
+						'application/json': {
+							schema: resolver(v.array(workspaceSchema))
+						}
+					}
+				}
+			}
+		}),
+		async (c) => {
+			const workspaces = await readWorkspaces({ limit: undefined, offset: undefined });
+			return c.json(workspaces);
+		}
+	)
 	.post(
 		'/:workspace/capture',
-		paramsValidator,
-		vValidator(
+		describeRoute({
+			description: 'Create a capture',
+			responses: {
+				200: {
+					description: 'Successful response',
+					content: {
+						'application/json': {
+							schema: resolver(
+								v.object({
+									success: v.literal(true)
+								})
+							)
+						}
+					}
+				}
+			}
+		}),
+		validator('param', paramsSchema),
+		validator(
 			'json',
 			v.object({
 				type: v.enum(Type),
@@ -103,6 +201,19 @@ export const router = new Hono()
 		}
 	);
 
+router.get(
+	'/openapi',
+	openAPIRouteHandler(router, {
+		documentation: {
+			info: {
+				title: 'Compeer API',
+				version: '1.0.0',
+				description: 'Compeer API'
+			},
+			servers: [{ url: 'http://localhost:3000', description: 'Compeer' }]
+		}
+	})
+);
 export const api = new Hono().route('/api/v1', router);
 
 export type Router = typeof router;

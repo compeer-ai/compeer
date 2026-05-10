@@ -25,7 +25,7 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false,
-
+    "types": ["bun"],
     // Path aliases for importing from web package
     "paths": {
       "@web/client": ["../web/src/lib/utilities/client.ts"],
