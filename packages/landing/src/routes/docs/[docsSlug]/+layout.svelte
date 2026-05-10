@@ -26,12 +26,6 @@
                 <span>Edit on GitHub</span>        
             </button>
         </a>
-        <a href={`/docs/${page.params.docsSlug!!}/llms`}>
-        <button class="space-x-2 flex items-center pt-5 hover:text-black cursor-pointer transition ease-in-out">
-            <Icon icon={BookOpen} />
-            <span>llms.txt</span>        
-        </button>
-    </a>
     </div>
     </div>
 </div>

@@ -222,7 +222,7 @@
 			<p><span class="text-black">For your systems.</span>
 			Abstractions for your to integrate Compeer with your greater agenetic infrastructure.
 		</p>
-		<a href="/docs/sdks">
+		<a href="/docs/python-sdk">
 			<Button>Learn More</Button>
 		</a>
 		</div>
