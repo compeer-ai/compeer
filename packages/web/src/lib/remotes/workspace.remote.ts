@@ -7,6 +7,7 @@ import {
 import { workspaceTable } from '$lib/utilities/schema';
 import { eq } from 'drizzle-orm';
 import * as v from 'valibot';
+import { commandExportStore, readStores } from './store.remote';
 
 const workspaceRepository = new WorkspaceRepository();
 
@@ -44,6 +45,24 @@ const _deleteWorkspace = enhancedValidatedMutation(
 );
 
 export const deleteWorkspace = _deleteWorkspace.form;
+
+const _exportWorkspace = enhancedValidatedMutation(
+	v.object({
+		name: v.string()
+	}),
+	'exportWorkspaces',
+	async ({ validatedPayload }) => {
+		const workspace = await _readWorkspace.query({ name: validatedPayload.name });
+		const stores = await readStores({ workspaceId: workspace.id, limit: undefined, offset: undefined });
+		const storeExports = await Promise.all(stores.map((store) => commandExportStore({ id: store.id })));
+		return {
+			workspace,
+			stores: storeExports
+		};
+	}
+);
+
+export const exportWorkspace = _exportWorkspace.command;
 
 const _readWorkspaces = enhancedValidatedQuery(
 	'read_workspaces',
