@@ -8,14 +8,11 @@ const config = {
     }),
   ],
   kit: {
+    prerender: {
+      handleUnseenRoutes: 'warn'
+    },
     adapter: adapter(),
     experimental: {
-      tracing: {
-        server: true,
-      },
-      instrumentation: {
-        server: true,
-      },
       remoteFunctions: true,
     },
   },

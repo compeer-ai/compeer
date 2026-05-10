@@ -20,18 +20,12 @@
             {@render children()}
         </div>
     <div class="border-t flex space-x-5 border-gray-300 w-full">
-        <a href={`https://github.com/barque-ai/barque/tree/main/packages/landing/src/lib/markdown/docs/${page.params.docsSlug!!}.svx`} target="_blank" rel="noopener noreferrer">
+        <a href={`https://github.com/compeer-ai/compeer/tree/main/packages/landing/src/lib/markdown/docs/${page.params.docsSlug!!}.svx`} target="_blank" rel="noopener noreferrer">
             <button class="space-x-2 flex items-center pt-5 hover:text-black cursor-pointer transition ease-in-out">
                 <Icon icon={Pen} />
                 <span>Edit on GitHub</span>        
             </button>
         </a>
-        <a href={`/docs/${page.params.docsSlug!!}/llms`}>
-        <button class="space-x-2 flex items-center pt-5 hover:text-black cursor-pointer transition ease-in-out">
-            <Icon icon={BookOpen} />
-            <span>llms.txt</span>        
-        </button>
-    </a>
     </div>
     </div>
 </div>

@@ -18,8 +18,10 @@
     <Github size={18} />
 {/snippet}
 
-<section class="grid md:grid-cols-3 grid-cols-1 gap-4">
-    {#each cookbooks as cookbook}
+    {#if cookbooks.length}
+    <section class="grid md:grid-cols-3 grid-cols-1 gap-4">
+
+        {#each cookbooks as cookbook}
         <a href={`/cookbook/${cookbook.slug}`}>
             <div class="space-y-3 p-5 w-full border border-gray-300 bg-white rounded-lg shadow-sm shadow-gray-100">
                 <h2 class="font-medium text-black">{cookbook.title}</h2>
@@ -32,5 +34,9 @@
                 </div>
             </div>
         </a>
-    {/each}
-</section>
+        {/each}
+        </section>
+    {:else}
+        <p class="text-center">Come back soon! Nothing here, yet...</p>
+    {/if}
+

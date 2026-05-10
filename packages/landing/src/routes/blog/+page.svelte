@@ -4,7 +4,8 @@
     const blogs = await readBlogs();
 </script>
 
-<div class="border border-gray-300 rounded-lg divide-y divide-gray-300 shadow-sm shadow-gray-100 w-full flex flex-col bg-white">
+{#if blogs.length}
+<section class="border border-gray-300 rounded-lg divide-y divide-gray-300 shadow-sm shadow-gray-100 w-full flex flex-col bg-white">
     {#each blogs as blog}
         <a href={`/blog/${blog.slug}`}>
             <button class="space-y-2 text-left w-full p-5 hover:bg-gray-100/30 transition ease-in-out">
@@ -15,4 +16,8 @@
             </button>
         </a>
     {/each}
-</div>
+</section>
+{:else}
+    <p class="text-center">Come back soon! Nothing here, yet...</p>
+
+{/if}

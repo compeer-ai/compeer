@@ -3,13 +3,25 @@ title: Quickstart
 order: 1
 ---
 
-Compeer runs as a Docker container. Make sure Docker is installed first:
-https://docs.docker.com/get-docker/
+## Prequisties
 
-Then start the server:
+Compeer requires Docker and NPM. 
 
+Install Docker Engine: https://docs.docker.com/engine/install 
+
+Install NPM via Node.js: https://nodejs.org/en/download
+
+## Install Compeer
+
+First, clone the Compeer repository from GitHub:
 ```bash
-docker run -p 3000:3000 ghcr.io/barque-ai/barque:latest
+git clone https://github.com/compeer-ai/compeer.git
 ```
 
-That is it. No environment variables or additional services are required.
+Once cloned, we'll use Compeer's `MakeFile` to setup everything we need.
+
+```bash
+make build
+```
+
+Give this a minute or so to setup everything. This will stand up all Compeer dependencies and the Compeer CLI.

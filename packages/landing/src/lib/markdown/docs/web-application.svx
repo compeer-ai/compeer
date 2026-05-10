@@ -1,32 +1,23 @@
 ---
 title: Web Application
-order: 7
+order: 9
 ---
 
-Compeer includes a local web app for managing stores, captures, and usage.
+Compeer includes a local web app for managing workspaces, stores, captures, and usage.
 
 ## Open the app
 
-After starting the container, visit: `http://localhost:3000`
+After following the [quickstart](http://localhost:5173/docs/quickstart) guide, visit: [http://localhost:3000](http://localhost:3000).
 
-## Home
+## Open via the CLI
 
-- View all stores and search by name.
-- Add a new store from the drawer.
+```text
+compeer web
+compeer w
+```
 
-## Captures
+## Create a new workspace
 
-Inside a store you can:
+You can easily add a workspace by visiting any url of the following format: http://localhost:3000/[workspace].
 
-- Add captures from a website URL, plain text, or JSON data.
-- Search captures.
-- Select and delete captures in bulk.
-
-## Usage
-
-The Usage page shows recent queries and the captures used to answer them.
-
-## Settings
-
-- Global settings let you change the UI theme.
-- Store settings let you rename or delete a store (including all captures).
+For example, visiting [http://localhost:3000/new-workspace](http://localhost:3000/new-workspace) will create a new workspace named "new workspace" if it has not already been created.

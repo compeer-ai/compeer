@@ -1,0 +1,28 @@
+---
+title: Python SDK
+order: 7
+---
+
+The Compeer Python SDK allows you to interact with Compeer from your Python applications or Juypter notebooks.
+
+## Requirements
+
+You must have Python 3.9 or higher.
+
+## Installation
+
+Install the Compeer Python SDK using pip:
+
+```bash
+pip install compeer
+```
+
+## API Reference
+
+For detailed information on available methods and types, please refer to the [API Reference](https://github.com/compeer-ai/pyton-sdk/blob/main/api.md) in our `python-sdk` repository.
+
+## Usage
+
+You can find detailed usage examples the [`README.md`](https://github.com/compeer-ai/pyton-sdk#usage) section of our `python-sdk` repository.
+
+

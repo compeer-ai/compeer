@@ -7,90 +7,89 @@ The Compeer CLI lets you initialize Compeer locally, capture store content, and 
 
 ## Install
 
-Install the `barque` cli from NPM.
-
-```bash
-bun install @barque/cli
-```
-
-## Quick start
-
-```bash
-# Start Compeer locally and configure your agent
-barque init
-
-# List your stores
-barque stores
-
-# Capture a note into a store
-barque capture --store my-store --text "Ships on Friday"
-
-# Search captures in a store
-barque search --store my-store --query "Ships"
-```
+Install the Compeer CLI by following the [quickstart guide](http://localhost:5173/docs/quickstart).
 
 ## Commands
 
-### `barque init`
+### `compeer init`
 
-Initializes Compeer in the current directory.
+Initializes Compeer in the current directory. It will open a browser to authenticate and select a workspace.
 
-- Verifies Docker is running and starts the Compeer server on `http://localhost:8193` if needed.
-- Prompts for your coding agent and writes a `barque` skill file into the matching agent config directory.
-- Stores the selected agent in `~/.config/barque/credentials.json`.
-
-### `barque stores`
-
-Lists stores you own.
-
-```bash
-barque stores
-barque p
-```
-
-### `barque capture`
-
-Captures content for a store. Exactly one capture mode is required.
-
-```bash
-# Capture text
-barque capture --store my-store --text "Release checklist"
-
-# Capture a URL
-barque capture --store my-store --url "https://example.com/roadmap"
-
-# Capture JSON data
-barque capture --store my-store --data '{"title":"Spec","version":3}'
+```text
+compeer init
 ```
 
 Options:
+- `--server`: Server of your Compeer instance (default: `http://localhost:3000`)
 
-- `--store`, `-p` (required): store name to capture into
-- `--text`, `-t`: raw text content
-- `--url`, `-u`: URL to fetch and capture
-- `--data`, `-d`: JSON string payload
+### `compeer pull`
 
-### `barque search`
+Pulls the latext store definitions and synchronizes them with your agent's skills (e.g., Claude Code, Gemini CLI, etc.).
+
+```text
+compeer pull
+compeer pl
+```
+
+### `compeer workspaces`
+
+Lists all workspaces you have access to.
+
+```text
+compeer workspaces
+compeer ws
+```
+
+Options:
+- `--pretty`: Output as a table instead of JSON.
+
+### `compeer stores`
+
+Lists stores in the configured workspace.
+
+```text
+compeer stores
+compeer p
+```
+
+Options:
+- `--pretty`: Output as a table instead of JSON.
+
+### `compeer capture`
+
+Captures content for a store. Content can be a URL, JSON data, or raw text. The CLI automatically detects the type of content you are capturing.
+
+```text
+compeer capture [workspace] [store] [content]
+compeer c [workspace] [store] [content]
+```
+
+### `compeer search`
 
 Searches captured content within a store.
 
-```bash
-barque search --store my-store --query "roadmap"
-barque s -p my-store -q "roadmap"
+```text
+compeer search [workspace] [store] --query [query]
+compeer s [workspace] [store] --query [query]
 ```
 
 Options:
+- `--query`, `-q` (required): Search query
+- `--pretty`: Output as a table instead of JSON.
 
-- `--store`, `-p`: store id to search within
-- `--query`, `-q` (required): search query
+### `compeer mcp`
 
-### `barque logs`
+Starts a Model Context Protocol (MCP) server for a workspace or a specific store.
 
-Prints the CLI command history log.
-
-```bash
-barque logs
-barque lg
+```text
+compeer mcp [workspace] [store]
 ```
 
-Logs are stored under `.barque/history.log` in the directory where you ran the command. The file rotates when it grows past 10MB.
+### `compeer web`
+
+Opens the web dashboard for the current Compeer workspace in your browser.
+
+```text
+compeer web
+compeer w
+```
