@@ -1,6 +1,0 @@
----
-title: SDK
-order: 6
----
-
-Documentation is still in progress!

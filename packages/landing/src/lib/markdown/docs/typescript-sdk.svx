@@ -1,0 +1,28 @@
+---
+title: TypeScript SDK
+order: 8
+---
+
+The Compeer TypeScript SDK allows you to interact with Compeer from Javascript or TypeScript applications.
+
+## Requirements
+
+Find supported JavaScript runtimes and TypeScript versions in the [requirments](https://github.com/compeer-ai/typescript-sdk#requirements) section of the `typescript-sdk` repository `README.md`.
+
+## Installation
+
+Install the Compeer TypeScript SDK using npm:
+
+```bash
+npm install @compeer-ai/sdk
+```
+
+## API Reference
+
+For detailed information on available methods and types, please refer to the [API Reference](https://github.com/compeer-ai/typescript-sdk/blob/main/api.md) in our `typescript-sdk` repository.
+
+## Usage
+
+You can find detailed usage examples the [usage](https://github.com/compeer-ai/typescript-sdk#usage) section of the `typescript-sdk` repository `README.md`.
+
+

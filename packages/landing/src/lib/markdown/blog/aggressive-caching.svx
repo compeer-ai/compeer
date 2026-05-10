@@ -1,5 +1,0 @@
----
-title: Aggressive Caching for peak performance
-description: Our approach to caching so context is served in sub 20 ms
-order: 1
----

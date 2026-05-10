@@ -80,7 +80,7 @@
                 <Icon icon={Menu} />
             </button>
             <div class="flex items-center space-x-3">
-                <a href="https://github.com/barque-ai" target="_blank" rel="noreferrer">
+                <a href="https://github.com/compeer-ai" target="_blank" rel="noreferrer">
                     <Github size={18} />
                 </a>
                 <a href="https://discord.com" target="_blank" rel="noreferrer">
