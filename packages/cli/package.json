@@ -5,7 +5,7 @@
   "module": "src/index.ts",
   "type": "module",
   "bin": {
-    "barque": "build/barque"
+    "compeer": "build/compeer"
   },
   "files": [
     "build/"
