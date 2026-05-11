@@ -117,13 +117,13 @@
         </a>
     </div>
 </section>
-<section class="py-10 flex items-center">
+<section class="py-7 flex items-center">
 	<div class="text-center space-y-2 w-full">
 		<h2 class="text-black text-lg font-semibold">Agents Need Our Help</h2>
 		<p>Everytime you spawn a new session with your coding assistant, it has to learn. <span class="text-black font-medium">Compeer is knowledge transfer for your agent.</span> Humans need it. Agents do too. Increase your agent's performance and save tokens.</p>
 	</div>
 </section>
-<section class="py-10 space-y-7">
+<section class="py-7 space-y-7">
 	<div class="text-center space-y-2 w-full">
 		<h2 class="text-black text-lg font-semibold">See what's possible</h2>
 		<p>Compeer is more than just context for your agents.</p>
@@ -194,7 +194,7 @@
 
 	</div>
 </section>
-<section class="py-10 space-y-7">
+<section class="py-7 space-y-7">
 	<div class="text-center space-y-2 w-full">
 		<h2 class="text-black text-lg font-semibold">Start Building</h2>
 		<p>Compeer is batteries included. Start making stries today.</p>
@@ -231,7 +231,7 @@
 		</div>
 	</div>
 </section>
-<section class="py-10 flex items-center">
+<section class="py-7 flex items-center">
 	<div class="text-center space-y-2 w-full">
 		<h2 class="text-black text-lg font-semibold">Join the Community</h2>
 		<p>Let's grow this into something big! Follow us on <a href="https://github.com/compeer-ai" class="text-blue-700">GitHub</a>, star our <a href="https://github.com/compeer-ai/compeer" class="text-blue-700">repository</a>, or join us on <a href="https://github.com/compeer-ai/compeer/discussions" class="text-blue-700">GitHub discussions</a> or <a href="https://discord.com" class="text-blue-700">Discord</a>.</p>

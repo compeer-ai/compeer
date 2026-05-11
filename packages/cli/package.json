@@ -15,9 +15,9 @@
     "tsgo": "tsgo",
     "test:types": "tsgo --noEmit",
     "build": "bun run build:linux",
-    "build:linux": "bun build --compile --minify --sourcemap ./src/index.ts --outfile build/compeer",
-    "build:macos": "bun build --compile --minify --sourcemap --target=bun-darwin-arm64 ./src/index.ts --outfile build/compeer-macos",
-    "build:windows": "bun build --compile --minify --sourcemap --target=bun-windows-x64 ./src/index.ts --outfile build/compeer.exe",
+    "build:linux": "bun build --compile --minify --sourcemap ./src/index.ts --outfile build/linux/compeer",
+    "build:macos": "bun build --compile --minify --sourcemap --target=bun-darwin-arm64 ./src/index.ts --outfile build/macos/compeer",
+    "build:windows": "bun build --compile --minify --sourcemap --target=bun-windows-x64 ./src/index.ts --outfile build/windows/compeer.exe",
     "build:all": "bun run build:linux && bun run build:macos && bun run build:windows",
     "prepublishOnly": "bun run build"
   },
