@@ -18,10 +18,10 @@ First, clone the Compeer repository from GitHub:
 git clone https://github.com/compeer-ai/compeer.git
 ```
 
-Once cloned, we'll use Compeer's `MakeFile` to setup everything we need.
+Once cloned, use the `install.sh` file to setup everything we need.
 
 ```bash
-make build
+. ./install.sh
 ```
 
 Give this a minute or so to setup everything. This will stand up all Compeer dependencies and the Compeer CLI.
