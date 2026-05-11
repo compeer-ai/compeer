@@ -77,8 +77,9 @@
 
 <main>
 <section class="space-y-3 text-center py-14">
-	<h1 class="text-2xl font-semibold text-black inline-flex items-center justify-center gap-2">
-		<span>Help</span>
+	<h1 class="text-2xl font-semibold text-black flex md:flex-row flex-col items-center justify-center gap-2">
+		<div class="flex items-center gap-2"> 
+			<span>Help</span>
 		<div
 			class="h-12 border bg-white text-xl border-gray-300 px-4 shadow-sm shadow-gray-100 flex items-center justify-center rounded-full w-fit"
 			aria-live="polite"
@@ -90,6 +91,8 @@
 				</span>
 			{/key}
 		</div>
+		</div>
+		
 		<span>stay up to date</span>
 	</h1>
     <p>The open-source context layer for the agenetic era.</p>
@@ -126,7 +129,7 @@
 		<p>Compeer is more than just context for your agents.</p>
 	</div>
 	<div class="md:grid-cols-3 grid-cols-1 grid gap-4">
-		<div class="p-5 border border-gray-300 rounded-lg space-y-3 bg-white">
+		<div class="p-5 border border-gray-300 rounded-lg space-y-3 bg-white shadow-gray-100 shadow-sm">
 		<div class="space-x-2 flex items-center text-black">
 			<Icon icon={ArrowRightLeft} />
 			<h3 class="font-medium">Bidirectional Context</h3>
@@ -136,7 +139,7 @@
 			<Button>Get Started</Button>
 		</a>
 	</div>
-		<div class="p-5 space-y-3 border border-gray-300 rounded-lg bg-white">
+		<div class="p-5 border border-gray-300 rounded-lg space-y-3 bg-white shadow-gray-100 shadow-sm">
 		<div class="space-x-2 flex items-center text-black">
 			<Icon icon={Blocks} />
 			<h3 class="font-medium">Multiple Modalities</h3>
@@ -148,7 +151,7 @@
 				<Button>Get Started</Button>
 		</a>
 	</div>
-		<div class="p-5 border border-gray-300 rounded-lg space-y-3">
+		<div class="p-5 border border-gray-300 rounded-lg space-y-3 bg-white shadow-gray-100 shadow-sm">
 	<div class="space-x-2 flex items-center text-black">
 			<Icon icon={Share2} />
 			<h3 class="font-medium">Collaboration</h3>
@@ -158,7 +161,7 @@
 				<Button>Get Started</Button>
 		</a>
 	</div>
-		<div class="p-5 border border-gray-300 rounded-lg space-y-3">
+		<div class="p-5 border border-gray-300 rounded-lg space-y-3 bg-white shadow-gray-100 shadow-sm">
 <div class="space-x-2 flex items-center text-black">
 			<Icon icon={Cable} />
 			<h3 class="font-medium">Interporability</h3>
@@ -168,7 +171,7 @@
 				<Button>Get Started</Button>
 		</a>
 	</div>
-		<div class="p-5 border border-gray-300 rounded-lg space-y-3">
+		<div class="p-5 border border-gray-300 rounded-lg space-y-3 bg-white shadow-gray-100 shadow-sm">
 <div class="space-x-2 flex items-center text-black">
 			<Icon icon={Code} />
 			<h3 class="font-medium">SDKs</h3>
@@ -178,7 +181,7 @@
 				<Button>Get Started</Button>
 		</a>
 	</div>
-		<div class="p-5 space-y-3 border border-gray-300 rounded-lg">
+		<div class="p-5 border border-gray-300 rounded-lg space-y-3 bg-white shadow-gray-100 shadow-sm">
 <div class="space-x-2 flex items-center text-black">
 			<Icon icon={Lock} />
 			<h3 class="font-medium">Entreprise Ready</h3>
@@ -197,7 +200,7 @@
 		<p>Compeer is batteries included. Start making stries today.</p>
 	</div>
 	<div class="grid md:grid-cols-3 grid-cols-1 gap-5">
-		<div class="space-y-3 p-5 border border-gray-300 rounded-lg">
+		<div class="p-5 border border-gray-300 rounded-lg space-y-3 bg-white shadow-gray-100 shadow-sm">
 			<h3 class="font-medium text-black">CLI</h3>
 			<p>
 				<span class="text-black">For your Agent.</span>
@@ -207,7 +210,7 @@
 				</a>
 
 				</div>
-		<div class="space-y-3 p-5 border border-gray-300 rounded-lg">
+		<div class="p-5 border border-gray-300 rounded-lg space-y-3 bg-white shadow-gray-100 shadow-sm">
 			<h3 class="font-medium text-black">Web</h3>
 			<p>	<span class="text-black">For your Team.</span>
 				An interface for you and your team to capture text, data, and websites for your agents to learn from.
@@ -217,7 +220,7 @@
 			</a>			
 
 			</div>
-		<div class="space-y-3 p-5 border border-gray-300 rounded-lg">
+		<div class="p-5 border border-gray-300 rounded-lg space-y-3 bg-white shadow-gray-100 shadow-sm">
 			<h3 class="font-medium text-black">SDKs</h3>
 			<p><span class="text-black">For your systems.</span>
 			Abstractions for your to integrate Compeer with your greater agenetic infrastructure.
