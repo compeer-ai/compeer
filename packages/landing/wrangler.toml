@@ -1,2 +1,3 @@
 name = "compeer"
-pages_build_output_dir = "./build"
+compatibility_date = "2026-03-09"
+pages_build_output_dir = "build"
