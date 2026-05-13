@@ -34,6 +34,11 @@
             prefix: `/cookbook`,
             path: `/cookbook`,
         },
+        {
+            name: "Integrations",
+            prefix: `/integrations`,
+            path: `/integrations`,
+        },
     ];
 </script>
 
