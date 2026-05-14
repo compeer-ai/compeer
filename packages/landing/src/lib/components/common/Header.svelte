@@ -30,11 +30,6 @@
             path: `/blog`,
         },
         {
-            name: "Cookbook",
-            prefix: `/cookbook`,
-            path: `/cookbook`,
-        },
-        {
             name: "Integrations",
             prefix: `/integrations`,
             path: `/integrations`,
