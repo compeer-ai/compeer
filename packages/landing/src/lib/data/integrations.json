@@ -40,5 +40,40 @@
     "tag": "Harness",
     "icon": "Gemini",
     "content": "[Gemini CLI](https://geminicli.com) is Google's AI coding assistant. Use the [Compeer CLI](/docs/cli) to initialize Compeer in your project, pick a workspace, and select Gemini CLI as your harness. Now, Gemini CLI can search context stored in Compeer. You can also integrate Compeer via [mcp](/docs/mcp-servers)."
+  },
+  "entra": {
+    "name": "Microsoft Entra ID",
+    "description": "Microsoft's cloud identity and access management service",
+    "tag": "Authentication",
+    "icon": "Azure",
+    "content": "[Microsoft Entra ID](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id) is a cloud identity and access management service. You can use it as an OIDC provider to authenticate users in your Compeer deployment."
+  },
+  "google": {
+    "name": "Google",
+    "description": "Google's OIDC identity platform",
+    "tag": "Authentication",
+    "icon": "Google",
+    "content": "[Google](https://cloud.google.com/identity-platform) provides OIDC identity services. Use Google as an OIDC provider to authenticate users in your Compeer deployment."
+  },
+  "keycloak": {
+    "name": "Keycloak",
+    "description": "Open-source identity and access management",
+    "tag": "Authentication",
+    "icon": "Keycloak",
+    "content": "[Keycloak](https://www.keycloak.org/) is an open-source identity and access management solution. You can use Keycloak as an OIDC provider to authenticate users in your Compeer deployment."
+  },
+  "authelia": {
+    "name": "Authelia",
+    "description": "Open-source authentication and authorization server",
+    "tag": "Authentication",
+    "icon": "Authelia",
+    "content": "[Authelia](https://www.authelia.com/) is an open-source authentication and authorization server. You can use Authelia as an OIDC provider to authenticate users in your Compeer deployment."
+  },
+  "authentik": {
+    "name": "Authentik",
+    "description": "Open-source identity provider",
+    "tag": "Authentication",
+    "icon": "Authentik",
+    "content": "[Authentik](https://goauthentik.io/) is an open-source identity provider. You can use Authentik as an OIDC provider to authenticate users in your Compeer deployment."
   }
 }

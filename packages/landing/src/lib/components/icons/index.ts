@@ -8,3 +8,8 @@ export {default as Npm} from './Npm.svelte'
 export {default as Opencode} from './Opencode.svelte'
 export {default as OpenAI} from './OpenAI.svelte'
 export {default as Anthropic} from "./Anthropic.svelte"
+export {default as Azure} from "./Azure.svelte";
+export {default as Google} from "./Google.svelte";
+export {default as Keycloak} from "./Keycloak.svelte";
+export {default as Authelia} from "./Authelia.svelte";
+export {default as Authentik} from "./Authentik.svelte";

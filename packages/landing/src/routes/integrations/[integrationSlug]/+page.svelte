@@ -15,7 +15,7 @@
         <div class="text-black">
             {#snippet icon()}
                 {@const Icon = icons[integration.icon]}
-                <Icon size={18} />
+                <Icon size={20} />
             {/snippet}
             {@render icon()}
         </div>
