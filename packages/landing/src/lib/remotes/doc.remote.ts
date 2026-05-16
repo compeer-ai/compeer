@@ -4,14 +4,9 @@ import path from 'node:path';
 import matter from 'gray-matter';
 import * as v from "valibot";
 import { compile } from 'mdsvex';
-import { createHighlighter } from "shiki";
+import { highlighter } from '$lib/utilities/highlighter';
 
 const ROOT = process.cwd();
-
-const highlighter = await createHighlighter({
-  themes: ['tokyo-night'],
-  langs: ['javascript', 'typescript', 'bash', 'json'],
-})
 
 async function _readDocs() {
 	const targetDir = path.join(ROOT, `./src/lib/markdown/docs`);

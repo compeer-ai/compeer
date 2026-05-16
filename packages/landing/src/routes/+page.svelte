@@ -131,7 +131,7 @@
 	<div class="md:grid-cols-3 grid-cols-1 grid gap-4">
 		<div class="p-5 border border-gray-300 rounded-lg space-y-3 bg-white shadow-gray-100 shadow-sm">
 		<div class="space-x-2 flex items-center text-black">
-			<Icon icon={ArrowRightLeft} />
+			<Icon icon={ArrowRightLeft} size={18} />
 			<h3 class="font-medium">Bidirectional Context</h3>
 		</div>
 		<p>Compeer allows your coding assistant to capture data into it's memory for future use or for other agents to use.</p>
@@ -141,7 +141,7 @@
 	</div>
 		<div class="p-5 border border-gray-300 rounded-lg space-y-3 bg-white shadow-gray-100 shadow-sm">
 		<div class="space-x-2 flex items-center text-black">
-			<Icon icon={Blocks} />
+			<Icon icon={Blocks} size={18} />
 			<h3 class="font-medium">Multiple Modalities</h3>
 		</div>		
 		<p>Conveniently curate data for your coding assistant via your browser, CLI, API, and more.
@@ -153,7 +153,7 @@
 	</div>
 		<div class="p-5 border border-gray-300 rounded-lg space-y-3 bg-white shadow-gray-100 shadow-sm">
 	<div class="space-x-2 flex items-center text-black">
-			<Icon icon={Share2} />
+			<Icon icon={Share2} size={18} />
 			<h3 class="font-medium">Collaboration</h3>
 		</div>					
 		<p>Compeer can hosted for team-use, allowing everyone to contribute context and expose it for others to use.</p>
@@ -163,7 +163,7 @@
 	</div>
 		<div class="p-5 border border-gray-300 rounded-lg space-y-3 bg-white shadow-gray-100 shadow-sm">
 <div class="space-x-2 flex items-center text-black">
-			<Icon icon={Cable} />
+			<Icon icon={Cable} size={18} />
 			<h3 class="font-medium">Interporability</h3>
 		</div>			
 		<p>Coding agents don't have to be the only user of your context. You can expose your context to custom agentic applications.</p>
@@ -173,7 +173,7 @@
 	</div>
 		<div class="p-5 border border-gray-300 rounded-lg space-y-3 bg-white shadow-gray-100 shadow-sm">
 <div class="space-x-2 flex items-center text-black">
-			<Icon icon={Code} />
+			<Icon icon={Code} size={18} />
 			<h3 class="font-medium">SDKs</h3>
 		</div>		
 		<p>Use our Python and Typescript SDKs to enable your internal applications to integrate with Compeer.</p>
@@ -183,7 +183,7 @@
 	</div>
 		<div class="p-5 border border-gray-300 rounded-lg space-y-3 bg-white shadow-gray-100 shadow-sm">
 <div class="space-x-2 flex items-center text-black">
-			<Icon icon={Lock} />
+			<Icon icon={Lock} size={18} />
 			<h3 class="font-medium">Entreprise Ready</h3>
 		</div>			
 		<p>Compeer has granular configuration controls and intregation with OIDC authentication for entreprise level use.</p>

@@ -7,3 +7,4 @@ export {default as Notion} from './Notion.svelte'
 export {default as Npm} from './Npm.svelte'
 export {default as Opencode} from './Opencode.svelte'
 export {default as OpenAI} from './OpenAI.svelte'
+export {default as Anthropic} from "./Anthropic.svelte"

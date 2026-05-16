@@ -1,5 +1,0 @@
----
-name: OpenAI
-description: Provider of GPT series models
-tag: Inference
----
