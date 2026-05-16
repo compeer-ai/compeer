@@ -17,12 +17,14 @@ import { scrape } from "@compeer-ai/scrape";
     selectedContent = await scrape.DOMParser(content);
     urlCapture = true;
   }
-  const encodedText = encodeURIComponent(selectedContent);
-  const url = new URL("http://localhost:3000")
-  if (urlCapture) {
-    const currentUrl = window.location.href;
-    url.searchParams.set('url', currentUrl);
+  function toBase64url(s: string) {
+    return btoa(Array.from(new TextEncoder().encode(s)).map(b => String.fromCharCode(b)).join(''))
+      .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
   }
-  url.searchParams.set('text', encodedText);
+  const url = new URL("http://localhost:3000/capture")
+  if (urlCapture) {
+    url.searchParams.set('url', toBase64url(window.location.href));
+  }
+  url.searchParams.set('text', toBase64url(selectedContent));
   window.location.href = url.toString();
 })();
