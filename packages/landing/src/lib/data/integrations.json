@@ -1,0 +1,44 @@
+{
+  "anthropic": {
+    "name": "Anthrophic",
+    "description": "Provides access to the Claude family of models",
+    "tag": "Inference",
+    "icon": "Anthropic",
+    "content": "[Anthropic](https://www.anthropic.com/) provides access to the Claude family of models. You can connect to Anthropic via [proxy inference](/docs/quickstart) or by using your own API key with a third party harness like [OpenCode](https://opencode.ai) and the [Compeer CLI](/docs/cli)."
+  },
+  "claude-code": {
+    "name": "Claude Code",
+    "description": "Anthropic's agentic coding assistant",
+    "tag": "Harness",
+    "icon": "Claude",
+    "content": "[Claude Code](https://claude.com/product/claude-code) is Anthropic's agentic coding assistant. Use the [Compeer CLI](/docs/cli) to initialize Compeer in your project, pick a workspace, and select Claude Code as your harness. Now, Claude Code can search context stored in Compeer. You can also integrate Compeer via [mcp](/docs/mcp-servers)."
+  },
+  "openai": {
+    "name": "OpenAI",
+    "description": "Provides access to the GPT family of models",
+    "tag": "Inference",
+    "icon": "OpenAI",
+    "content": "[OpenAI](https://openai.com/) provides access to the GPT family of models. You can connect to OpenAI via [proxy inference](/docs/quickstart) or by using your own API key with a third party harness like [OpenCode](https://opencode.ai) and the [Compeer CLI](/docs/cli)."
+  },
+  "openai-codex": {
+    "name": "OpenAI Codex",
+    "description": "OpenAI's AI coding assistant",
+    "tag": "Harness",
+    "icon": "Codex",
+    "content": "[OpenAI Codex](https://openai.com/codex) is OpenAI's AI coding assistant. Use the [Compeer CLI](/docs/cli) to initialize Compeer in your project, pick a workspace, and select OpenAI Codex as your harness. Now, OpenAI Codex can search context stored in Compeer. You can also integrate Compeer via [mcp](/docs/mcp-servers)."
+  },
+  "opencode": {
+    "name": "OpenCode",
+    "description": "A model-agnostic CLI for agentic workflows",
+    "tag": "Harness",
+    "icon": "Opencode",
+    "content": "[OpenCode](https://opencode.ai) is a model-agnostic CLI for agentic workflows. Use the [Compeer CLI](/docs/cli) to initialize Compeer in your project, pick a workspace, and select OpenCode as your harness. Now, OpenCode can search context stored in Compeer. You can also integrate Compeer via [mcp](/docs/mcp-servers)."
+  },
+  "gemini-cli": {
+    "name": "Gemini CLI",
+    "description": "Google's AI coding assistant",
+    "tag": "Harness",
+    "icon": "Gemini",
+    "content": "[Gemini CLI](https://geminicli.com) is Google's AI coding assistant. Use the [Compeer CLI](/docs/cli) to initialize Compeer in your project, pick a workspace, and select Gemini CLI as your harness. Now, Gemini CLI can search context stored in Compeer. You can also integrate Compeer via [mcp](/docs/mcp-servers)."
+  }
+}
