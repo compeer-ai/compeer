@@ -18,7 +18,7 @@ import { scrape } from "@compeer-ai/scrape";
     urlCapture = true;
   }
   const encodedText = encodeURIComponent(selectedContent);
-  const url = new URL("http://localhost:3000")
+  const url = new URL("http://localhost:3000/capture")
   if (urlCapture) {
     const currentUrl = window.location.href;
     url.searchParams.set('url', currentUrl);
