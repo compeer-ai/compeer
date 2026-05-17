@@ -2,10 +2,16 @@
     import { readBlog } from "$lib/remotes/blog.remote";
     import { page } from "$app/state";
     import liam_headshot from "$lib/assets/liam_headshot.jpeg";
+    import Meta from "$lib/components/common/Meta.svelte";
 
     const blog = $derived(await readBlog({ slug: page.params.blogSlug!! }));
 </script>
 
+<Meta
+	title={`Compeer Blog: {blog.title}`}
+	description={blog.description}
+	type="article"
+/>
 <article class='space-y-5 w-full'>
     <section class='space-y-3'>
         <h1 class='text-2xl font-semibold text-black'>{blog.title}</h1>

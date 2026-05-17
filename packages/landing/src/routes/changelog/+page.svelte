@@ -1,6 +1,12 @@
 <script lang='ts'>
     import changelogs from "$lib/data/changelog.json";
+    import Meta from "$lib/components/common/Meta.svelte";
 </script>
+
+<Meta
+	title="Compeer: Changelog"
+	description="See the latest updates and releases for the Compeer platform."
+/>
 
 {#if changelogs.length}
 
