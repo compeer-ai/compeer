@@ -13,3 +13,6 @@ export {default as Google} from "./Google.svelte";
 export {default as Keycloak} from "./Keycloak.svelte";
 export {default as Authelia} from "./Authelia.svelte";
 export {default as Authentik} from "./Authentik.svelte";
+export {default as Cloudflare} from "./Cloudflare.svelte";
+export {default as Railway} from "./Railway.svelte";
+export {default as Flyio} from "./Flyio.svelte"

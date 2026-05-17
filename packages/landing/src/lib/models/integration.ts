@@ -4,7 +4,7 @@ export interface Integration {
     name: string;
     description: string;
     slug: string;
-    tag: 'Harness' | "Inference" | "Developer Tool" | "Authentication"
+    tag: 'Harness' | "Inference" | "Developer Tool" | "Authentication" | "Platform"
     icon: keyof typeof icons
     content: string
 }

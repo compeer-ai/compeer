@@ -75,5 +75,26 @@
     "tag": "Authentication",
     "icon": "Authentik",
     "content": "[Authentik](https://goauthentik.io/) is an open-source identity provider. You can use Authentik as an OIDC provider to authenticate users in your Compeer deployment."
+  },
+  "cloudflare": {
+    "name": "Cloudflare",
+    "description": "Cloudflare's global cloud platform",
+    "tag": "Platform",
+    "icon": "Cloudflare",
+    "content": "[Cloudflare](https://www.cloudflare.com/) provides a global cloud platform. You can deploy Compeer as a Docker image on Cloudflare."
+  },
+  "railway": {
+    "name": "Railway",
+    "description": "Modern application deployment platform",
+    "tag": "Platform",
+    "icon": "Railway",
+    "content": "[Railway](https://railway.com/) is a modern application deployment platform. You can deploy Compeer as a Docker image on Railway."
+  },
+  "fly-io": {
+    "name": "Fly.io",
+    "description": "Application deployment platform close to users",
+    "tag": "Platform",
+    "icon": "Flyio",
+    "content": "[Fly.io](https://fly.io/) is an application deployment platform. You can deploy Compeer as a Docker image on Fly.io."
   }
 }
