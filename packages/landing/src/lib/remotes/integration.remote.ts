@@ -4,12 +4,9 @@ import { compile } from 'mdsvex';
 import integrations from "$lib/data/integrations.json";
 import type { Integration } from '$lib/models/integration';
 
-
-function _readIntegrations() {
+export const readIntegrations = prerender(() => {
 	return Object.entries(integrations).map(([slug, data]) => ({ slug, ...data })) as Integration[];
-}
-
-export const readIntegrations = prerender(_readIntegrations);
+});
 
 export const readIntegration = prerender(
 	v.object({
@@ -27,8 +24,6 @@ export const readIntegration = prerender(
 		};
 	},
 	{
-		inputs: async () => {
-			return readIntegrations()
-		}
+		inputs: () => Object.keys(integrations).map((key) => ({ slug: key }))
 	}
 );

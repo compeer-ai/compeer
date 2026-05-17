@@ -92,7 +92,6 @@
 			{/key}
 		</div>
 		</div>
-		
 		<span>stay up to date</span>
 	</h1>
     <p>The open-source context layer for the agenetic era.</p>
