@@ -1,8 +1,14 @@
 <script lang='ts'>
 	import { readBlogs } from "$lib/remotes/blog.remote";
+	import Meta from "$lib/components/common/Meta.svelte";
 
     const blogs = await readBlogs();
 </script>
+
+<Meta
+	title="Compeer: Blog"
+	description="Read about Compeer updates, tips, and the future of agentic coding."
+/>
 
 {#if blogs.length}
 <section class="border border-gray-300 rounded-lg divide-y divide-gray-300 shadow-sm shadow-gray-100 w-full flex flex-col bg-white">

@@ -7,6 +7,7 @@
 	import Npm from "$lib/components/icons/Npm.svelte";
 	import Opencode from "$lib/components/icons/Opencode.svelte";
 	import Button from "$lib/components/common/Button.svelte";
+	import Meta from "$lib/components/common/Meta.svelte";
 	import { animate } from "motion";
 	import { onDestroy, onMount } from "svelte";
 	import { ArrowRightLeft, Blocks, Boxes, Cable, Code, Lock, Share2 } from "@lucide/svelte";
@@ -74,6 +75,11 @@
 {#snippet github()}
 	<Github size={20} />
 {/snippet}
+
+<Meta
+	title="Compeer: The open-source context layer for the agenetic era"
+	description="Compeer is knowledge transfer for your AI coding assistant. Increase your agent's performance and save tokens."
+/>
 
 <main>
 <section class="space-y-3 text-center py-14">

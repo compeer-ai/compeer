@@ -6,10 +6,16 @@
 	import Icon from "$lib/components/common/Icon.svelte";
 	import { dispatcher } from "$lib/utilities/dispatcher";
 	import { type Toast } from "$lib/models/toast";
+	import Meta from "$lib/components/common/Meta.svelte";
     
     const doc = $derived(await readDoc({ slug: page.params.docsSlug!! }));
 </script>
 
+<Meta
+	title="Compeer Docs: {doc.title}"
+	description={doc.description}
+    type="article"
+/>
 <article class='space-y-5 w-full'>
     <section class='space-y-3'>
 		<button

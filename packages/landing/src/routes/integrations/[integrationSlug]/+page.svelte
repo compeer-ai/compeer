@@ -2,10 +2,15 @@
 	import { page } from "$app/state";
 	import { readIntegration } from "$lib/remotes/integration.remote";
     import * as icons from "$lib/components/icons";
+    import Meta from "$lib/components/common/Meta.svelte";
 
     const integration = await readIntegration({ slug: page.params.integrationSlug!! })
 </script>
 
+<Meta
+	title="Compeer Integrations: {integration.name}"
+	description={integration.tag}
+/>
 <div class="space-y-3">
     <div class="bg-white text-sm h-7 w-fit flex items-center justify-center px-2 rounded-full border border-gray-300 shadow-gray-100 shadow-sm">
         {integration.tag}
