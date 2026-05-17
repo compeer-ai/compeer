@@ -92,7 +92,6 @@
 			{/key}
 		</div>
 		</div>
-		
 		<span>stay up to date</span>
 	</h1>
     <p>The open-source context layer for the agenetic era.</p>
@@ -234,7 +233,7 @@
 <section class="py-7 flex items-center">
 	<div class="text-center space-y-2 w-full">
 		<h2 class="text-black text-lg font-semibold">Join the Community</h2>
-		<p>Let's grow this into something big! Follow us on <a href="https://github.com/compeer-ai" class="text-blue-700">GitHub</a>, star our <a href="https://github.com/compeer-ai/compeer" class="text-blue-700">repository</a>, or join us on <a href="https://github.com/compeer-ai/compeer/discussions" class="text-blue-700">GitHub discussions</a> or <a href="https://discord.com" class="text-blue-700">Discord</a>.</p>
+		<p>Let's grow this into something big! Follow us on <a href="https://github.com/compeer-ai" class="text-black underline">GitHub</a>, star our <a href="https://github.com/compeer-ai/compeer" class="text-black underline">repository</a>, or join us on <a href="https://github.com/compeer-ai/compeer/discussions" class="text-black underline">GitHub discussions</a> or <a href="https://discord.com" class="text-black underline">Discord</a>.</p>
 	</div>
 </section>
 </main>
