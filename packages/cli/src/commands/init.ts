@@ -4,7 +4,6 @@ import { callbackServer } from "../utilities/callbackServer";
 import { config } from "../utilities/config";
 import * as v from "valibot";
 import { pullCommandHanndler } from "./pull";
-import { spinner } from "../utilities/spinner";
 import yoctoSpinner from "yocto-spinner";
 
 export const initCommand = command({

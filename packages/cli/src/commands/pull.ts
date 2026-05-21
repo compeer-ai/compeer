@@ -3,7 +3,6 @@ import { backend } from "../utilities/backend";
 import { config } from "../utilities/config";
 import { skill } from "../utilities/skill";
 import type { Config } from "../models/config";
-import { spinner } from "../utilities/spinner";
 import yoctoSpinner from "yocto-spinner";
 
 export async function pullCommandHanndler(opts: Config) {
