@@ -3,12 +3,14 @@ import { backend } from "../utilities/backend";
 import { config } from "../utilities/config";
 import { skill } from "../utilities/skill";
 import type { Config } from "../models/config";
+import yoctoSpinner from "yocto-spinner";
 
 export async function pullCommandHanndler(opts: Config) {
   const { workspace, agent, jwt, server } = opts;
   try {
+    const spinner = yoctoSpinner({ text: "Pulling stores" });
+    spinner.start();
     const client = backend.client(server, jwt);
-
     const result = await client[":workspace"].stores.$get({
       param: {
         workspace,
@@ -17,11 +19,11 @@ export async function pullCommandHanndler(opts: Config) {
     if (result.ok) {
       const json = await result.json();
       await skill.syncAll(workspace, agent, json);
-      console.log(`Pulled ${json.length} stores`);
+      spinner.success(`Pulled ${json.length} stores`);
       return;
     }
     console.error(
-      `Failed to pull:`,
+      `Failed to pull`,
       JSON.stringify({
         status: result.status,
         statusText: result.statusText,
