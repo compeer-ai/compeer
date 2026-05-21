@@ -29,14 +29,14 @@
     class="space-y-5 p-7 h-screen-minus-header overflow-y-auto"
     use:animations.fadeInForward
   >
-    {#if config.flags.updateProjects}
+    {#if config.flags.updateStores}
       <Card title="Update Store" collaspable>
         <div class="space-y-3 p-5">
           <ProjectForm store={store.current} workspaceId={workspace.current.id} invalidate={updateInvalidate} />
         </div>
       </Card>
     {/if}
-    {#if config.flags.exportProjects}
+    {#if config.flags.exportStores}
       <Card title="Export Store" collaspable>
         <div class="p-5">
           <Button variant='wide' onclick={async () => {
@@ -48,7 +48,7 @@
         </div>
       </Card>
     {/if}
-    {#if config.flags.deleteProjects}
+    {#if config.flags.deleteStores}
       <Card title="Delete Store" collaspable>
         <div class="space-y-3 p-5">
           <p>

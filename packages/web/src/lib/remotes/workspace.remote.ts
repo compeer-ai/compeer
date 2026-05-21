@@ -62,7 +62,7 @@ const _exportWorkspace = enhancedValidatedMutation(
 	}
 );
 
-export const exportWorkspace = _exportWorkspace.command;
+export const exportWorkspaceCommand = _exportWorkspace.command;
 
 const _readWorkspaces = enhancedValidatedQuery(
 	'read_workspaces',
