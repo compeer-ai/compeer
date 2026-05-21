@@ -4,6 +4,8 @@ import { callbackServer } from "../utilities/callbackServer";
 import { config } from "../utilities/config";
 import * as v from "valibot";
 import { pullCommandHanndler } from "./pull";
+import { spinner } from "../utilities/spinner";
+import yoctoSpinner from "yocto-spinner";
 
 export const initCommand = command({
   name: "init",
@@ -29,6 +31,7 @@ export const initCommand = command({
       server,
     );
     await open(initilizationUrl);
+    const spinner = yoctoSpinner({ text: "Initilizing Compeer" });
     const redirectUri = await initilizationCallbackServer.wait();
     const jwt = redirectUri.searchParams.get("jwt");
     const agent = redirectUri.searchParams.get("agent");
@@ -53,7 +56,7 @@ export const initCommand = command({
       process.exit(1);
     }
     const createdConfig = await config.create({ ...result.output, server });
-    console.log("Succesfully initialized Compeer");
+    spinner.success("Succesfully initialized Compeer");
     await pullCommandHanndler(createdConfig)
   },
 });
