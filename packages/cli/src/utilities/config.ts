@@ -3,7 +3,6 @@ import { CONFIG_FILE } from "./constants";
 import { mkdir } from "fs/promises";
 import { join } from "path";
 import pkg from "../../package.json";
-import { version } from "os";
 
 await mkdir(join(process.cwd(), ".compeer"), { recursive: true });
 

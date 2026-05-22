@@ -50,7 +50,7 @@ export const initCommand = command({
     const result = await v.safeParseAsync(schmea, { jwt, agent, workspace });
     if (!result.success) {
       console.error(
-        "Invalidate parameters recieved by Compeer instance during initilization",
+        "Invalid parameters recieved by Compeer instance during initilization",
       );
       process.exit(1);
     }
