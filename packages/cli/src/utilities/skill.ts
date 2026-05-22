@@ -6,7 +6,7 @@ async function create(skillDir: string, name: string, description: string, body:
   const header = [
     "---",
     `name: ${name}`,
-    `description: ${description}`,
+    `description: Skill on how to use the compeer CLI to access the ${name} store, which is described as "${description}"`,
     "---",
     "",
   ].join("\n");
