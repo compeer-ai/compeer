@@ -41,7 +41,7 @@
         <div class="p-5">
           <Button variant='wide' onclick={async () => {
             const backup = await commandExportStore({ id: page.params.storeId!! });
-            download.start(backup, `${store.current.name}_backup.barque`)
+            download.start(backup, `${store.current.name}_store.compeer`)
           }}>
             Export
           </Button>

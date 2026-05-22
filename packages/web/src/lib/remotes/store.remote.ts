@@ -1,15 +1,16 @@
 import { errors } from '$lib/utilities/errors';
 import { loggers } from '$lib/utilities/loggers';
-import { StoreRepository, storeSchema } from '$lib/repository/storeRepository';
+import { insertStoreSchema, selectStoreSchema, StoreRepository } from '$lib/repository/storeRepository';
 import { getRequestEvent } from '$app/server';
 import { and, eq } from 'drizzle-orm';
 import { storeTable } from '$lib/utilities/schema';
 import * as v from 'valibot';
 import { enhancedValidatedMutation, enhancedValidatedQuery } from '../utilities/remote';
-import { captureSchema } from '$lib/repository/captureRepository';
+import { CaptureRepository, captureSchema } from '$lib/repository/captureRepository';
 import { commandCreateCaptures, readCaptures } from './capture.remote';
 
 const storeRepository = new StoreRepository();
+const captureRepository = new CaptureRepository();
 
 const _readStore = enhancedValidatedQuery(
 	'read_store',
@@ -88,7 +89,7 @@ const _deleteStore = enhancedValidatedMutation(
 
 		await _readStore.refresh(store);
 		await _readStoreByNameAndWorkspaceId.refresh(store);
-		await _readStores.refresh({...store, limit: undefined, offset: undefined});
+		await _readStores.refresh({ ...store, limit: undefined, offset: undefined });
 	}
 );
 
@@ -115,14 +116,14 @@ const _updateStore = enhancedValidatedMutation(
 
 export const formUpdateStore = _updateStore.form;
 
+
 const _createStore = enhancedValidatedMutation(
 	v.object({
+		...insertStoreSchema.entries,
 		name: v.pipe(
 			v.string(),
 			v.transform((input) => input.toLowerCase().replaceAll(' ', '-'))
 		),
-		description: v.nullish(v.string()),
-		workspaceId: v.string()
 	}),
 	'createStores',
 	async ({ validatedPayload }) => {
@@ -130,11 +131,32 @@ const _createStore = enhancedValidatedMutation(
 		const createdStore = await result.first();
 		loggers.data.info('Created Store');
 
-		await _readStores.refresh({...createdStore, limit: undefined, offset: undefined });
+		await _readStores.refresh({ ...createdStore, limit: undefined, offset: undefined });
 	}
 );
 
 export const formCreateStore = _createStore.form;
+
+const _createStoresWithCaptures = enhancedValidatedMutation(
+	v.object({
+		workspaceId: v.string(),
+		stores: v.array(v.object({
+			store: selectStoreSchema,
+			captures: v.array(captureSchema)
+		}))
+	}),
+	null,
+	async ({ validatedPayload }) => {
+		const stores = validatedPayload.stores.map(({ store }) => store);
+		const captures = validatedPayload.stores.flatMap(({ captures }) => captures);
+		await storeRepository.createMany(stores);
+		await captureRepository.createMany(captures);
+
+		await _readStores.refresh({ ...validatedPayload, limit: undefined, offset: undefined })
+	}
+);
+
+export const commandCreateStoresWithCaptures = _createStoresWithCaptures.command;
 
 const _exportStore = enhancedValidatedMutation(
 	v.object({
@@ -167,7 +189,7 @@ const _importStore = enhancedValidatedMutation(
 		const json = JSON.parse(text);
 		const schema = v.object({
 			store: v.pipe(
-				storeSchema,
+				selectStoreSchema,
 				v.transform((value) => ({ ...value, workspaceId: validatedPayload.workspaceId }))
 			),
 			captures: v.array(captureSchema)

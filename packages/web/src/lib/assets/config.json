@@ -9,6 +9,7 @@
 		"exportStores": true,
 		"deleteStores": true,
 
+		"importWorkspaces": true,
 		"createWorkspaces": true,
 		"updateWorkspaces": true,
 		"deleteWorkspaces": true,

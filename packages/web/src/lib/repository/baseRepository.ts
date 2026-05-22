@@ -1,6 +1,6 @@
 import { db } from '$lib/utilities/sqlite';
-import { and, eq, type InferInsertModel, type InferSelectModel } from 'drizzle-orm';
-import type { AnySQLiteTable, SQLiteTable, SQLiteColumn } from 'drizzle-orm/sqlite-core';
+import { and, eq, SQL, type InferInsertModel, type InferSelectModel } from 'drizzle-orm';
+import type { AnySQLiteTable, SQLiteTable, SQLiteColumn, SQLiteInsert } from 'drizzle-orm/sqlite-core';
 
 export class BaseRepoistory<T extends AnySQLiteTable, K> {
 	private table: T;

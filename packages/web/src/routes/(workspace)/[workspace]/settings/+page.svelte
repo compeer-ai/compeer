@@ -33,7 +33,7 @@
                 </p>
                 <Button variant='wide' onclick={async () => {
                     const backup = await exportWorkspaceCommand({ name: workspace.current.name });
-                    download.start(backup, `${workspace.current.name}_backup.barque`)
+                    download.start(backup, `${workspace.current.name}_workspace.compeer`)
                 }}>Export Workspace</Button>
             </div>
         </Card>
