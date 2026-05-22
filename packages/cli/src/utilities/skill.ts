@@ -2,20 +2,25 @@ import { type Store } from "$lib/repository/storeRepository";
 import { mkdir } from "fs/promises";
 import path from "path";
 
-async function sync(agent: string, workspace: string, store: Store) {
-  const skillName = store.name.toLocaleLowerCase().split(" ").join("-");
-  const skillPath = path.join(process.cwd(), `.${agent}/skills/${skillName}`);
-  await mkdir(skillPath, {
-    recursive: true,
-  });
+async function create(skillDir: string, name: string, description: string, body: string[]) {
   const header = [
     "---",
-    `name: ${skillName}`,
-    `description: ${store.description}`,
+    `name: ${name}`,
+    `description: ${description}`,
     "---",
     "",
   ].join("\n");
-  const body = [
+  const content = header + body.join('\n');
+  const skillPath = path.join(skillDir, name)
+  await mkdir(skillPath, {
+    recursive: true,
+  });
+  await Bun.write(path.join(skillPath, "SKILL.md"), content);
+}
+
+async function sync(agent: string, workspace: string, store: Store) {
+  const skillDir = path.join(process.cwd(), `.${agent}/skills`);
+  await create(skillDir, store.name, store.description!!,  [
     `# ${store.name}`,
     "",
     "## Search Knowledge Base",
@@ -23,7 +28,7 @@ async function sync(agent: string, workspace: string, store: Store) {
     "You can search this knowledge base using the `search` command. Example:",
     "",
     "```bash",
-    `compeer search "${workspace}" "${store.name}" \"Frontend design specification\"`,
+    `compeer search "${workspace}" "${store.name}" --query \"Frontend design specification\"`,
     "```",
     "",
     "## Add to Knowledge Base",
@@ -47,8 +52,7 @@ async function sync(agent: string, workspace: string, store: Store) {
     "```bash",
     `compeer capture  "${workspace}" "${store.name}" \"{'hello': 'world'}\"`,
     "```",
-  ].join("\n");
-  await Bun.write(path.join(skillPath, "SKILL.md"), header + body);
+  ])  
 }
 
 async function syncAll(workspace: string, agent: string, stores: Store[]) {
@@ -58,4 +62,5 @@ async function syncAll(workspace: string, agent: string, stores: Store[]) {
 export const skill = {
   sync,
   syncAll,
+  create
 };
