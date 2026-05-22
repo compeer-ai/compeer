@@ -1,13 +1,11 @@
-import { WorkspaceRepository } from '$lib/repository/workspaceRepository';
-import {
-	enhancedQuery,
-	enhancedValidatedMutation,
-	enhancedValidatedQuery
-} from '$lib/utilities/remote';
+import { WorkspaceRepository, workspaceSchema } from '$lib/repository/workspaceRepository';
+import { enhancedValidatedMutation, enhancedValidatedQuery } from '$lib/utilities/remote';
 import { workspaceTable } from '$lib/utilities/schema';
 import { eq } from 'drizzle-orm';
 import * as v from 'valibot';
-import { commandExportStore, readStores } from './store.remote';
+import { commandCreateStoresWithCaptures, commandExportStore, readStores } from './store.remote';
+import { selectStoreSchema } from '$lib/repository/storeRepository';
+import { captureSchema } from '$lib/repository/captureRepository';
 
 const workspaceRepository = new WorkspaceRepository();
 
@@ -53,8 +51,14 @@ const _exportWorkspace = enhancedValidatedMutation(
 	'exportWorkspaces',
 	async ({ validatedPayload }) => {
 		const workspace = await _readWorkspace.query({ name: validatedPayload.name });
-		const stores = await readStores({ workspaceId: workspace.id, limit: undefined, offset: undefined });
-		const storeExports = await Promise.all(stores.map((store) => commandExportStore({ id: store.id })));
+		const stores = await readStores({
+			workspaceId: workspace.id,
+			limit: undefined,
+			offset: undefined
+		});
+		const storeExports = await Promise.all(
+			stores.map((store) => commandExportStore({ id: store.id }))
+		);
 		return {
 			workspace,
 			stores: storeExports
@@ -62,7 +66,33 @@ const _exportWorkspace = enhancedValidatedMutation(
 	}
 );
 
-export const exportWorkspace = _exportWorkspace.command;
+export const exportWorkspaceCommand = _exportWorkspace.command;
+
+const _importWorkspace = enhancedValidatedMutation(
+	v.object({
+		file: v.blob()
+	}),
+	'importWorkspaces',
+	async ({ validatedPayload }) => {
+		const { file } = validatedPayload;
+		const text = await file.text();
+		const json = JSON.parse(text);
+		const schema = v.object({
+			workspace: workspaceSchema,
+			stores: v.array(
+				v.object({
+					store: selectStoreSchema,
+					captures: v.array(captureSchema)
+				})
+			)
+		});
+		const data = await v.parseAsync(schema, json);
+		await _createWorkspace.command({ name: data.workspace.name })
+		await commandCreateStoresWithCaptures({ ...data, workspaceId: data.workspace.id });
+
+		_readWorkspaces.refresh({ limit: undefined, offset: undefined })
+	}
+);
 
 const _readWorkspaces = enhancedValidatedQuery(
 	'read_workspaces',

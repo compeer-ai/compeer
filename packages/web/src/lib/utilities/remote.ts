@@ -105,7 +105,11 @@ export function enhancedValidatedMutation<S extends v.ObjectSchema<any, any>, T>
 
 	const _command = command(schema, async (validatedPayload: v.InferOutput<S>) => {
 		const { url } = getRequestEvent();
-		if (flag && !config[flag as keyof typeof config]) {
+		const user = await readUser();
+		if (flag && !config.readFlag(flag)) {
+			throw errors.badRequest(url, 'Remote function not enabled');
+		}
+		if (user && flag && !config.readUserScopedFlag(user.email, flag)) {
 			throw errors.badRequest(url, 'Remote function not enabled');
 		}
 		const result = fn({

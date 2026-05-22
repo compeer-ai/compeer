@@ -1,5 +1,5 @@
 import { db } from '$lib/utilities/sqlite';
-import { and, eq, type InferInsertModel, type InferSelectModel } from 'drizzle-orm';
+import { and, eq, SQL, type InferInsertModel, type InferSelectModel } from 'drizzle-orm';
 import type { AnySQLiteTable, SQLiteTable, SQLiteColumn } from 'drizzle-orm/sqlite-core';
 
 export class BaseRepoistory<T extends AnySQLiteTable, K> {
@@ -11,7 +11,7 @@ export class BaseRepoistory<T extends AnySQLiteTable, K> {
 		this.idColumn = idColumn;
 	}
 
-	async create(row: InferInsertModel<T>) {
+	async create<J extends InferInsertModel<T>>(row: J) {
 		const result = (await db.insert(this.table).values(row).returning()) as InferSelectModel<T>[];
 		function first() {
 			return result[0];
@@ -27,7 +27,7 @@ export class BaseRepoistory<T extends AnySQLiteTable, K> {
 		};
 	}
 
-	async createMany(rows: InferInsertModel<T>[]) {
+	async createMany<J extends InferInsertModel<T>[]>(rows: J) {
 		const result = (await db.insert(this.table).values(rows).returning()) as InferSelectModel<T>[];
 
 		function first() {
@@ -112,7 +112,7 @@ export class BaseRepoistory<T extends AnySQLiteTable, K> {
 		};
 	}
 
-	async update(id: K, row: Partial<InferInsertModel<T>>) {
+	async update<J extends Partial<InferInsertModel<T>>>(id: K, row: J) {
 		const result = (await db
 			.update(this.table)
 			.set(row)
@@ -132,7 +132,7 @@ export class BaseRepoistory<T extends AnySQLiteTable, K> {
 		};
 	}
 
-	async updateByPredicate(id: K, predicate: SQL, row: Partial<InferInsertModel<T>>) {
+	async updateByPredicate<J extends Partial<InferInsertModel<T>>>(id: K, predicate: SQL, row: J) {
 		const result = (await db
 			.update(this.table)
 			.set(row)
