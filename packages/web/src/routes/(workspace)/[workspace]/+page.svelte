@@ -38,9 +38,6 @@
 
 <Metadata title="Compeer: Home" />
 {#if stores?.ready && workspace.ready}
-<section class="space-y-5 p-7" use:animations.fadeInForward>
-  <div class="flex justify-between">
-    <Search bind:query placeholder="Search for a store..." onChange={() => paginationPage = 1} />
     {#snippet addProjectDrawerContent()}
       <div class="px-5">
         <ProjectForm workspaceId={workspace.current.id} {invalidate} />
@@ -51,6 +48,10 @@
         <ImportProjectForm workspaceId={workspace.current.id} {invalidate} />
       </div>
     {/snippet}
+<section class="space-y-5 p-7" use:animations.fadeInForward>
+  <div class="flex justify-between">
+    <Search bind:query placeholder="Search for a store..." onChange={() => paginationPage = 1} />
+
   <div class="space-x-2 flex">
     <button
       class="bg-primary-gradient hover:bg-primary flex h-12 cursor-pointer items-center space-x-2 rounded-lg px-3 text-white transition ease-in-out"
@@ -61,7 +62,7 @@
       <Icon icon={Plus}></Icon>
       <span>Add Store</span>
     </button>
-    {#if config.flags.importProjects}
+    {#if config.flags.importStores}
       <button
         class="bg-primary-gradient hover:bg-primary flex h-12 cursor-pointer items-center space-x-2 rounded-lg px-3 text-white transition ease-in-out"
         onclick={() => {

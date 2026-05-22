@@ -94,6 +94,8 @@ const _importWorkspace = enhancedValidatedMutation(
 	}
 );
 
+export const formImportWorkspace = _importWorkspace.form;
+
 const _readWorkspaces = enhancedValidatedQuery(
 	'read_workspaces',
 	null,

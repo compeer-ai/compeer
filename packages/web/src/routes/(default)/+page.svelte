@@ -3,13 +3,15 @@
 	import Paginated from "$lib/components/common/Paginated.svelte";
 	import Search from "$lib/components/common/Search.svelte";
 	import Workspace from "$lib/components/common/Workspace.svelte";
+	import ImportProjectForm from "$lib/components/forms/ImportProjectForm.svelte";
+	import ImportWorkspaceForm from "$lib/components/forms/ImportWorkspaceForm.svelte";
 	import WorkspaceForm from "$lib/components/forms/WorkspaceForm.svelte";
 	import { readWorkspaces } from "$lib/remotes/workspace.remote";
 	import type { Workspace as IWorkspace } from "$lib/repository/workspaceRepository";
 	import { animations } from "$lib/utilities/animations";
 	import { config } from "$lib/utilities/config";
 	import { dispatcher } from "$lib/utilities/dispatcher";
-	import { Plus } from "@lucide/svelte";
+	import { Download, Plus } from "@lucide/svelte";
 
   const workspaces = readWorkspaces({
     limit: undefined,
@@ -24,6 +26,7 @@
             workspace.name.toLowerCase().includes(query.toLowerCase()),
         );
     }
+  const invalidate = () => workspaces!!.refresh();
 </script>
 
 
@@ -33,9 +36,15 @@
       <WorkspaceForm />
     </div>
 {/snippet}
+  {#snippet importProjectDrawerContent()}
+  <div class="px-5">
+    <ImportWorkspaceForm {invalidate} />
+  </div>
+{/snippet}
 <div class="p-7 space-y-5" use:animations.fadeInForward>
   <div class="flex justify-between">
     <Search bind:query placeholder="Search for a workspace..." onChange={() => paginationPage = 1} />
+     <div class="flex space-x-2">
       {#if config.flags.createWorkspaces}
         <button
         class="bg-primary-gradient hover:bg-primary flex h-12 cursor-pointer items-center space-x-2 rounded-lg px-3 text-white transition ease-in-out"
@@ -47,6 +56,19 @@
         <span>Add Workspace</span>
       </button>
     {/if}
+     {#if config.flags.importWorkspaces}
+      <button
+        class="bg-primary-gradient hover:bg-primary flex h-12 cursor-pointer items-center space-x-2 rounded-lg px-3 text-white transition ease-in-out"
+        onclick={() => {
+          dispatcher.send("drawer", importProjectDrawerContent);
+        }}
+      >
+        <Icon icon={Download}></Icon>
+        <span>Import Workspace</span>
+      </button>
+    {/if}
+
+     </div>
   </div>
   {#snippet paginatedSubset(subset: IWorkspace[])}
     <div
