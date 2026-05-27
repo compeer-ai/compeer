@@ -25,6 +25,11 @@
             path: `/changelog`,
         },
         {
+            name: "Marketplace",
+            prefix: `/marketplace`,
+            path: `/marketplace`,
+        },
+        {
             name: "Blog",
             prefix: `/blog`,
             path: `/blog`,
