@@ -1,0 +1,7 @@
+{
+    "test": {
+        "name": "Test",
+        "description": "test",
+        "tags": ["React", "JavaScript", "Frontend"]
+    }
+}
