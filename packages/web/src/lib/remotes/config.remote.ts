@@ -20,7 +20,7 @@ const _updateTheme = enhancedValidatedMutation(
 	}
 );
 
-export const updateThemeCommand = _updateTheme.command;
+export const commandUpdateTheme = _updateTheme.command;
 
 const _readTheme = enhancedQuery('read_theme', null, async () => {
 	const result = await configRepository.readByPredicate(eq(configTable.key, 'theme'));

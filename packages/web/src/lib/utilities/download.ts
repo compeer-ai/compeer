@@ -1,5 +1,6 @@
-function start<T>(data: T, filename: string) {
-	const blob = new Blob([JSON.stringify(data)], { type: 'text/plain' });
+function start<T>(data: T, filename: string, type = 'text/plain') {
+	const content = typeof data === 'string' ? data : JSON.stringify(data);
+	const blob = new Blob([content], { type });
 	const url = URL.createObjectURL(blob);
 	const a = document.createElement('a');
 	a.href = url;

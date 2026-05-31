@@ -2,7 +2,7 @@
   import { page } from "$app/state";
   import classNames from "classnames";
   import Logo from "./Logo.svelte";
-  import { Home, Settings2 } from "@lucide/svelte";
+  import { Blocks, Home, Settings2 } from "@lucide/svelte";
   import Icon from "./Icon.svelte";
 	import type { User } from "$lib/models/user";
 
@@ -36,6 +36,19 @@
         >
           <Icon icon={Home} size={15} strokeWidth={2} />
           <span>Home</span>
+        </div>
+      </a>
+      <a href={`/integrations`}>
+        <div
+          class={classNames(
+            "space-x-2 flex items-center hover:text-black transition ease-in-out cursor-pointer",
+            {
+              "text-black": isActive(`/integrations`),
+            },
+          )}
+        >
+          <Icon icon={Blocks} size={15} strokeWidth={2} />
+          <span>Integrations</span>
         </div>
       </a>
       <a href={`/settings`}>
