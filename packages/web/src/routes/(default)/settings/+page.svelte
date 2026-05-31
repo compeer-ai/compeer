@@ -3,7 +3,7 @@
   import { animations } from "$lib/utilities/animations";
   import Metadata from "$lib/components/common/Metadata.svelte";
   import classNames from "classnames";
-  import { readTheme, updateThemeCommand } from "$lib/remotes/config.remote";
+  import { readTheme, commandUpdateTheme } from "$lib/remotes/config.remote";
   import { delay } from "$lib/utilities/delay";
   import { dispatcher } from "$lib/utilities/dispatcher";
 	import Button from "$lib/components/common/Button.svelte";
@@ -54,7 +54,7 @@
                 id: Date.now(),
               });
               await delay(350);
-              await updateThemeCommand({theme: theme.name});
+              await commandUpdateTheme({theme: theme.name});
               await invalidate();
               dispatcher.state("toast", {
                 level: "success",
