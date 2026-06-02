@@ -43,19 +43,11 @@ const _readCaptures = enhancedValidatedQuery(
 		const result = await captureRepository.readByPredicate(
 			eq(captureTable.storeId, validatedPayload.storeId),
 			validatedPayload.offset,
-			validatedPayload.limit,
-			{
-				id: captureTable.id,
-				created: captureTable.created,
-				content: captureTable.content,
-				type: captureTable.type,
-				url: captureTable.url,
-				enabled: captureTable.enabled,
-				storeId: captureTable.storeId
-			}
+			validatedPayload.limit
 		);
 		const captures = result.all();
-		return captures;
+		const formattedCaptures = captures.map(({ embedding, ...others }) => others);
+		return formattedCaptures;
 	}
 );
 

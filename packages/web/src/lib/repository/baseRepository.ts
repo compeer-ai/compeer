@@ -63,14 +63,11 @@ export class BaseRepoistory<T extends AnySQLiteTable, K> {
 		};
 	}
 
-	async readByPredicate(
-		predicate: SQL,
-		limit?: number,
-		offset?: number,
-		columns?: Record<string, any>
-	) {
-		const select = columns ? db.select(columns) : db.select();
-		let query = select.from(this.table as SQLiteTable).where(predicate);
+	async readByPredicate(predicate: SQL, limit?: number, offset?: number) {
+		let query = db
+			.select()
+			.from(this.table as SQLiteTable)
+			.where(predicate);
 		if (limit) {
 			query.limit(limit);
 		}
