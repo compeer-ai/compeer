@@ -11,7 +11,7 @@ import { oidc } from './oidc';
 import defaultConfiguration from '../assets/defaultConfig.json';
 import configuration from '../assets/config.json';
 import { describeRoute, openAPIRouteHandler, resolver, validator } from 'hono-openapi';
-import { storeSchema } from '$lib/repository/storeRepository';
+import { selectStoreSchema } from '$lib/repository/storeRepository';
 import { workspaceSchema } from '$lib/repository/workspaceRepository';
 
 export const API_KEYS = configuration.apiKeys || defaultConfiguration.apiKeys || [];
@@ -33,7 +33,7 @@ export const router = new Hono()
 				200: {
 					description: 'Successful response',
 					content: {
-						'application/json': { schema: resolver(storeSchema) }
+						'application/json': { schema: resolver(v.object( { alive: v.boolean() })) }
 					}
 				}
 			}
@@ -46,7 +46,7 @@ export const router = new Hono()
 				200: {
 					description: 'Successful response',
 					content: {
-						'application/json': { schema: resolver(storeSchema) }
+						'application/json': { schema: resolver(v.boolean()) }
 					}
 				}
 			}
@@ -71,10 +71,7 @@ export const router = new Hono()
 			description: "Get a workspace's stores",
 			responses: {
 				200: {
-					description: 'Successful response',
-					content: {
-						'application/json': { schema: resolver(storeSchema) }
-					}
+					description: 'Successful response'
 				}
 			}
 		}),async (c) => {
@@ -93,7 +90,7 @@ export const router = new Hono()
 				200: {
 					description: 'Successful response',
 					content: {
-						'application/json': { schema: resolver(storeSchema) }
+						'application/json': { schema: resolver(v.array(selectStoreSchema)) }
 					}
 				}
 			}
