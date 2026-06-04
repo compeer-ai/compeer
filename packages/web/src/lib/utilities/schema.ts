@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { sqliteTable, text, integer, customType, unique } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, customType, unique, index } from 'drizzle-orm/sqlite-core';
 
 const embedding = customType<{
 	data: number[];
@@ -62,7 +62,9 @@ export const captureTable = sqliteTable('capture', {
 			onDelete: 'cascade'
 		})
 		.notNull()
-});
+}, (table) => [
+	index("capture_storeId_idx").on(table.storeId)
+]);
 
 export const captureChunkTable = sqliteTable('capture_chunk', {
 	id: text()
