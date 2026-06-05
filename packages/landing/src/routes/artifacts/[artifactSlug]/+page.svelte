@@ -1,14 +1,12 @@
 <script lang='ts'>
-    import { type Artifact } from "$lib/models/artifact";
-
-    interface Props {
-        artifact: Artifact
-    }
-    const { artifact }: Props = $props();
+	import { page } from "$app/state";
+    import { readArtifact } from "$lib/remotes/artifact.remote"
+    const artifact = await readArtifact({
+        slug: page.params.artifactSlug!!
+    });
 </script>
 
-<a href="/artifacts/{artifact.name.replaceAll(' ', '-').toLowerCase()}">
-<div class="border border-gray-300 p-5 shadow-sm shadow-gray-100 bg-white rounded-lg space-y-3">
+<div class="space-y-3">
     <div class="space-y-2">
         <h2 class="text-lg font-semibold text-black">{artifact.name}</h2>
         <p>{artifact.description}</p>
@@ -21,4 +19,3 @@
         {/each}
     </div>
 </div>
-</a>
