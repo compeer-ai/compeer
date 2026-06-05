@@ -6,7 +6,7 @@ export const readArtifacts = prerender(() => {
     return Object.entries(artifacts).map(([slug, data]) => ({ slug, ...data }));
 });
 
-export const readIntegration = prerender(
+export const readArtifact = prerender(
     v.object({
         slug: v.string()
     }),
