@@ -38,12 +38,14 @@
 		"vitest": "^3.2.4"
 	},
 	"dependencies": {
+		"@ai-sdk/openai-compatible": "^2.0.48",
 		"@compeer-ai/scrape": "workspace:*",
 		"@hono/standard-validator": "^0.2.2",
 		"@huggingface/transformers": "^3.8.1",
 		"@libsql/client": "^0.17.0",
 		"@lucide/svelte": "^0.525.0",
 		"@valibot/to-json-schema": "^1.7.0",
+		"ai": "^6.0.197",
 		"classnames": "^2.5.1",
 		"drizzle-orm": "^0.45.2",
 		"drizzle-valibot": "^0.4.2",
