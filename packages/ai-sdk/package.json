@@ -12,6 +12,9 @@
     "ai": "^6.0.183"
   },
   "dependencies": {
-    "@ai-sdk/openai-compatible": "^2.0.47"
+    "@ai-sdk/openai-compatible": "^2.0.47",
+    "@ai-sdk/valibot": "^2.0.28",
+    "@compeer-ai/sdk": "^0.1.0",
+    "valibot": "^1.4.1"
   }
 }

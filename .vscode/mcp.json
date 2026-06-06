@@ -1,9 +1,0 @@
-{
-	"servers": {
-		"tests": {
-			"command": "./packages/cli/build/barque",
-			"args": ["mcp"]
-		}
-	},
-	"inputs": []
-}
