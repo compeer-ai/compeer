@@ -1,6 +1,6 @@
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import { Compeer} from '@compeer-ai/sdk';
-import { tool } from 'ai';
+import { tool, ToolLoopAgent, type LanguageModel } from 'ai';
 import * as v from 'valibot';
 import { valibotSchema } from '@ai-sdk/valibot';
 
@@ -21,7 +21,17 @@ export function createCompeerProvider(args: { compeer: Compeer, workspace: strin
     })
 }
 
-export function createTools(compeer: Compeer) {
+export function createAgent(args: { compeer: Compeer, model: LanguageModel }) {
+  const { compeer, model } = args;
+  const tools = createTools({ compeer });
+  return new ToolLoopAgent({
+    model,
+    tools
+  })
+}
+
+export function createTools(args: { compeer: Compeer }) {
+  const { compeer } = args;
   const Type = {
   	Text: 'text',
   	Data: 'data',
