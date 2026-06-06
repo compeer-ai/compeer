@@ -21,15 +21,17 @@ export function createCompeerProvider(args: { compeer: Compeer, workspace: strin
     })
 }
 
-export function createAgent(compeer: Compeer, model: LanguageModel) {
-  const tools = createTools(compeer);
+export function createAgent(args: { compeer: Compeer, model: LanguageModel }) {
+  const { compeer, model } = args;
+  const tools = createTools({ compeer });
   return new ToolLoopAgent({
     model,
     tools
   })
 }
 
-export function createTools(compeer: Compeer) {
+export function createTools(args: { compeer: Compeer }) {
+  const { compeer } = args;
   const Type = {
   	Text: 'text',
   	Data: 'data',
