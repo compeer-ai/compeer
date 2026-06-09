@@ -74,7 +74,7 @@ export function enhancedValidatedQuery<S extends v.ObjectSchema<any, any>, T>(
 
 	return {
 		query: _query,
-		refresh,
+		refresh
 	};
 }
 

@@ -27,20 +27,26 @@ const Type = {
 } as const;
 
 export const router = new Hono()
-	.get('/alive', describeRoute({
+	.get(
+		'/alive',
+		describeRoute({
 			description: "Get a workspace's stores",
 			responses: {
 				200: {
 					description: 'Successful response',
 					content: {
-						'application/json': { schema: resolver(v.object( { alive: v.boolean() })) }
+						'application/json': { schema: resolver(v.object({ alive: v.boolean() })) }
 					}
 				}
 			}
-		}),(c) => {
-		return c.json({ alive: true });
-	})
-	.get('/oidc', describeRoute({
+		}),
+		(c) => {
+			return c.json({ alive: true });
+		}
+	)
+	.get(
+		'/oidc',
+		describeRoute({
 			description: "Get a workspace's stores",
 			responses: {
 				200: {
@@ -50,9 +56,11 @@ export const router = new Hono()
 					}
 				}
 			}
-		}), (c) => {
-		return c.json(oidc.enabled());
-	})
+		}),
+		(c) => {
+			return c.json(oidc.enabled());
+		}
+	)
 	.use(async (c, next) => {
 		if (!oidc.enabled()) return next();
 		const apiKey = c.req.header('X-Api-Key');
@@ -67,21 +75,25 @@ export const router = new Hono()
 
 		return next();
 	})
-	.get('/backup', describeRoute({
+	.get(
+		'/backup',
+		describeRoute({
 			description: "Get a workspace's stores",
 			responses: {
 				200: {
 					description: 'Successful response'
 				}
 			}
-		}),async (c) => {
-		const sqliteDir = fileURLToPath(new URL('../../../', import.meta.url));
-		const dbPath = join(sqliteDir, 'sqlite.db');
-		const buffer = await Bun.file(dbPath).arrayBuffer();
-		c.header('Content-Type', 'application/octet-stream');
-		c.header('Content-Disposition', `attachment; filename="sqlite.db"`);
-		return c.body(buffer);
-	})
+		}),
+		async (c) => {
+			const sqliteDir = fileURLToPath(new URL('../../../', import.meta.url));
+			const dbPath = join(sqliteDir, 'sqlite.db');
+			const buffer = await Bun.file(dbPath).arrayBuffer();
+			c.header('Content-Type', 'application/octet-stream');
+			c.header('Content-Disposition', `attachment; filename="sqlite.db"`);
+			return c.body(buffer);
+		}
+	)
 	.get(
 		'/:workspace/stores',
 		describeRoute({

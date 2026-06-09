@@ -87,10 +87,10 @@ const _importWorkspace = enhancedValidatedMutation(
 			)
 		});
 		const data = await v.parseAsync(schema, json);
-		await _createWorkspace.command({ name: data.workspace.name })
+		await _createWorkspace.command({ name: data.workspace.name });
 		await commandCreateStoresWithCaptures({ ...data, workspaceId: data.workspace.id });
 
-		_readWorkspaces.refresh({ limit: undefined, offset: undefined })
+		_readWorkspaces.refresh({ limit: undefined, offset: undefined });
 	}
 );
 

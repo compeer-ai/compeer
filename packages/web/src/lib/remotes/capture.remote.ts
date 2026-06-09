@@ -43,11 +43,18 @@ const _readCaptures = enhancedValidatedQuery(
 		const result = await captureRepository.readByPredicate(
 			eq(captureTable.storeId, validatedPayload.storeId),
 			validatedPayload.offset,
-			validatedPayload.limit
+			validatedPayload.limit,
+			{
+				id: captureTable.id,
+				created: captureTable.created,
+				content: captureTable.content,
+				type: captureTable.type,
+				url: captureTable.url,
+				enabled: captureTable.enabled,
+				storeId: captureTable.storeId
+			}
 		);
-		const captures = result.all();
-		const formattedCaptures = captures.map(({ embedding, ...others }) => others);
-		return formattedCaptures;
+		return result.all();
 	}
 );
 
@@ -213,7 +220,7 @@ const _deleteCapture = enhancedValidatedMutation(
 	null,
 	async ({ validatedPayload }) => {
 		const result = await captureRepository.deleteById(validatedPayload.id);
-		const createdCapture = result.first()
+		const createdCapture = result.first();
 		loggers.data.info('Deleted capture');
 
 		await _readCaptures.refresh({ ...createdCapture, offset: undefined, limit: undefined });

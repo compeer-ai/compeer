@@ -102,7 +102,7 @@ async function projectContext(query: string, workspace: string, store: string) {
 
 	const formattedResult = result.rows.map((row: any) => ({
 		captureId: row.captureId as string,
-		content: row.content as string,
+		content: row.content as string
 	}));
 	return formattedResult;
 }

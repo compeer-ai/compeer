@@ -4,7 +4,7 @@ services:
       context: /app
       dockerfile: packages/web/Dockerfile
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       ORIGIN: http://localhost:3000
       SQLITE: http://turso:8080
@@ -15,7 +15,7 @@ services:
   turso:
     image: ghcr.io/tursodatabase/libsql-server:latest
     ports:
-      - "8080:8080"
+      - '8080:8080'
     volumes:
       - turso_data:/var/lib/sqld
 
