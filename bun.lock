@@ -66,6 +66,9 @@
     "packages/extension": {
       "name": "@compeer-ai/extension",
       "version": "0.0.0",
+      "dependencies": {
+        "@compeer-ai/scrape": "workspace:*",
+      },
       "devDependencies": {
         "@wxt-dev/auto-icons": "^1.1.1",
         "typescript": "^5.9.3",
