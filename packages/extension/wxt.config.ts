@@ -8,7 +8,8 @@ export default defineConfig({
     description: "Capture to Compeer on the fly",
     permissions: [
       'activeTab',
-      'tabs',    
+      'tabs',
+      'storage',
     ],
     host_permissions: [
       '<all_urls>',
