@@ -3,6 +3,12 @@ import { scrape } from "@compeer-ai/scrape";
 export default defineContentScript({
   matches: ['*'],
   async main() {
+    let instanceUrl = (await browser.storage.sync.get('server')).server;
+    if (!instanceUrl) {
+      instanceUrl = window.prompt('Enter your Compeer instance URL:', 'http://localhost:3000');
+      if (!instanceUrl) return;
+      await browser.storage.sync.set({ server: instanceUrl });
+    }
     const selection = window.getSelection();
     let selectedContent = "";
     let urlCapture = false;
@@ -23,7 +29,7 @@ export default defineContentScript({
       return btoa(Array.from(new TextEncoder().encode(s)).map(b => String.fromCharCode(b)).join(''))
         .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
     }
-    const url = new URL("http://localhost:3000/capture")
+    const url = new URL(`${instanceUrl}/capture`)
     if (urlCapture) {
       url.searchParams.set('url', toBase64url(window.location.href));
     }
