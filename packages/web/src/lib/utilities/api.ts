@@ -8,13 +8,17 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { jwt } from './jwt';
 import { oidc } from './oidc';
+import { secrets } from './secrets';
 import defaultConfiguration from '../assets/defaultConfig.json';
 import configuration from '../assets/config.json';
 import { describeRoute, openAPIRouteHandler, resolver, validator } from 'hono-openapi';
 import { selectStoreSchema } from '$lib/repository/storeRepository';
 import { workspaceSchema } from '$lib/repository/workspaceRepository';
 
-export const API_KEYS = configuration.apiKeys || defaultConfiguration.apiKeys || [];
+export const API_KEYS = [
+	...(configuration.apiKeys || defaultConfiguration.apiKeys || []),
+	...(secrets.safeRead('COMPEER_API_KEYS')?.split(',').map((k) => k.trim()) || [])
+].filter((k) => k && k !== '$API_KEY');
 
 const paramsSchema = v.object({
 	workspace: v.string()
@@ -54,11 +58,16 @@ export const router = new Hono()
 		return c.json(oidc.enabled());
 	})
 	.use(async (c, next) => {
-		if (!oidc.enabled()) return next();
 		const apiKey = c.req.header('X-Api-Key');
 		if (apiKey) {
 			return API_KEYS.includes(apiKey) ? next() : c.status(401);
 		}
+
+		if (!oidc.enabled()) {
+			if (API_KEYS.length > 0) return c.status(401);
+			return next();
+		}
+
 		const authorization = c.req.header('Authorization');
 		if (!authorization) return c.status(401);
 		const bearer = authorization.replace('Bearer ', '');

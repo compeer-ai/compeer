@@ -1,0 +1,4 @@
+## 2025-05-15 - [API Authentication Bypass when OIDC Disabled]
+**Vulnerability:** The API authentication middleware completely bypassed all security checks if OIDC was not enabled, even if API keys were configured in the application configuration.
+**Learning:** Logic that depends on a "main" authentication provider (like OIDC) being enabled can inadvertently bypass secondary or fallback authentication methods (like API keys) if the "enabled" check is used as a short-circuit for the entire middleware.
+**Prevention:** Always structure authentication middleware to check for any provided credentials (like API keys) before checking the status of the primary provider. Ensure that a "secure by default" posture is maintained—if any authentication method is configured, the request must satisfy one of them before being allowed through.
