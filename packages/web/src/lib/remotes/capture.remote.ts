@@ -42,12 +42,22 @@ const _readCaptures = enhancedValidatedQuery(
 	async ({ validatedPayload }) => {
 		const result = await captureRepository.readByPredicate(
 			eq(captureTable.storeId, validatedPayload.storeId),
+			validatedPayload.limit,
 			validatedPayload.offset,
-			validatedPayload.limit
+			// Performance Optimization: Exclude the large 'embedding' blob (F32_BLOB, 384 dimensions)
+			// to reduce database I/O, network transfer, and memory usage during list operations.
+			{
+				id: captureTable.id,
+				created: captureTable.created,
+				content: captureTable.content,
+				type: captureTable.type,
+				url: captureTable.url,
+				enabled: captureTable.enabled,
+				storeId: captureTable.storeId
+			}
 		);
 		const captures = result.all();
-		const formattedCaptures = captures.map(({ embedding, ...others }) => others);
-		return formattedCaptures;
+		return captures;
 	}
 );
 

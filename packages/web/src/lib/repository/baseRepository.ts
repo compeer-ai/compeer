@@ -63,9 +63,17 @@ export class BaseRepoistory<T extends AnySQLiteTable, K> {
 		};
 	}
 
-	async readByPredicate(predicate: SQL, limit?: number, offset?: number) {
-		let query = db
-			.select()
+	/**
+	 * Reads rows from the table based on a predicate, with optional limit, offset, and column selection.
+	 * Providing the `columns` parameter can significantly improve performance by avoiding fetching large blobs (e.g., embeddings).
+	 */
+	async readByPredicate(
+		predicate: SQL,
+		limit?: number,
+		offset?: number,
+		columns?: Record<string, any>
+	) {
+		let query = (columns ? db.select(columns) : db.select())
 			.from(this.table as SQLiteTable)
 			.where(predicate);
 		if (limit) {
