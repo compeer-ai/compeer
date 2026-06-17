@@ -15,9 +15,6 @@ export function mcpServer(config: Config, workspace: string, store?: string) {
     },
     {
       adapter: new ValibotJsonSchemaAdapter(),
-      capabilities: {
-        tools: {},
-      },
       instructions: `Use this server for finding context within ${workspace}${store ? `/${store}` : ''}`
     },
   );
