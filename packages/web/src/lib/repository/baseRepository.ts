@@ -63,10 +63,6 @@ export class BaseRepoistory<T extends AnySQLiteTable, K> {
 		};
 	}
 
-	/**
-	 * Reads rows from the table based on a predicate, with optional limit, offset, and column selection.
-	 * Providing the `columns` parameter can significantly improve performance by avoiding fetching large blobs (e.g., embeddings).
-	 */
 	async readByPredicate(
 		predicate: SQL,
 		limit?: number,

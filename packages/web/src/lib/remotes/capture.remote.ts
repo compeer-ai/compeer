@@ -44,8 +44,6 @@ const _readCaptures = enhancedValidatedQuery(
 			eq(captureTable.storeId, validatedPayload.storeId),
 			validatedPayload.limit,
 			validatedPayload.offset,
-			// Performance Optimization: Exclude the large 'embedding' blob (F32_BLOB, 384 dimensions)
-			// to reduce database I/O, network transfer, and memory usage during list operations.
 			{
 				id: captureTable.id,
 				created: captureTable.created,
