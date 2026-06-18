@@ -25,6 +25,26 @@ const router = new Hono().post('/*', validator('param', paramsSchema), async (c)
 		}
 	);
 
+	mcpServer.tool(
+		{
+			name: 'search',
+			description: 'Search for context that might be useful',
+			schema: v.object({
+				query: v.string()
+			}),
+			outputSchema: v.object({
+				result: v.array(
+					v.object({
+						content: v.string()
+					})
+				)
+			})
+		},
+		async ({ query }) => {
+			throw new Error('Not Yet Implemented');
+		}
+	);
+
 	const transport = new HttpTransport(mcpServer);
 	const response = await transport.respond(c.req.raw);
 	if (!response) return c.status(500);
