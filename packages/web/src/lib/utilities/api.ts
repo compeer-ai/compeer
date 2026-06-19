@@ -8,13 +8,10 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { jwt } from './jwt';
 import { oidc } from './oidc';
-import defaultConfiguration from '../assets/defaultConfig.json';
-import configuration from '../assets/config.json';
+import { apiKeys as API_KEYS } from './config';
 import { describeRoute, openAPIRouteHandler, resolver, validator } from 'hono-openapi';
 import { selectStoreSchema } from '$lib/repository/storeRepository';
 import { workspaceSchema } from '$lib/repository/workspaceRepository';
-
-export const API_KEYS = configuration.apiKeys || defaultConfiguration.apiKeys || [];
 
 const paramsSchema = v.object({
 	workspace: v.string()
@@ -27,20 +24,26 @@ const Type = {
 } as const;
 
 export const router = new Hono()
-	.get('/alive', describeRoute({
+	.get(
+		'/alive',
+		describeRoute({
 			description: "Get a workspace's stores",
 			responses: {
 				200: {
 					description: 'Successful response',
 					content: {
-						'application/json': { schema: resolver(v.object( { alive: v.boolean() })) }
+						'application/json': { schema: resolver(v.object({ alive: v.boolean() })) }
 					}
 				}
 			}
-		}),(c) => {
-		return c.json({ alive: true });
-	})
-	.get('/oidc', describeRoute({
+		}),
+		(c) => {
+			return c.json({ alive: true });
+		}
+	)
+	.get(
+		'/oidc',
+		describeRoute({
 			description: "Get a workspace's stores",
 			responses: {
 				200: {
@@ -50,15 +53,25 @@ export const router = new Hono()
 					}
 				}
 			}
-		}), (c) => {
-		return c.json(oidc.enabled());
-	})
-	.use(async (c, next) => {
-		if (!oidc.enabled()) return next();
-		const apiKey = c.req.header('X-Api-Key');
-		if (apiKey) {
-			return API_KEYS.includes(apiKey) ? next() : c.status(401);
+		}),
+		(c) => {
+			return c.json(oidc.enabled());
 		}
+	)
+	.use(async (c, next) => {
+		const apiKey = c.req.header('X-Api-Key');
+		if (API_KEYS.length > 0 && apiKey) {
+			if (API_KEYS.includes(apiKey)) {
+				return next();
+			}
+			return c.json({ error: 'Unauthorized' }, 401);
+		}
+
+		if (!oidc.enabled()) {
+			if (API_KEYS.length > 0) return c.json({ error: 'Unauthorized' }, 401);
+			return next();
+		}
+
 		const authorization = c.req.header('Authorization');
 		if (!authorization) return c.status(401);
 		const bearer = authorization.replace('Bearer ', '');
@@ -67,21 +80,25 @@ export const router = new Hono()
 
 		return next();
 	})
-	.get('/backup', describeRoute({
+	.get(
+		'/backup',
+		describeRoute({
 			description: "Get a workspace's stores",
 			responses: {
 				200: {
 					description: 'Successful response'
 				}
 			}
-		}),async (c) => {
-		const sqliteDir = fileURLToPath(new URL('../../../', import.meta.url));
-		const dbPath = join(sqliteDir, 'sqlite.db');
-		const buffer = await Bun.file(dbPath).arrayBuffer();
-		c.header('Content-Type', 'application/octet-stream');
-		c.header('Content-Disposition', `attachment; filename="sqlite.db"`);
-		return c.body(buffer);
-	})
+		}),
+		async (c) => {
+			const sqliteDir = fileURLToPath(new URL('../../../', import.meta.url));
+			const dbPath = join(sqliteDir, 'sqlite.db');
+			const buffer = await Bun.file(dbPath).arrayBuffer();
+			c.header('Content-Type', 'application/octet-stream');
+			c.header('Content-Disposition', `attachment; filename="sqlite.db"`);
+			return c.body(buffer);
+		}
+	)
 	.get(
 		'/:workspace/stores',
 		describeRoute({

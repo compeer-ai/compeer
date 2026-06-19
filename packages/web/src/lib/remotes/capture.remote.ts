@@ -213,7 +213,7 @@ const _deleteCapture = enhancedValidatedMutation(
 	null,
 	async ({ validatedPayload }) => {
 		const result = await captureRepository.deleteById(validatedPayload.id);
-		const createdCapture = result.first()
+		const createdCapture = result.first();
 		loggers.data.info('Deleted capture');
 
 		await _readCaptures.refresh({ ...createdCapture, offset: undefined, limit: undefined });

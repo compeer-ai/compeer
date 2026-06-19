@@ -20,7 +20,13 @@ function readUserScopedFlag(email: string, flag: keyof typeof configuration.flag
 	return userScopedFlags[flag];
 }
 
-export const apiKeys = configuration.apiKeys;
+const envApiKeysString =
+	typeof Bun !== 'undefined' ? Bun.env.COMPEER_API_KEYS : process.env.COMPEER_API_KEYS;
+const envApiKeys = envApiKeysString ? envApiKeysString.split(',') : [];
+
+export const apiKeys = [...(configuration.apiKeys || []), ...envApiKeys]
+	.map((key) => key.trim())
+	.filter((key) => key !== '$API_KEY' && key !== '');
 
 export const config = {
 	url: configuration.url,

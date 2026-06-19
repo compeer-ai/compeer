@@ -1,6 +1,10 @@
 import { errors } from '$lib/utilities/errors';
 import { loggers } from '$lib/utilities/loggers';
-import { insertStoreSchema, selectStoreSchema, StoreRepository } from '$lib/repository/storeRepository';
+import {
+	insertStoreSchema,
+	selectStoreSchema,
+	StoreRepository
+} from '$lib/repository/storeRepository';
 import { getRequestEvent } from '$app/server';
 import { and, eq } from 'drizzle-orm';
 import { storeTable } from '$lib/utilities/schema';
@@ -116,14 +120,13 @@ const _updateStore = enhancedValidatedMutation(
 
 export const formUpdateStore = _updateStore.form;
 
-
 const _createStore = enhancedValidatedMutation(
 	v.object({
 		...insertStoreSchema.entries,
 		name: v.pipe(
 			v.string(),
 			v.transform((input) => input.toLowerCase().replaceAll(' ', '-'))
-		),
+		)
 	}),
 	'createStores',
 	async ({ validatedPayload }) => {
@@ -140,10 +143,12 @@ export const formCreateStore = _createStore.form;
 const _createStoresWithCaptures = enhancedValidatedMutation(
 	v.object({
 		workspaceId: v.string(),
-		stores: v.array(v.object({
-			store: selectStoreSchema,
-			captures: v.array(captureSchema)
-		}))
+		stores: v.array(
+			v.object({
+				store: selectStoreSchema,
+				captures: v.array(captureSchema)
+			})
+		)
 	}),
 	null,
 	async ({ validatedPayload }) => {
@@ -152,7 +157,7 @@ const _createStoresWithCaptures = enhancedValidatedMutation(
 		await storeRepository.createMany(stores);
 		await captureRepository.createMany(captures);
 
-		await _readStores.refresh({ ...validatedPayload, limit: undefined, offset: undefined })
+		await _readStores.refresh({ ...validatedPayload, limit: undefined, offset: undefined });
 	}
 );
 

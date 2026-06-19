@@ -47,24 +47,26 @@ export const configTable = sqliteTable('config', {
 	value: text({ mode: 'json' }).$type<unknown>().notNull().default({})
 });
 
-export const captureTable = sqliteTable('capture', {
-	id: text()
-		.primaryKey()
-		.$defaultFn(() => Bun.randomUUIDv7()),
-	created: text().default(sql`(CURRENT_DATE)`),
-	content: text().notNull(),
-	embedding: embedding({ dimensions: 384 }).notNull(),
-	type: text().notNull(),
-	url: text(),
-	enabled: integer({ mode: 'boolean' }).default(true).notNull(),
-	storeId: text()
-		.references(() => storeTable.id, {
-			onDelete: 'cascade'
-		})
-		.notNull()
-}, (table) => [
-	index("capture_storeId_idx").on(table.storeId)
-]);
+export const captureTable = sqliteTable(
+	'capture',
+	{
+		id: text()
+			.primaryKey()
+			.$defaultFn(() => Bun.randomUUIDv7()),
+		created: text().default(sql`(CURRENT_DATE)`),
+		content: text().notNull(),
+		embedding: embedding({ dimensions: 384 }).notNull(),
+		type: text().notNull(),
+		url: text(),
+		enabled: integer({ mode: 'boolean' }).default(true).notNull(),
+		storeId: text()
+			.references(() => storeTable.id, {
+				onDelete: 'cascade'
+			})
+			.notNull()
+	},
+	(table) => [index('capture_storeId_idx').on(table.storeId)]
+);
 
 export const captureChunkTable = sqliteTable('capture_chunk', {
 	id: text()

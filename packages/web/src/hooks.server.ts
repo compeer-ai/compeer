@@ -45,7 +45,7 @@ export const init: ServerInit = async () => {
  / __)(  _  )(  \/  )(  _ \( ___)( ___)(  _ \
 ( (__  )(_)(  )    (  )___/ )__)  )__)  )   /
  \___)(_____)(_/\/\_)(__)  (____)(____)(_)\_)
-	`)
+	`);
 	if (pkg.version != config.version) {
 		loggers.infra.error(
 			`Configuration file version does not match that of docker image. Configuration version: ${config.version}. Docker image version: ${pkg.version}.`
