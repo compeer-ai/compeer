@@ -6,6 +6,7 @@ import { McpServer } from 'tmcp';
 import { ValibotJsonSchemaAdapter } from '@tmcp/adapter-valibot';
 import pkg from '../../../package.json';
 import { errors } from './errors';
+import { readSearchCaptures } from '$lib/remotes/capture.remote';
 
 const paramsSchema = v.object({
 	workspace: v.string(),
@@ -41,7 +42,18 @@ const router = new Hono().post('/*', validator('param', paramsSchema), async (c)
 			})
 		},
 		async ({ query }) => {
-			throw new Error('Not Yet Implemented');
+			const result = await readSearchCaptures({ store, workspace, query });
+			return {
+				content: [
+					{
+						type: 'text',
+						text: JSON.stringify(result)
+					}
+				],
+				structuredContent: {
+					result
+				}
+			};
 		}
 	);
 
