@@ -11,6 +11,7 @@
 	import Button from "$lib/components/common/Button.svelte";
 	import { download } from "$lib/utilities/download";
   import { config } from "$lib/utilities/config";
+	import Input from "$lib/components/common/Input.svelte";
 
   const workspace = $derived(readWorkspace({
     name: page.params.workspace!!
@@ -29,6 +30,12 @@
     class="space-y-5 p-7 h-screen-minus-header overflow-y-auto"
     use:animations.fadeInForward
   >
+    <Card title="Store MCP" collaspable>
+      <div class="space-y-3 p-5">
+        <p>Connect your coding assistant via MCP to this store. Use the streamable HTTP url below.</p>
+        <Input name="mcpUrl" placeholder="MCP URL" value={`${page.url.origin}/store/${workspace.current.name}/${store.current.name}/mcp`} label="MCP URL" />
+      </div>
+    </Card>
     {#if config.flags.updateStores}
       <Card title="Update Store" collaspable>
         <div class="space-y-3 p-5">
