@@ -42,8 +42,8 @@ const _readStores = enhancedValidatedQuery(
 	async ({ validatedPayload }) => {
 		const result = await storeRepository.readByPredicate(
 			eq(storeTable.workspaceId, validatedPayload.workspaceId),
-			validatedPayload.offset,
-			validatedPayload.limit
+			validatedPayload.limit,
+			validatedPayload.offset
 		);
 		const stores = result.all();
 		return stores;

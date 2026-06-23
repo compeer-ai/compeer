@@ -40,14 +40,23 @@ const _readCaptures = enhancedValidatedQuery(
 		limit: v.optional(v.number())
 	}),
 	async ({ validatedPayload }) => {
+		// Optimization: Exclude the large 'embedding' column from the database query.
+		// This reduces I/O and memory usage when listing captures.
 		const result = await captureRepository.readByPredicate(
 			eq(captureTable.storeId, validatedPayload.storeId),
+			validatedPayload.limit,
 			validatedPayload.offset,
-			validatedPayload.limit
+			{
+				id: captureTable.id,
+				created: captureTable.created,
+				content: captureTable.content,
+				type: captureTable.type,
+				url: captureTable.url,
+				enabled: captureTable.enabled,
+				storeId: captureTable.storeId
+			}
 		);
-		const captures = result.all();
-		const formattedCaptures = captures.map(({ embedding, ...others }) => others);
-		return formattedCaptures;
+		return result.all();
 	}
 );
 
