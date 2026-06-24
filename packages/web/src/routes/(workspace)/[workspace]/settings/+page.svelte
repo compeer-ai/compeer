@@ -9,6 +9,7 @@
 	import { config } from "$lib/utilities/config";
 	import Button from "$lib/components/common/Button.svelte";
 	import { download } from "$lib/utilities/download";
+	import Input from "$lib/components/common/Input.svelte";
 
     const workspace = $derived(readWorkspace({
         name: page.params.workspace!!
@@ -25,6 +26,12 @@
             </div>
         </Card>
     {/if}
+    <Card title="Workspace MCP" collaspable>
+      <div class="space-y-3 p-5">
+        <p>Connect your coding assistant via MCP to this workspace. Use the streamable HTTP url below.</p>
+        <Input name="mcpUrl" placeholder="MCP URL" value={`${page.url.origin}/workspace/${workspace.current.name}/mcp`} label="MCP URL" />
+      </div>
+    </Card>
     {#if config.flags.exportWorkspaces}
         <Card title="Export Workspace" collaspable>
  <div class="space-y-3 p-5">
