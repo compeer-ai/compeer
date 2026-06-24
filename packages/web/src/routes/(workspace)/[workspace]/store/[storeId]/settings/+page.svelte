@@ -33,7 +33,7 @@
     <Card title="Store MCP" collaspable>
       <div class="space-y-3 p-5">
         <p>Connect your coding assistant via MCP to this store. Use the streamable HTTP url below.</p>
-        <Input name="mcpUrl" placeholder="MCP URL" value={`${page.url.origin}/store/${workspace.current.name}/${store.current.name}/mcp`} label="MCP URL" />
+        <Input name="mcpUrl" placeholder="MCP URL" value={`${page.url.origin}/workspace/${workspace.current.name}/store/${store.current.name}/mcp`} label="MCP URL" />
       </div>
     </Card>
     {#if config.flags.updateStores}
