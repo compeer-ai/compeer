@@ -17,8 +17,16 @@
   <div class="space-y-5">
     <Card title="Bookmarklet" collaspable>
         <div class="p-5 space-y-3">
-            <p>Capture web pages or selections of web pages as you browse</p>
+            <p>Capture web pages or selections of web pages as you browse using a bookmarklet</p>
             <Button variant='wide' onclick={() => download.start(bookmarklet.current, 'bookmarklet.js', 'application/javascript')}>Download</Button>
+        </div>
+    </Card>
+    <Card title="Extension" collaspable>
+        <div class="p-5 space-y-3">
+            <p>Capture web pages or selections of web pages as you browse using our Chrome extension</p>
+            <a href="https://compeer.dev/extension.zip">
+              <Button variant='wide'>Download</Button>
+            </a>
         </div>
     </Card>
   </div>
