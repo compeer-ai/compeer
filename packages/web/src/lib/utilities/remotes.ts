@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import { captureRouter } from '$lib/routers/captureRouter';
+import { configRouter } from '$lib/routers/configRouter';
 import { integrationRouter } from '$lib/routers/integrationRouter';
 import { jwtRouter } from '$lib/routers/jwtRouter';
 import { storeRouter } from '$lib/routers/storeRouter';
