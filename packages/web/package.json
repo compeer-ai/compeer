@@ -46,7 +46,7 @@
 		"@lucide/svelte": "^0.525.0",
 		"@tmcp/adapter-valibot": "^0.1.6",
 		"@tmcp/transport-http": "^0.8.6",
-		"@valibot/to-json-schema": "^1.7.0",
+		"@valibot/to-json-schema": "^1.7.1",
 		"ai": "^6.0.197",
 		"classnames": "^2.5.1",
 		"drizzle-orm": "^0.45.2",
