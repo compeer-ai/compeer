@@ -16,17 +16,51 @@ const Type = {
 	url: 'url'
 } as const;
 
+export const readSearchCapturesParamsSchema = v.object({
+	store: v.optional(v.string()),
+	workspace: v.string(),
+	query: v.string()
+});
+export const readCapturesParamsSchema = v.object({
+	storeId: v.string(),
+	offset: v.optional(v.number()),
+	limit: v.optional(v.number())
+});
+export const createCaptureSchema = v.object({
+	type: v.enum(Type),
+	content: v.string(),
+	storeId: v.string()
+});
+export const createCapturesSchema = v.object({
+	captures: v.array(captureSchema)
+});
+export const updateCaptureEnabledSchema = v.object({
+	id: v.string(),
+	enabled: v.boolean(),
+	storeId: v.string()
+});
+export const updateCaptureSchema = v.object({
+	id: v.string(),
+	enabled: v.optional(v.boolean(), false),
+	originalContent: v.string(),
+	originalUrl: v.optional(v.string()),
+	content: v.string(),
+	storeId: v.string(),
+	type: v.enum(Type)
+});
+export const deleteCaptureSchema = v.object({
+	id: v.string(),
+	storeId: v.string()
+});
+export const deleteCapturesSchema = v.object({
+	captureIds: v.array(v.string()),
+	storeId: v.string()
+});
+
 export const captureRouter = new Hono()
 	.get(
 		'read_search_captures',
-		validator(
-			'param',
-			v.object({
-				store: v.optional(v.string()),
-				workspace: v.string(),
-				query: v.string()
-			})
-		),
+		validator('param', readSearchCapturesParamsSchema),
 		async (ctx) => {
 			const { query, store, workspace } = ctx.req.valid('param');
 			const context = store
@@ -37,14 +71,7 @@ export const captureRouter = new Hono()
 	)
 	.get(
 		'read_captures',
-		validator(
-			'param',
-			v.object({
-				storeId: v.string(),
-				offset: v.optional(v.number()),
-				limit: v.optional(v.number())
-			})
-		),
+		validator('param', readCapturesParamsSchema),
 		async (ctx) => {
 			const validatedPayload = ctx.req.valid('param');
 			const result = await captureRepository.readByPredicate(
@@ -59,14 +86,7 @@ export const captureRouter = new Hono()
 	)
 	.post(
 		'create_capture',
-		validator(
-			'json',
-			v.object({
-				type: v.enum(Type),
-				content: v.string(),
-				storeId: v.string()
-			})
-		),
+		validator('json', createCaptureSchema),
 		async (ctx) => {
 			const validatedPayload = ctx.req.valid('json');
 			const { type, storeId } = validatedPayload;
@@ -102,12 +122,7 @@ export const captureRouter = new Hono()
 	)
 	.post(
 		'create_captures',
-		validator(
-			'json',
-			v.object({
-				captures: v.array(captureSchema)
-			})
-		),
+		validator('json', createCapturesSchema),
 		async (ctx) => {
 			const validatedPayload = ctx.req.valid('json');
 			const result = await captureRepository.createMany(validatedPayload.captures as Capture[]);
@@ -116,14 +131,7 @@ export const captureRouter = new Hono()
 	)
 	.patch(
 		'update_capture_enabled',
-		validator(
-			'json',
-			v.object({
-				id: v.string(),
-				enabled: v.boolean(),
-				storeId: v.string()
-			})
-		),
+		validator('json', updateCaptureEnabledSchema),
 		async (ctx) => {
 			const validatedPayload = ctx.req.valid('json');
 			await captureRepository.updateByPredicate(
@@ -138,18 +146,7 @@ export const captureRouter = new Hono()
 	)
 	.put(
 		'update_capture',
-		validator(
-			'json',
-			v.object({
-				id: v.string(),
-				enabled: v.optional(v.boolean(), false),
-				originalContent: v.string(),
-				originalUrl: v.optional(v.string()),
-				content: v.string(),
-				storeId: v.string(),
-				type: v.enum(Type)
-			})
-		),
+		validator('json', updateCaptureSchema),
 		async (ctx) => {
 			const validatedPayload = ctx.req.valid('json');
 			const { content, enabled, id, type } = validatedPayload;
@@ -209,13 +206,7 @@ export const captureRouter = new Hono()
 	)
 	.delete(
 		'delete_capture',
-		validator(
-			'json',
-			v.object({
-				id: v.string(),
-				storeId: v.string()
-			})
-		),
+		validator('json', deleteCaptureSchema),
 		async (ctx) => {
 			const validatedPayload = ctx.req.valid('json');
 			await captureRepository.deleteById(validatedPayload.id);
@@ -225,13 +216,7 @@ export const captureRouter = new Hono()
 	)
 	.delete(
 		'delete_captures',
-		validator(
-			'json',
-			v.object({
-				captureIds: v.array(v.string()),
-				storeId: v.string()
-			})
-		),
+		validator('json', deleteCapturesSchema),
 		async (ctx) => {
 			const validatedPayload = ctx.req.valid('json');
 			await captureRepository.deleteByPredicate(
