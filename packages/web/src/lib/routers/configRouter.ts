@@ -5,7 +5,6 @@ import { eq } from 'drizzle-orm';
 import * as v from 'valibot';
 import { validator } from 'hono-openapi';
 
-export const readConfigParamsSchema = v.object({});
 export const updateThemeSchema = v.object({
 	theme: v.string()
 });
@@ -13,7 +12,7 @@ export const updateThemeSchema = v.object({
 const configRepository = new ConfigRepository();
 
 export const configRouter = new Hono()
-	.get('read_theme', validator('param', readConfigParamsSchema), async (ctx) => {
+	.get('read_theme', async (ctx) => {
 		const result = await configRepository.readByPredicate(eq(configTable.key, 'theme'));
 		const config = result.first();
 		if (config) {
