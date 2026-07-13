@@ -9,8 +9,6 @@ import { captureTable, storeTable } from '$lib/utilities/schema';
 import { and, eq } from 'drizzle-orm';
 import * as v from 'valibot';
 import { validator } from 'hono-openapi';
-import { toJsonSchema} from '@valibot/to-json-schema'
-import { form, type JsonSchema } from "$lib/utilities/form";
 
 const storeRepository = new StoreRepository();
 const captureRepository = new CaptureRepository();
