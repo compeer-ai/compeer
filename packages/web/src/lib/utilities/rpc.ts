@@ -10,6 +10,21 @@ function cacheKey(path: string, params: unknown): string {
 const factory = createFactory();
 
 export const rpc = {
+	impureQuery<I extends GenericSchema, O>(schema: I, fn: (args: InferOutput<I>) => O | Promise<O>) {
+		const handler = factory.createHandlers(
+			async (
+				ctx: Context<{}, string, { in: { param: InferOutput<I> }; out: { param: InferOutput<I> } }>
+			) => {
+				if (ctx.req.method !== 'GET') throw new Error('Invalid RPC method');
+				const params = ctx.req.valid('param') as InferOutput<I>;
+				const result = await Promise.resolve(fn(params));
+				return ctx.json({ result });
+			}
+		);
+
+		return { handler, schema, fn, validator: validator('param', schema) };
+	},
+
 	query<I extends GenericSchema, O>(
 		path: string,
 		schema: I,

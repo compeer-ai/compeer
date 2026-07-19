@@ -76,8 +76,7 @@ export const readCapturesRpc = await rpc.query(
 	}
 );
 
-export const readSearchCapturesRpc = await rpc.query(
-	'/read_search_captures',
+export const readSearchCapturesRpc = await rpc.impureQuery(
 	v.object({
 		store: v.optional(v.string()),
 		workspace: v.string(),
@@ -108,7 +107,7 @@ export const updateCaptureEnabledRpc = await rpc.mutation(
 	(args) => [...readCapturesRpc.invalidate(args)]
 );
 
-export const createCaptures = await rpc.mutation(
+export const createCapturesRpc = await rpc.mutation(
 	'create_capture',
 	v.object({
 		captures: v.array(captureSchema)
@@ -218,7 +217,7 @@ export const captureRouter = new Hono()
 	.get('/read_captures', ...readSearchCapturesRpc.handler)
 	.get('/read_captures', ...readCapturesRpc.handler)
 	.post('/create_capture', ...createCaptureRpc.handler)
-	.post('/create_captures', ...createCaptures.handler)
+	.post('/create_captures', ...createCapturesRpc.handler)
 	.put('/update_capture_enabled', ...updateCaptureEnabledRpc.handler)
 	.put('/update_capture', ...updateCaptureRpc.handler)
 	.delete('/delete_capture', ...deleteCaptureRpc.handler)
