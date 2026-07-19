@@ -53,7 +53,8 @@ export const createCaptureRpc = await rpc.mutation(
 		}
 		loggers.data.info('Created capture');
 		return createdCapture;
-	}
+	},
+	(args) => [...readCapturesRpc.invalidate(args)]
 );
 
 export const readCapturesRpc = await rpc.query(
@@ -74,10 +75,6 @@ export const readCapturesRpc = await rpc.query(
 		return formattedCaptures;
 	}
 );
-
-export const createCapturesSchema = v.object({
-	captures: v.array(captureSchema)
-});
 
 export const readSearchCapturesRpc = await rpc.query(
 	'/read_search_captures',
@@ -111,13 +108,19 @@ export const updateCaptureEnabledRpc = await rpc.mutation(
 	(args) => [...readCapturesRpc.invalidate(args)]
 );
 
-export const createCaptures = await rpc.mutation('create_capture', createCapturesSchema, async (args) => {
-	const result = await captureRepository.createMany(args.captures);
-	return result.first();
-});
+export const createCaptures = await rpc.mutation(
+	'create_capture',
+	v.object({
+		captures: v.array(captureSchema)
+	}),
+	async (args) => {
+		const result = await captureRepository.createMany(args.captures);
+		return result.first();
+	}
+);
 
 export const updateCaptureRpc = await rpc.mutation(
-	'update_capture',
+	'/update_capture',
 	v.object({
 		id: v.string(),
 		enabled: v.optional(v.boolean(), false),
@@ -177,11 +180,12 @@ export const updateCaptureRpc = await rpc.mutation(
 		}
 		loggers.data.info('Updated capture');
 		return { success: true };
-	}
+	},
+	(args) => [...readCapturesRpc.invalidate(args)]
 );
 
 export const deleteCaptureRpc = await rpc.mutation(
-	'delete_capture',
+	'/delete_capture',
 	v.object({
 		id: v.string(),
 		storeId: v.string()
@@ -190,7 +194,8 @@ export const deleteCaptureRpc = await rpc.mutation(
 		await captureRepository.deleteById(args.id);
 		loggers.data.info('Deleted capture');
 		return { success: true };
-	}
+	},
+	(args) => [...readCapturesRpc.invalidate(args)]
 );
 
 export const deleteCapturesRpc = await rpc.mutation(
@@ -204,7 +209,8 @@ export const deleteCapturesRpc = await rpc.mutation(
 			and(eq(captureTable.storeId, args.storeId), inArray(captureTable.id, args.captureIds))!!
 		);
 		return { success: true };
-	}
+	},
+	(args) => [...readCapturesRpc.invalidate(args)]
 );
 
 export const captureRouter = new Hono()
