@@ -46,6 +46,7 @@ async function read<T>(key: string, onVacant: () => Promise<T> | T) {
 
 function invalidate(...keys: string[]) {
 	keys.forEach((key) => lru.delete(key));
+	return keys;
 }
 
 export const cache = {

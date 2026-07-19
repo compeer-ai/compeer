@@ -6,8 +6,9 @@
 	import Modal from "$lib/components/common/Modal.svelte";
 	import Toast from "$lib/components/common/Toast.svelte";
 	import type { LayoutProps } from "./$types";
-    import "../app.css";
+  import "../app.css";
 	import { readTheme } from "$lib/remotes/config.remote";
+
 
     let drawer = $state<Snippet | null>(null);
     let drawerExpanded = $state<Snippet | null>();
