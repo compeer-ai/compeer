@@ -1,10 +1,8 @@
 {
   "name": "compeer-ai",
   "private": true,
-  "scripts": {
-    "docker:build:web": "docker build -f packages/web/Dockerfile . -t compeer:0.0.1"
-  },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "apps/*"
   ]
 }

@@ -1,1 +1,0 @@
-CREATE INDEX `capture_storeId_idx` ON `capture` (`storeId`);
