@@ -10,6 +10,7 @@
       "dependencies": {
         "@compeer-ai/rpc": "workspace:*",
         "hono": "^4.13.3",
+        "valibot": "^1.4.2",
       },
       "devDependencies": {
         "@types/bun": "latest",

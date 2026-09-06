@@ -1,9 +1,8 @@
-import { Hono } from 'hono'
+import { Hono } from "hono";
+import { memoryRpc } from "./rpc/memoryRpc";
 
-const app = new Hono()
+const app = new Hono();
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
+app.route("/memory", memoryRpc);
 
-export default app
+export default app;
