@@ -1,5 +1,5 @@
 {
-  "name": "@compeer/rpc",
+  "name": "@compeer-ai/rpc",
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
