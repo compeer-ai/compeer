@@ -1,31 +1,84 @@
-import { rpc as createRpc } from "@compeer-ai/rpc";
 import { Hono } from "hono";
 import * as v from "valibot";
-import type { Dependencies } from "../index";
-import { memoryTable } from "../utilities/schema";
+import { eq, like } from "drizzle-orm";
+import type { Rpc } from "../index";
+import { Memory, memoryTable, selectMemorySchema } from "../utilities/schema";
+import { RPCError } from "@compeer-ai/rpc";
 
-const rpc = createRpc<Dependencies>((e) => {
-  console.error(e.message);
-});
+export function memoryRpc(rpc: Rpc) {
+  const postCapture = rpc.mutation(
+    "POST",
+    "/capture",
+    {
+      inputSchema: v.object({
+        text: v.string(),
+        data: v.union([
+          v.string(),
+          v.number(),
+          v.boolean(),
+          v.array(v.unknown()),
+          v.record(v.string(), v.unknown()),
+        ]),
+        store: v.string(),
+      }),
+      outputSchema: selectMemorySchema,
+    },
+    async ({ store, text, data }, { database }) => {
+      const exists = await database.exists(store);
+      if (!exists) throw new RPCError(404, `Store ${store} not found`);
+      const replica = database.connection(store);
+      const [result] = await replica
+        .insert(memoryTable)
+        .values({ data, text })
+        .returning();
+      return result as Memory;
+    },
+  );
 
-export const postCaptureText = rpc.mutation(
-  "POST",
-  "/capture/text",
-  {
-    inputSchema: v.object({
-      store: v.string(),
-      text: v.string(),
-    }),
-    outputSchema: v.object({
-      store: v.string(),
-      text: v.string(),
-    }),
-  },
-  async ({ text, store }, { database }) => {
-    const replica = database.connection(store);
-    await replica.insert(memoryTable).values({ text }).execute();
-    return { text, store };
-  },
-);
+  const getCaptureSearch = rpc.impureQuery(
+    "/capture/search",
+    {
+      inputSchema: v.object({
+        text: v.string(),
+        store: v.string(),
+      }),
+      outputSchema: v.array(selectMemorySchema),
+    },
+    async ({ text, store }, { database }) => {
+      const exists = await database.exists(store);
+      if (!exists) throw new RPCError(404, `Store ${store} not found`);
+      const replica = database.connection(store);
+      const captures = await replica
+        .select()
+        .from(memoryTable)
+        .where(like(memoryTable.text, text));
+      return captures as Memory[];
+    },
+  );
 
-export const memoryRoute = new Hono().route("/", postCaptureText.app);
+  rpc.mutation(
+    "DELETE",
+    "/capture",
+    {
+      inputSchema: v.object({
+        store: v.string(),
+        id: v.pipe(v.string(), v.uuid()),
+      }),
+      outputSchema: v.object({
+        id: v.pipe(v.string(), v.uuid()),
+      }),
+    },
+    async ({ id, store }, { database }) => {
+      const exists = await database.exists(store);
+      if (!exists) throw new RPCError(404, `Store ${store} not found`);
+
+      const replica = database.connection(store);
+      await replica.delete(memoryTable).where(eq(memoryTable.id, id));
+      return { id };
+    },
+  );
+
+  return new Hono()
+    .route("/", postCapture.app)
+    .route("/", getCaptureSearch.app);
+}

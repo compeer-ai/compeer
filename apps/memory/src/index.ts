@@ -1,22 +1,26 @@
 import { Hono } from "hono";
-import { memoryRoute } from "./rpc/memoryRpc";
-import { config as _config } from "./utilities/config";
-import { createServices, type Services } from "./utilities/services";
-import { storeRoute } from "./rpc/storeRpc";
+import { createRpc } from "@compeer-ai/rpc";
+import { config } from "./utilities/config";
+import { memoryRpc } from "./rpc/memoryRpc";
+import { storeRpc } from "./rpc/storeRpc";
+import { database } from "./utilities/database";
 
-export type Config = typeof _config;
+function services(config: Config) {
+  return {
+    database: database(config),
+  };
+}
+
+export type Config = typeof config;
+export type Services = ReturnType<typeof services>;
 export type Dependencies = Config & Services;
+export type Rpc = ReturnType<typeof createRpc<Config, Services>>;
 
 export function memory(config: Config) {
+  const rpc = createRpc(config, services, (e) => console.error(e.message));
   const app = new Hono<{ Variables: Dependencies }>();
-  app.use((c, next) => {
-    const deps = { ...config, ...createServices(config) } as Dependencies;
-    Object.entries(deps).forEach(([key, value]) => {
-      c.set(key as keyof Dependencies, value as Dependencies[keyof Dependencies]);
-    });
-    return next();
-  });
-  app.route("/memory", memoryRoute);
-  app.route("/store", storeRoute);
+  app.use(rpc.injection);
+  app.route("/memory", memoryRpc(rpc));
+  app.route("/store", storeRpc(rpc));
   return app;
 }
