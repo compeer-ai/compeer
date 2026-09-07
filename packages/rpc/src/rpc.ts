@@ -39,7 +39,7 @@ export class RPCError extends Error {
   }
 }
 
-export function rpc(onError: (e: Error) => void) {
+export function rpc<T extends object>(onError: (e: Error) => void) {
   const validationHook: Hook<unknown, Env, string> = (result, c) => {
     if (!result.success) {
       onError(
@@ -63,12 +63,15 @@ export function rpc(onError: (e: Error) => void) {
       inputSchema: I;
       outputSchema: K;
     },
-    fn: (args: InferOutput<I>) => InferOutput<K> | Promise<InferOutput<K>>,
+    fn: (
+      args: InferOutput<I>,
+      dependencies: T,
+    ) => InferOutput<K> | Promise<InferOutput<K>>,
   ) {
     const handler = factory.createHandlers(
       async (
         ctx: Context<
-          {},
+          { Variables: T },
           string,
           { in: { query: InferOutput<I> }; out: { query: InferOutput<I> } }
         >,
@@ -76,7 +79,7 @@ export function rpc(onError: (e: Error) => void) {
         if (ctx.req.method !== "GET") throw new Error("Invalid RPC method");
         const params = ctx.req.valid("query") as InferOutput<I>;
         try {
-          const result = await Promise.resolve(fn(params));
+          const result = await Promise.resolve(fn(params, ctx.var as T));
           return ctx.json({ result });
         } catch (e: unknown) {
           if (e instanceof RPCError) {
@@ -124,13 +127,14 @@ export function rpc(onError: (e: Error) => void) {
     },
     fn: (
       args: InferOutput<I>,
+      dependencies: T,
       ctx: Context,
     ) => InferOutput<K> | Promise<InferOutput<K>>,
   ) {
     const handler = factory.createHandlers(
       async (
         ctx: Context<
-          {},
+          { Variables: T },
           string,
           { in: { query: InferOutput<I> }; out: { query: InferOutput<I> } }
         >,
@@ -149,7 +153,9 @@ export function rpc(onError: (e: Error) => void) {
           namespaces[namespace] = [...existingKeys, key];
         }
         try {
-          const result = await cache.read(key, () => fn(params, ctx));
+          const result = await cache.read(key, () =>
+            fn(params, ctx.var as T, ctx),
+          );
           return ctx.json(result);
         } catch (e: unknown) {
           if (e instanceof RPCError) {
@@ -205,14 +211,15 @@ export function rpc(onError: (e: Error) => void) {
     },
     fn: (
       args: InferOutput<I>,
+      dependencies: T,
       ctx: Context,
     ) => InferOutput<K> | Promise<InferOutput<K>>,
-    invalidate?: (args: InferOutput<I>) => string[],
+    invalidate?: (args: InferOutput<I>, dependencies: T) => string[],
   ) {
     const handler = factory.createHandlers(
       async (
         ctx: Context<
-          { Variables: { invalidations: string[] } },
+          { Variables: { invalidations: string[] & T } },
           string,
           { in: { json: InferOutput<I> }; out: { json: InferOutput<K> } }
         >,
@@ -225,8 +232,8 @@ export function rpc(onError: (e: Error) => void) {
           throw new Error("Invalid RPC method");
         const json = ctx.req.valid("json") as InferOutput<I>;
         try {
-          const result = await Promise.resolve(fn(json, ctx));
-          invalidate?.(json);
+          const result = await Promise.resolve(fn(json, ctx.var as T, ctx));
+          invalidate?.(json, ctx.var as T);
           return ctx.json(result);
         } catch (e: unknown) {
           if (e instanceof RPCError) {
