@@ -6,6 +6,7 @@ import { describeRoute, resolver, validator } from "hono-openapi";
 import { createFactory } from "hono/factory";
 import type { StatusCode } from "hono/utils/http-status";
 import type { Hook } from "@hono/standard-validator";
+import sade from "sade";
 
 export const queryInt = () => v.pipe(v.string(), v.transform(Number));
 
@@ -44,17 +45,25 @@ export type Rpc<C extends object, S extends object> = ReturnType<
 >;
 
 export function createRpc<C extends object, S extends object>(
+  name: string,
   config: C,
   createServices: (config: C) => S,
   onError: (e: Error) => void,
 ) {
   type Dependencies = C & S;
+  const cli = sade(`${name}-cli`);
 
   const deps = { ...config, ...createServices(config) } as Dependencies;
 
-  const injection: MiddlewareHandler<{ Variables: Dependencies }> = (c, next) => {
+  const injection: MiddlewareHandler<{ Variables: Dependencies }> = (
+    c,
+    next,
+  ) => {
     Object.entries(deps).forEach(([key, value]) => {
-      c.set(key as keyof Dependencies, value as Dependencies[keyof Dependencies]);
+      c.set(
+        key as keyof Dependencies,
+        value as Dependencies[keyof Dependencies],
+      );
     });
     return next();
   };
@@ -98,7 +107,9 @@ export function createRpc<C extends object, S extends object>(
         if (ctx.req.method !== "GET") throw new Error("Invalid RPC method");
         const params = ctx.req.valid("query") as InferOutput<I>;
         try {
-          const result = await Promise.resolve(fn(params, ctx.var as Dependencies));
+          const result = await Promise.resolve(
+            fn(params, ctx.var as Dependencies),
+          );
           return ctx.json({ result });
         } catch (e: unknown) {
           if (e instanceof RPCError) {
@@ -251,7 +262,9 @@ export function createRpc<C extends object, S extends object>(
           throw new Error("Invalid RPC method");
         const json = ctx.req.valid("json") as InferOutput<I>;
         try {
-          const result = await Promise.resolve(fn(json, ctx.var as unknown as Dependencies, ctx));
+          const result = await Promise.resolve(
+            fn(json, ctx.var as unknown as Dependencies, ctx),
+          );
           invalidate?.(json, ctx.var as unknown as Dependencies);
           return ctx.json(result);
         } catch (e: unknown) {
@@ -304,5 +317,6 @@ export function createRpc<C extends object, S extends object>(
     impureQuery,
     injection,
     deps,
+    cli,
   };
 }
