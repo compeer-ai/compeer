@@ -17,7 +17,9 @@ export type Dependencies = Config & Services;
 export type Rpc = ReturnType<typeof createRpc<Config, Services>>;
 
 export function memory(config: Config) {
-  const rpc = createRpc(config, services, (e) => console.error(e.message));
+  const rpc = createRpc("memory", config, services, (e) =>
+    console.error(e.message),
+  );
   const app = new Hono<{ Variables: Dependencies }>();
   app.use(rpc.injection);
   app.route("/memory", memoryRpc(rpc));
