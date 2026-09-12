@@ -11,8 +11,8 @@ export const indexTable = sqliteTable("memory", {
   id: text()
     .primaryKey()
     .$defaultFn(() => Bun.randomUUIDv7()),
-  name: text().unique(),
-  artifact: text(),
+  name: text().unique().notNull(),
+  artifact: text().notNull(),
 });
 
 export const insertIndexTable = createInsertSchema(indexTable);
