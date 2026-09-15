@@ -16,8 +16,13 @@ export function artifacts(config: Pick<Config, "artifactsPath">) {
     await unlink(source);
   }
 
+  function update(currentArtifact: string, newArtifact: string) {
+    return Promise.all([_delete(currentArtifact), create(newArtifact)]);
+  }
+
   return {
     create,
+    update,
     delete: _delete,
   };
 }
