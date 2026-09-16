@@ -50,5 +50,30 @@ export function indexRpc(rpc: Rpc) {
     },
   );
 
-  return new Hono().route("/", postIndex.app).route("/", deleteIndex.app);
+  const updateIndex = rpc.mutation(
+    "PUT",
+    "/",
+    {
+      inputSchema: v.object({
+        name: v.string(),
+        path: v.string(),
+      }),
+      outputSchema: selectIndexTable,
+    },
+    async ({ name, path }, { database, artifacts }) => {
+      const connection = database.connection();
+      const [index] = await connection
+        .update(indexTable)
+        .set({ path })
+        .where(eq(indexTable.name, name))
+        .returning();
+      if (!index) {
+        throw new RPCError(400, "Index not found");
+      }
+      await artifacts.update(index.path, path);
+      return index;
+    },
+  );
+
+  return new Hono().route("/", postIndex.app).route("/", deleteIndex.app).route("/", updateIndex.app);
 }
