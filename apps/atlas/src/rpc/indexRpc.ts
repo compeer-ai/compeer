@@ -18,7 +18,7 @@ export function indexRpc(rpc: Rpc) {
     },
     async ({ path, name }, { database, artifacts }) => {
       const connection = database.connection();
-      const artifact = await artifacts.create(path);
+      await artifacts.create(path);
       const [index] = await connection
         .insert(indexTable)
         .values({ name, path })
@@ -46,31 +46,6 @@ export function indexRpc(rpc: Rpc) {
         throw new RPCError(400, "Index not found");
       }
       await artifacts.delete(index.path);
-      return index;
-    },
-  );
-
-  const updateIndex = rpc.mutation(
-    "PUT",
-    "/",
-    {
-      inputSchema: v.object({
-        name: v.string(),
-        path: v.string(),
-      }),
-      outputSchema: selectIndexTable,
-    },
-    async ({ name, path }, { database, artifacts }) => {
-      const connection = database.connection();
-      const [index] = await connection
-        .update(indexTable)
-        .set({ path })
-        .where(eq(indexTable.name, name))
-        .returning();
-      if (!index) {
-        throw new RPCError(400, "Index not found");
-      }
-      await artifacts.update(index.path, path);
       return index;
     },
   );
