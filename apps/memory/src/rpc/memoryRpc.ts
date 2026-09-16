@@ -2,7 +2,8 @@ import { Hono } from "hono";
 import * as v from "valibot";
 import { eq, like } from "drizzle-orm";
 import type { Rpc } from "../index";
-import { Memory, memoryTable, selectMemorySchema } from "../utilities/schema";
+import type { Memory } from "../utilities/schema";
+import { memoryTable, selectMemorySchema } from "../utilities/schema";
 import { RPCError } from "@compeer-ai/rpc";
 
 export function memoryRpc(rpc: Rpc) {

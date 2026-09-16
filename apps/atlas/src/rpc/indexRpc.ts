@@ -18,7 +18,7 @@ export function indexRpc(rpc: Rpc) {
     },
     async ({ path, name }, { database, artifacts }) => {
       const connection = database.connection();
-      const artifact = await artifacts.create(path);
+      await artifacts.create(path);
       const [index] = await connection
         .insert(indexTable)
         .values({ name, path })
@@ -75,5 +75,5 @@ export function indexRpc(rpc: Rpc) {
     },
   );
 
-  return new Hono().route("/", postIndex.app).route("/", deleteIndex.app);
+  return new Hono().route("/", postIndex.app).route("/", deleteIndex.app).route("/", updateIndex.app);
 }
