@@ -75,5 +75,22 @@ export function indexRpc(rpc: Rpc) {
     },
   );
 
-  return new Hono().route("/", postIndex.app).route("/", deleteIndex.app).route("/", updateIndex.app);
+  const searchIndex = rpc.impureQuery(
+    "/",
+    {
+      inputSchema: v.object({
+        query: v.string(),
+      }),
+      outputSchema: v.array(v.string()),
+    },
+    async ({ query }) => {
+      return [];
+    },
+  );
+
+  return new Hono()
+    .route("/", postIndex.app)
+    .route("/", deleteIndex.app)
+    .route("/", updateIndex.app)
+    .route("/", searchIndex.app);
 }
