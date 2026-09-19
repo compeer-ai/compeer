@@ -1,6 +1,7 @@
 <script type="ts">
   import { ChevronRight } from "@lucide/svelte";
   import type { Snippet } from "svelte";
+  import Link from "../link/Link.svelte";
 
   interface Props {
     className?: string;
@@ -11,8 +12,8 @@
 </script>
 
 <li class={["space-x-2 flex items-center", className]}>
-  <a {href}>
+  <Link {href}>
     {children}
-  </a>
+  </Link>
   <ChevronRight size={15} />
 </li>
