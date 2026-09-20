@@ -18,10 +18,31 @@ export function indexRpc(rpc: Rpc) {
     },
     async ({ path, name }, { database, artifacts }) => {
       const connection = database.connection();
-      await artifacts.create(path);
+      await artifacts.create(path, name);
       const [index] = await connection
         .insert(indexTable)
         .values({ name, path })
+        .returning();
+      return index as Index;
+    },
+  );
+
+  const postExternalIndex = rpc.mutation(
+    "POST",
+    "/",
+    {
+      inputSchema: v.object({
+        name: v.string(),
+        source: v.pipe(v.string(), v.url()),
+      }),
+      outputSchema: selectIndexTable,
+    },
+    async ({ name, source }, { database, artifacts }) => {
+      const connection = database.connection();
+      await artifacts.pull(source, name);
+      const [index] = await connection
+        .insert(indexTable)
+        .values({ name, source })
         .returning();
       return index as Index;
     },
@@ -45,7 +66,7 @@ export function indexRpc(rpc: Rpc) {
       if (!index) {
         throw new RPCError(400, "Index not found");
       }
-      await artifacts.delete(index.path);
+      await artifacts.delete(index.name);
       return index;
     },
   );
@@ -70,7 +91,7 @@ export function indexRpc(rpc: Rpc) {
       if (!index) {
         throw new RPCError(400, "Index not found");
       }
-      await artifacts.update(index.path, path);
+      await artifacts.update(index);
       return index;
     },
   );
@@ -83,7 +104,7 @@ export function indexRpc(rpc: Rpc) {
       }),
       outputSchema: v.array(v.string()),
     },
-    async ({ query }) => {
+    async () => {
       return [];
     },
   );
@@ -92,5 +113,6 @@ export function indexRpc(rpc: Rpc) {
     .route("/", postIndex.app)
     .route("/", deleteIndex.app)
     .route("/", updateIndex.app)
-    .route("/", searchIndex.app);
+    .route("/", searchIndex.app)
+    .route("/", postExternalIndex.app);
 }
