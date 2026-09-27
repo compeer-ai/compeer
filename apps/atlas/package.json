@@ -1,5 +1,6 @@
 {
   "name": "@compeer-ai/atlas",
+  "description": "Portable knowledge bases for your agents",
   "module": "index.ts",
   "type": "module",
   "private": true,
