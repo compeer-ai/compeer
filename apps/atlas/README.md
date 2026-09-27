@@ -1,4 +1,6 @@
-# atlas
+# @compeer-ai/atlas
+
+Portable knowledge bases for your agents.
 
 To install dependencies:
 
