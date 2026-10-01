@@ -1,11 +1,17 @@
+# @compeer-ai/memory
+
+Get your agents to remember things.
+
 To install dependencies:
-```sh
+
+```bash
 bun install
 ```
 
 To run:
-```sh
-bun run dev
+
+```bash
+bun run index.ts
 ```
 
-open http://localhost:3000
+This project was created using `bun init` in bun v1.3.14. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
