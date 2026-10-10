@@ -1,5 +1,5 @@
 {
-  "name": "@compeer-ai/quality",
+  "name": "analyst",
   "module": "index.ts",
   "type": "module",
   "private": true,
