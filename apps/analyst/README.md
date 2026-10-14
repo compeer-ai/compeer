@@ -1,4 +1,4 @@
-# analyst
+# @compeer-ai/analyst
 
 To install dependencies:
 

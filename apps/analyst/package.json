@@ -1,5 +1,5 @@
 {
-  "name": "analyst",
+  "name": "@compeer-ai/analyst",
   "module": "index.ts",
   "type": "module",
   "private": true,
